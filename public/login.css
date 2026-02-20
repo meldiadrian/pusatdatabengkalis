@@ -1,0 +1,36 @@
+.fi-simple-main-ctn {
+    min-height: 100vh;
+    background-image: url("/images/log-data.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    position: relative;
+}
+/* Kembalikan pointer-events ke elemen anak yang penting */
+.fi-simple-main-ctn > * {
+    /* semua anak langsung */
+    pointer-events: auto;
+}
+
+.fi-simple-auth-card,
+.fi-auth-card,
+form,
+input,
+button,
+label,
+a {
+    pointer-events: auto !important; /* force agar form & elemennya clickable */
+}
+
+/* container */
+.fi-simple-main {
+    background: transparent !important;
+}
+
+/* card */
+.fi-simple-auth-card {
+    background: none !important;
+    backdrop-filter: none;
+    border: none;
+}

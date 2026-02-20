@@ -1,0 +1,8 @@
+.fi-ta-table thead th {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+}
+.fi-ta-header-cell,
+.fi-ta-header-cell * {
+    color: #ffffff !important;
+}
