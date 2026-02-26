@@ -138,9 +138,13 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
         return $table
 
             ->columns([
+                TextColumn::make('no')
+                    ->label('No')
+                    ->rowIndex(isFromZero: false),
 
                 //--------------------vew user----------------------------//
                 TextColumn::make('unitKerja.nama_opd')
+                    ->disableClick()
                     ->label('Nama Perangkat Daerah')
                     ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
                     ->searchable(
@@ -153,6 +157,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
 
                 TextColumn::make('unitKerja.alamat')
+                    ->disableClick()
                     ->label('Alamat Kantor')
                     ->searchable(
                         query: function (Builder $query, string $search) {
@@ -164,6 +169,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
                 Tables\Columns\TextColumn::make('alamat_domain')
                     ->label('Alamat Website')
+                    ->disableClick()
                     ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
                     ->wrap()
                     ->copyable()
@@ -177,29 +183,41 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                                 : 'https://' . $record->alamat_domain) .
                             "', '_blank', 'width=900,height=600,resizable=yes,scrollbars=yes')",
                     ]),
+
+
+                Tables\Columns\TextColumn::make('jenis_aplikasi')
+                    ->disableClick()
+                    ->label('Jenis Aplikasi')
+                    ->wrap()
+                    ->limit(80)
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
+                    ->searchable(),
                 //------------------------end off vie user---------------------//
 
                 //--------------view admin----------------------//   
 
                 Tables\Columns\TextColumn::make('pembuat')
                     ->label('Pembuat')
+                    ->disableClick()
                     ->wrap()
                     ->limit(80)
                     ->visible(! $isBasicUser)
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('status')
+                    ->disableClick()
                     ->label('Status')
                     ->wrap()
                     ->limit(80)
-                    ->visible(! $isBasicUser)
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('keterangan')
+                    ->disableClick()
                     ->label('Keterangan')
                     ->wrap()
                     ->limit(80)
-                    ->visible(! $isBasicUser)
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
                     ->searchable(),
                 //----------end view admin----------------//
 

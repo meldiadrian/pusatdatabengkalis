@@ -99,8 +99,12 @@ class PemilikDataResource extends Resource
                     : $query->where('opd_tujuan', auth()->user()->unit_kerja_id)
             )
             ->columns([
+                TextColumn::make('no')
+                    ->label('No')
+                    ->rowIndex(isFromZero: false),
+
                 TextColumn::make('unitKerja.nama_opd')
-                    ->label('INSTANSI PEMOHON')
+                    ->label('Pemohon')
                     ->searchable(
                         query: function (Builder $query, string $search) {
                             $query->orWhereHas('unitKerja', function (Builder $q) use ($search) {
@@ -109,7 +113,7 @@ class PemilikDataResource extends Resource
                         }
                     ),
                 TextColumn::make('unitKerjaTujuan.nama_opd')
-                    ->label('INSTANSI PENYEDIA DATA')
+                    ->label('Penyedia Data')
                     ->searchable(
                         query: function (Builder $query, string $search) {
                             $query->orWhereHas('unitKerjaTujuan', function (Builder $q) use ($search) {
@@ -119,13 +123,13 @@ class PemilikDataResource extends Resource
                     ),
 
                 Tables\Columns\TextColumn::make('data_diminta')
-                    ->label('DATA REQUEST')
+                    ->label('Data Request')
                     ->wrap()
                     ->limit(80)
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('tujuan_penggunaan')
-                    ->label('PEMANFAATAN DATA')
+                    ->label('Pemanfaatan Data')
                     ->wrap()
                     ->limit(80)
                     ->searchable(),
@@ -152,7 +156,7 @@ class PemilikDataResource extends Resource
                 //     ->limit(80)
                 //     ->searchable(),
                 Tables\Columns\TextColumn::make('keterangan_surat_balasan')
-                    ->label('KETERANGAN SURAT BALASAN')
+                    ->label('Keterangan')
                     ->getStateUsing(function ($record) {
                         $last = $record->suratBalasan()->latest()->first();
                         return $last?->keterangan ?? 'Data tidak ada';
@@ -207,7 +211,10 @@ class PemilikDataResource extends Resource
                     })
                     ->openUrlInNewTab()
                     ->hidden(fn($record) => !$record->suratBalasan()->latest()->first() || !$record->suratBalasan()->latest()->first()->upload_balasan),
-                Tables\Actions\EditAction::make(),
+                
+                    
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -4,10 +4,8 @@ namespace App\Filament\Resources;
 
 use filament;
 use Filament\Forms;
-use Filament\Tables;
 use App\Models\Pemohon;
 use Filament\Forms\Form;
-use Filament\Tables\Table;
 use App\Models\SuratBalasan;
 use App\Exports\PemohonExport;
 use Filament\Resources\Resource;
@@ -24,6 +22,9 @@ use Filament\Support\Facades\FilamentIcon;
 use App\Filament\Resources\PemohonResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PemohonResource\RelationManagers;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
 
 
 class PemohonResource extends Resource
@@ -89,24 +90,29 @@ class PemohonResource extends Resource
                     })
             )
             ->columns([
+
+                TextColumn::make('no')
+                    ->label('No')
+                    ->rowIndex(isFromZero: false),
+
                 Tables\Columns\TextColumn::make('unitKerja.nama_opd') //relasi ke DB unit kerja
-                    ->label('INSTANSI PEMOHON')
+                    ->label('Pemohon')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('unitKerjaTujuan.nama_opd') //relasi ke DB unit kerja
-                    ->label('INSTANSI PENYEDIA DATA')
+                    ->label('Penyedia Data')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('data_diminta')
-                    ->label('DATA REQUEST')
+                    ->label('Data Request')
                     ->wrap() //fungsi teks jadi rata kebawah
                     ->limit(80) //limit teks
                     ->searchable(),
                 Tables\Columns\TextColumn::make('tujuan_penggunaan')
-                    ->label('PEMANFAATAN DATA')
+                    ->label('Pemanfaatan Data')
                     ->wrap() //fungsi teks jadi rata kebawah
                     ->limit(80) //limit teks
                     ->searchable(),
                 Tables\Columns\TextColumn::make('upload_surat')
-                    ->label('SURAT PERMOHONAN')
+                    ->label('Surat Permohonan')
                     ->hidden(),
 
                 // IconColumn::make('surat_balasan')
@@ -118,7 +124,7 @@ class PemohonResource extends Resource
                 //     ->icon('heroicon-o-circle-stack') // solid download icon
                 //     ->color('success'),
                 Tables\Columns\TextColumn::make('keterangan_surat_balasan')
-                    ->label('KETERANGAN')
+                    ->label('Keterangan')
                     ->getStateUsing(function ($record) {
                         $last = $record->suratBalasan()->latest()->first();
                         return $last?->keterangan ?? 'Data tidak ada';

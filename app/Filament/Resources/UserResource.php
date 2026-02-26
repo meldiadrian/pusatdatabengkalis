@@ -6,9 +6,10 @@ use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\TextColumn;
 
 class UserResource extends Resource
 {
@@ -66,6 +67,10 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('no')
+                    ->label('No')
+                    ->rowIndex(isFromZero: false),
+
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama')
                     ->searchable()

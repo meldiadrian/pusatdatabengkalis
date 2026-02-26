@@ -8,10 +8,11 @@ use App\Models\UnitKerja;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
 
 class UnitKerjaResource extends Resource
 {
@@ -53,18 +54,21 @@ class UnitKerjaResource extends Resource
         return $table
             ->columns([
 
+                TextColumn::make('no')
+                    ->label('No')
+                    ->rowIndex(isFromZero: false),
 
                 Tables\Columns\TextColumn::make('nama_opd')
-                    ->label('UNIT KERJA')
+                    ->label('Unit Kerja')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('alamat')
-                    ->label('ALAMAT')
+                    ->label('Alamat')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('telp')
-                    ->label('TELPON')
+                    ->label('Telpon')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
-                    ->label('EMAIL')
+                    ->label('Email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
