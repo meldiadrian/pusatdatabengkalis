@@ -49,14 +49,12 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->spa()
             ->default()
-            ->id('admin')
-            ->path('admin')
+                ->id('admin')
+                ->path('admin')
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
                 fn() => '<link rel="stylesheet" href="' . asset('admin.css') . '">'
             )
-
-
             //->brandName('Hoaxs')
             // ->loginHeading('Masuk Aplikasi')
             // ->loginSubheading('Silakan masuk menggunakan akun Anda')
@@ -75,8 +73,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-
+                //Widgets\AccountWidget::class,
                 //widget filament pada dashboard
                 // Widgets\FilamentInfoWidget::class,
                 // -----end---
@@ -85,7 +82,7 @@ class AdminPanelProvider extends PanelProvider
                 'Manajemen',
                 'Data',
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
+            //->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

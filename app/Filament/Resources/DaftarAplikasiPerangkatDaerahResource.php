@@ -23,6 +23,9 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
     protected static ?string $modelLabel = 'Daftar Aplikasi Perangkat Daerah';
     protected static ?string $pluralModelLabel = 'Daftar Aplikasi Perangkat Daerah';
     protected static ?string $navigationIcon = 'heroicon-s-rectangle-stack';
+    protected static ?string $navigationGroup = 'Daftar Aplikasi & Website';
+    protected static ?int $navigationSort = 2;
+
 
     public static function form(Form $form): Form
     {
@@ -58,7 +61,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->maxLength(255),
 
                 Forms\Components\TextInput::make('tahun_penganggaran')
-                    ->label('Tahun')
+                    ->label('Tahun Pembuatan')
                     ->required()
                     ->numeric()
                     ->integer()
@@ -156,19 +159,32 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ),
 
 
-                TextColumn::make('unitKerja.alamat')
+                // TextColumn::make('unitKerja.alamat')
+                //     ->disableClick()
+                //     ->label('Alamat Kantor')
+                //     ->searchable(
+                //         query: function (Builder $query, string $search) {
+                //             $query->orWhereHas('unitKerja', function (Builder $q) use ($search) {
+                //                 $q->where('alamat', 'like', "%{$search}%");
+                //             });
+                //         }
+                //     ),
+                Tables\Columns\TextColumn::make('nama_aplikasi')
                     ->disableClick()
-                    ->label('Alamat Kantor')
-                    ->searchable(
-                        query: function (Builder $query, string $search) {
-                            $query->orWhereHas('unitKerja', function (Builder $q) use ($search) {
-                                $q->where('alamat', 'like', "%{$search}%");
-                            });
-                        }
-                    ),
+                    ->label('Nama Aplikasi')
+                    ->wrap()
+                    // ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('mode')
+                    ->disableClick()
+                    ->label('Status')
+                    ->wrap()
+                    //->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
+                    ->searchable(),
 
                 Tables\Columns\TextColumn::make('alamat_domain')
-                    ->label('Alamat Website')
+                    ->label('Alamat Domain')
                     ->disableClick()
                     ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
                     ->wrap()
@@ -184,17 +200,19 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                             "', '_blank', 'width=900,height=600,resizable=yes,scrollbars=yes')",
                     ]),
 
-
-                Tables\Columns\TextColumn::make('jenis_aplikasi')
+                Tables\Columns\TextColumn::make('tahun_penganggaran')
                     ->disableClick()
-                    ->label('Jenis Aplikasi')
+                    ->label('Tahun Penganggaran')
                     ->wrap()
-                    ->limit(80)
-                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
+                    // ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
                     ->searchable(),
-                //------------------------end off vie user---------------------//
 
-                //--------------view admin----------------------//   
+                Tables\Columns\TextColumn::make('dimanfaatkan_untuk_layanan')
+                    ->disableClick()
+                    ->label('Dimanfaatkan Untuk Layanan')
+                    ->wrap()
+                    // ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
+                    ->searchable(),
 
                 Tables\Columns\TextColumn::make('pembuat')
                     ->label('Pembuat')
@@ -203,6 +221,27 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->limit(80)
                     ->visible(! $isBasicUser)
                     ->searchable(),
+
+                Tables\Columns\TextColumn::make('spesifikasi_teknis')
+                    ->label('Spesifikasi Teknis')
+                    ->disableClick()
+                    ->wrap()
+                    ->limit(25)
+                    ->visible(! $isBasicUser)
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('jenis_aplikasi')
+                    ->disableClick()
+                    ->label('Jenis Aplikasi')
+                    ->wrap()
+                    ->limit(80)
+                    // ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
+                    ->searchable(),
+                //------------------------end off vie user---------------------//
+
+                //--------------view admin----------------------//   
+
+
 
                 Tables\Columns\TextColumn::make('status')
                     ->disableClick()
@@ -225,10 +264,14 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
             ->filters([
                 //
             ])
+
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->visible(fn() => auth()->user()?->role !== 'user'),
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
             ])
+
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

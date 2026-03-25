@@ -18,7 +18,9 @@ class UserResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-s-user-group';
     protected static ?string $modelLabel = 'Tambah User';
     protected static ?string $pluralModelLabel = 'User';
-    protected static ?string $navigationGroup = 'Manajemen';
+    protected static ?string $navigationGroup = 'Manajemen Pengguna & Unit Kerja';
+    protected static ?int $navigationSort = 3;
+
 
     public static function shouldRegisterNavigation(): bool
     {

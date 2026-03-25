@@ -28,10 +28,11 @@ class PemilikDataResource extends Resource
     // protected static ?string $model = PemilikData::class;
     protected static ?string $model = Pemohon::class;
 
-    protected static ?string $navigationIcon = 'heroicon-s-home-modern';
+    protected static ?string $navigationIcon = 'heroicon-s-book-open';
     protected static ?string $modelLabel = 'Instansi Penyedia Data';
     protected static ?string $pluralModelLabel = 'Surat Keluar';
     protected static ?string $navigationGroup = 'Manajemen Surat';
+    protected static ?int $navigationSort = 0;
 
     public static function shouldRegisterNavigation(): bool
     {
@@ -211,10 +212,10 @@ class PemilikDataResource extends Resource
                     })
                     ->openUrlInNewTab()
                     ->hidden(fn($record) => !$record->suratBalasan()->latest()->first() || !$record->suratBalasan()->latest()->first()->upload_balasan),
-                
-                    
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
+
+
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -21,7 +21,9 @@ class UnitKerjaResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-s-building-office';
     protected static ?string $modelLabel = 'Unit Kerja';
     protected static ?string $pluralModelLabel = 'Unit Kerja';
-    protected static ?string $navigationGroup = 'Manajemen';
+    protected static ?string $navigationGroup = 'Manajemen Pengguna & Unit Kerja';
+    protected static ?int $navigationSort = 3;
+
 
     public static function shouldRegisterNavigation(): bool
     {
