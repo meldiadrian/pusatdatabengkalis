@@ -33,9 +33,20 @@ class DaftarWebsiteDesaResource extends Resource
     protected static ?int $navigationSort = 3;
 
 
+    // public static function getEloquentQuery(): Builder
+    // {
+    //     return parent::getEloquentQuery()
+    //         ->with('kecamatan');
+    // }
+
     public static function getEloquentQuery(): Builder
     {
+        $user = auth()->user();
+
         return parent::getEloquentQuery()
+            ->when($user->role === 'user', function ($query) use ($user) {
+                $query->where('id', $user->id);
+            })
             ->with('kecamatan');
     }
 
@@ -43,6 +54,10 @@ class DaftarWebsiteDesaResource extends Resource
     {
         return $form
             ->schema([
+
+
+                Forms\Components\Hidden::make('id')
+                    ->default(auth()->id()),
 
                 Forms\Components\Select::make('kecamatan_id')
                     ->label('Kecamatan')
@@ -67,22 +82,6 @@ class DaftarWebsiteDesaResource extends Resource
                     ->columns(2)
                     ->required()
                     ->reactive(),
-
-                // Select::make('aplikasi_id')
-                //     ->label('Pilih Aplikasi')
-                //     ->options(\App\Models\DaftarAplikasiPerangkatDaerah::orderBy('websiteopd')->pluck('websiteopd', 'id'))
-                //     ->reactive()
-                //     ->afterStateUpdated(function ($state, callable $set) {
-                //         $aplikasi = \App\Models\DaftarAplikasiPerangkatDaerah::find($state);
-                //         $set('website', $aplikasi?->websiteopd);
-                //     })
-                //     ->required(),
-
-                // TextInput::make('website')
-                //     ->label('Website')
-                //     ->required()
-                //     ->placeholder('Isi alamat website')
-                //     ->maxLength(255),
 
                 Forms\Components\TextInput::make('websitedesa')
                     ->label('Alamat Website')
@@ -191,14 +190,28 @@ class DaftarWebsiteDesaResource extends Resource
                     ->extraAttributes([
                         'style' => 'background-color: #facc15; color: black;'
                     ])
-                    ->visible(fn() => auth()->user()?->unitKerja?->tipe === 'Desa'),
+                    ->visible(
+                        fn($record) =>
+                        auth()->user()->role === 'user' ||
+                            $record->user_id === auth()->id()
+                    ),
+
 
                 Tables\Actions\DeleteAction::make()
                     ->button()
+                    // ->extraAttributes([
+                    //     'style' => 'background-color: #dc2626; color: white ;'
+                    // ])
+                    // ->visible(fn() => auth()->user()?->unitKerja?->tipe === 'Desa')
+
                     ->extraAttributes([
-                        'style' => 'background-color: #dc2626; color: white ;'
+                        'style' => 'background-color: #dc2626; color: white;'
                     ])
-                    ->visible(fn() => auth()->user()?->unitKerja?->tipe === 'Desa')
+                    ->visible(
+                        fn($record) =>
+                        auth()->user()->role === 'user' ||
+                            $record->user_id === auth()->id()
+                    )
             ])
 
 

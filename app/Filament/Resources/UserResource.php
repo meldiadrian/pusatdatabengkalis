@@ -40,6 +40,7 @@ class UserResource extends Resource
                     ->email()
                     ->required()
                     ->unique(ignoreRecord: true),
+
                 Forms\Components\TextInput::make('password')
                     ->label('Password')
                     ->password()
@@ -47,6 +48,8 @@ class UserResource extends Resource
                     ->dehydrated(fn($state) => filled($state))
                     ->required(fn(string $operation) => $operation === 'create')
                     ->maxLength(255),
+
+
                 Forms\Components\Select::make('role')
                     ->label('Role')
                     ->options([
