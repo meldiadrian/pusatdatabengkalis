@@ -14,8 +14,8 @@ class ListDaftarWebsiteDesas extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->label('Tambah Data'),
-
+                ->label('Tambah Data')
+                ->visible(fn() => auth()->user()?->unitKerja?->tipe === 'Desa')
         ];
     }
 }

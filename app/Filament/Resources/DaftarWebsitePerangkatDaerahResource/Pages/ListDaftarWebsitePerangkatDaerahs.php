@@ -13,8 +13,8 @@ class ListDaftarWebsitePerangkatDaerahs extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
-                ->label('Tambah Data'),
+            //Actions\CreateAction::make()
+               // ->label('Tambah Data'),
         ];
     }
 }

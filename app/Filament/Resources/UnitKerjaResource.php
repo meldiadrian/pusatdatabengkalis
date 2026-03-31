@@ -38,6 +38,16 @@ class UnitKerjaResource extends Resource
                     ->label('Nama Instansi')
                     ->required()
                     ->maxLength(255),
+                    
+                Forms\Components\Select::make('tipe')
+                    ->label('Tipe')
+                    ->placeholder('Pilih OPD / Desa')
+                    ->required()
+                    ->options([
+                        'OPD' => 'OPD',
+                        'Desa' => 'Desa',
+                    ]),
+
                 Forms\Components\TextInput::make('alamat')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('telp')
@@ -63,6 +73,11 @@ class UnitKerjaResource extends Resource
                 Tables\Columns\TextColumn::make('nama_opd')
                     ->label('Unit Kerja')
                     ->searchable(),
+
+                Tables\Columns\TextColumn::make('tipe')
+                    ->label('Tipe')
+                    ->searchable(),
+
                 Tables\Columns\TextColumn::make('alamat')
                     ->label('Alamat')
                     ->searchable(),
@@ -85,8 +100,20 @@ class UnitKerjaResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->button()
+                    ->icon('heroicon-s-pencil')
+                    ->extraAttributes([
+                        'style' => 'background-color: #facc15; color: black;'
+                    ])
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
+
+                Tables\Actions\DeleteAction::make()
+                    ->button()
+                    ->extraAttributes([
+                        'style' => 'background-color: #dc2626; color: white ;'
+                    ])
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

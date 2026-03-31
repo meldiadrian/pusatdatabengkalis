@@ -29,7 +29,13 @@ class DaftarWebsitePerangkatDaerahResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-s-rectangle-stack';
     protected static ?int $navigationSort = 2;
 
-
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->whereHas('unitKerja', function ($query) {
+                $query->where('tipe', 'opd');
+            });
+    }
     public static function form(Form $form): Form
     {
         return $form
@@ -43,10 +49,10 @@ class DaftarWebsitePerangkatDaerahResource extends Resource
                     ->placeholder('Pilih perangkat daerah')
                     ->required(),
 
-                Forms\Components\TextInput::make('alamat_domain')
+                Forms\Components\TextInput::make('websiteopd')
                     ->label('Alamat Website')
                     ->required()
-                    ->placeholder('Isi alamat domain ex. www.google.com')
+                    ->placeholder('Isi alamat website ex. www.google.com')
                     ->maxLength(255),
 
                 Forms\Components\Select::make('pembuat')
@@ -102,8 +108,8 @@ class DaftarWebsitePerangkatDaerahResource extends Resource
                         }
                     ),
 
-                Tables\Columns\TextColumn::make('alamat_domain')
-                    ->label('Alamat Website')
+                Tables\Columns\TextColumn::make('websiteopd')
+                    ->label('Alamat Website Kantor')
                     ->disableClick()
                     ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
                     ->wrap()
@@ -113,9 +119,9 @@ class DaftarWebsitePerangkatDaerahResource extends Resource
                     ->extraAttributes(fn($record) => [
                         'style' => 'cursor:pointer; color:#2563eb;',
                         'onclick' => "window.open('" .
-                            (str_starts_with($record->alamat_domain, 'http')
-                                ? $record->alamat_domain
-                                : 'https://' . $record->alamat_domain) .
+                            (str_starts_with($record->websiteopd, 'http')
+                                ? $record->websiteopd
+                                : 'https://' . $record->websiteopd) .
                             "', '_blank', 'width=900,height=600,resizable=yes,scrollbars=yes')",
                     ]),
 
@@ -149,10 +155,20 @@ class DaftarWebsitePerangkatDaerahResource extends Resource
             ])
 
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
-                Tables\Actions\DeleteAction::make()
-                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
+                // Tables\Actions\EditAction::make()
+                //     ->button()
+                //     ->icon('heroicon-s-pencil')
+                //     ->extraAttributes([
+                //         'style' => 'background-color: #facc15; color: black;'
+                //     ])
+                //     ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
+
+                // Tables\Actions\DeleteAction::make()
+                //     ->button()
+                //     ->extraAttributes([
+                //         'style' => 'background-color: #dc2626; color: white ;'
+                //     ])
+                //     ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
             ])
 
 

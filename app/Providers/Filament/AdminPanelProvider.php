@@ -49,8 +49,8 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->spa()
             ->default()
-                ->id('admin')
-                ->path('admin')
+            ->id('admin')
+            ->path('admin')
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
                 fn() => '<link rel="stylesheet" href="' . asset('admin.css') . '">'

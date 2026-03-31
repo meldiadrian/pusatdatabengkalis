@@ -14,7 +14,19 @@ class DaftarAplikasiPerangkatDaerah extends Model
 
 
     protected $table = 'daftar_aplikasi_perangkat_daerahs';
-    protected $fillable = ['unit_kerja_id', 'nama_aplikasi', 'mode', 'jenis_aplikasi', 'instansi_pemohon'];
+    protected $fillable = [
+        'unit_kerja_id',
+        'nama_aplikasi',
+        'mode',
+        'jenis_aplikasi',
+        'instansi_pemohon',
+        'kecamatan_id',
+        'desa_ids',
+        'alamat_domain',
+        'pembuat',
+        'status',
+        'keterangan',
+    ];
 
     public function unitKerja()
     {
@@ -29,6 +41,7 @@ class DaftarAplikasiPerangkatDaerah extends Model
         'jenis_mobile' => 'boolean',
         'pemilik_pusat' => 'boolean',
         'pemilik_daerah' => 'boolean',
+        'desa_ids' => 'array',
 
     ];
 }

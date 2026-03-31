@@ -26,22 +26,61 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
     protected static ?string $navigationGroup = 'Daftar Aplikasi & Website';
     protected static ?int $navigationSort = 2;
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->whereHas('unitKerja', function ($q) {
+                $q->where('tipe', 'opd');
+            });
+    }
+
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('unit_kerja_id')
+                Forms\Components\Select::make('unit_kerja_id', fn($query) => $query->where('tipe', 'opd'))
                     ->relationship('unitKerja', 'nama_opd')
                     ->label('Perangkat Daerah')
-                    ->default(fn() => auth()->user()->unit_kerja_id)
+                    // ->default(fn() => auth()->user()->unit_kerja_id)
                     //->disabled()
                     ->dehydrated()
                     ->placeholder('Pilih perangkat daerah')
                     ->required(),
+
+
+
+
+
+                Forms\Components\TextInput::make('websiteopd')
+                    ->label('Domain Website Kantor')
+                    ->placeholder('Ex. www.bengkaliskab.go.id, Isi Dengan Tanda (-) Jika tidak ada')
+                    ->maxLength(255),
+
                 Forms\Components\TextInput::make('nama_aplikasi')
                     ->label('Nama Aplikasi')
                     ->placeholder('Isi nama aplikasi')
+                    ->required()
+                    ->maxLength(255),
+
+                Forms\Components\Select::make('jenis_aplikasi')
+                    ->label('Jenis Aplikasi')
+                    ->placeholder('Pilih jenis aplikasi')
+                    ->required()
+                    ->options([
+                        'web' => 'Web',
+                        'mobile' => 'Mobile',
+                    ]),
+
+                Forms\Components\TextInput::make('alamat_domain')
+                    ->label('Alamat Domain')
+                    ->required()
+                    ->placeholder('Isi Alamat Domain')
+                    ->maxLength(255),
+
+                Forms\Components\Textarea::make('spesifikasi_teknis')
+                    ->label('Spesifikasi Teknis')
+                    ->placeholder('Database mysql, bahasa program laravel, android (kotlin)')
                     ->required()
                     ->maxLength(255),
 
@@ -54,12 +93,6 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ))
                     ->required(),
 
-                Forms\Components\TextInput::make('alamat_domain')
-                    ->label('Alamat Domain')
-                    ->required()
-                    ->placeholder('Isi alamat domain ex. www.google.com')
-                    ->maxLength(255),
-
                 Forms\Components\TextInput::make('tahun_penganggaran')
                     ->label('Tahun Pembuatan')
                     ->required()
@@ -70,12 +103,6 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->maxLength(4)
                     ->placeholder('2026'),
 
-                Forms\Components\TextInput::make('dimanfaatkan_untuk_layanan')
-                    ->label('Dimanfaatkan Untuk Layanan')
-                    ->placeholder('Isi dimanfaatkan untuk layanan')
-                    ->required()
-                    ->maxLength(255),
-
                 Forms\Components\Select::make('pembuat')
                     ->label('Pembuat')
                     ->placeholder('Pilih pembuat pihak ketiga/diskominfotik')
@@ -83,22 +110,6 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->options([
                         'pihak ketiga' => 'Pihak Ketiga',
                         'diskominfotik' => 'Diskominfotik',
-                    ]),
-
-                Forms\Components\Textarea::make('spesifikasi_teknis')
-                    ->label('Spesifikasi Teknis')
-                    ->placeholder('Database mysql, bahasa program laravel, android (kotlin)')
-                    ->required()
-                    ->maxLength(255),
-
-
-                Forms\Components\Select::make('jenis_aplikasi')
-                    ->label('Jenis Aplikasi')
-                    ->placeholder('Pilih jenis aplikasi')
-                    ->required()
-                    ->options([
-                        'web' => 'Web',
-                        'mobile' => 'Mobile',
                     ]),
 
                 Forms\Components\Select::make('pemilik_aplikasi')
@@ -119,11 +130,19 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ))
                     ->required(),
 
+
+                Forms\Components\TextInput::make('dimanfaatkan_untuk_layanan')
+                    ->label('Dimanfaatkan Untuk Layanan')
+                    ->placeholder('Isi dimanfaatkan untuk layanan')
+                    ->required()
+                    ->maxLength(255),
+
                 Forms\Components\Textarea::make('keterangan')
                     ->label('Keterangan')
                     ->placeholder('Isi keterangan')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columnSpanFull(),
 
 
             ]);
@@ -173,14 +192,14 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->disableClick()
                     ->label('Nama Aplikasi')
                     ->wrap()
-                    // ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('mode')
                     ->disableClick()
                     ->label('Status')
                     ->wrap()
-                    //->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('alamat_domain')
@@ -267,9 +286,21 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
+                    ->button()
+                    ->icon('heroicon-s-pencil')
+                    ->extraAttributes([
+                        'style' => 'background-color: #facc15; color: black;'
+                    ])
+                    ->visible(fn() => auth()->user()?->unitKerja?->tipe === 'OPD'),
+
                 Tables\Actions\DeleteAction::make()
-                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
+                    ->button()
+                    ->extraAttributes([
+                        'style' => 'background-color: #dc2626; color: white ;'
+                    ])
+                    ->visible(fn() => auth()->user()?->unitKerja?->tipe === 'OPD'),
+
+
             ])
 
             ->bulkActions([

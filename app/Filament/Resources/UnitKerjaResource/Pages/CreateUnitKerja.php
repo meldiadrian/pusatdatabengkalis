@@ -59,6 +59,17 @@ class CreateUnitKerja extends CreateRecord
                         ->required(),
                 ]),
 
+            Step::make('Tipe')
+                ->schema([
+                    Select::make('tipe')
+                        ->label('Tipe')
+                        ->placeholder('Pilih OPD / Desa')
+                        ->required()
+                        ->options([
+                            'opd' => 'OPD',
+                            'desa' => 'Desa',
+                        ]),
+                ]),
 
             Step::make('Alamat')
                 ->schema([

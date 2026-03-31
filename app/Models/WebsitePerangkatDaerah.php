@@ -13,7 +13,7 @@ class WebsitePerangkatDaerah extends Model
 
 
     protected $table = 'daftar_aplikasi_perangkat_daerahs';
-    protected $fillable = ['unit_kerja_id', 'nama_aplikasi', 'mode', 'jenis_aplikasi', 'instansi_pemohon'];
+    protected $fillable = ['unit_kerja_id', 'websiteopd', 'mode', 'pembuat', 'status', 'keterangan'];
 
     public function unitKerja()
     {

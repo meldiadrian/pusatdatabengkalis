@@ -105,8 +105,20 @@ class UserResource extends Resource
                     ->relationship('unitKerja', 'nama_opd'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->button()
+                    ->icon('heroicon-s-pencil')
+                    ->extraAttributes([
+                        'style' => 'background-color: #facc15; color: black;'
+                    ])
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
+
+                Tables\Actions\DeleteAction::make()
+                    ->button()
+                    ->extraAttributes([
+                        'style' => 'background-color: #dc2626; color: white ;'
+                    ])
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

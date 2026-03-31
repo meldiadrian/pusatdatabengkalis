@@ -9,4 +9,14 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateDaftarWebsiteDesa extends CreateRecord
 {
     protected static string $resource = DaftarWebsiteDesaResource::class;
+
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+    public function getHeading(): string
+    {
+        return '';
+    }
 }
