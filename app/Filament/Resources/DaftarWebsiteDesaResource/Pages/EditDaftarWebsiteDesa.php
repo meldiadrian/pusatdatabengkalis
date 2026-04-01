@@ -13,8 +13,13 @@ class EditDaftarWebsiteDesa extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make()
-                ->visible(fn() => auth()->user()?->unitKerja?->tipe === 'Desa')
+        //    Actions\DeleteAction::make()
+                //->visible(fn() => auth()->user()?->unitKerja?->tipe === 'Desa')
         ];
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
     }
 }

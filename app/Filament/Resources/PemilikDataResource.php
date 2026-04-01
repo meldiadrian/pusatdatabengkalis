@@ -30,7 +30,7 @@ class PemilikDataResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-s-book-open';
     protected static ?string $modelLabel = 'Instansi Penyedia Data';
-    protected static ?string $pluralModelLabel = 'Surat Keluar';
+    protected static ?string $pluralModelLabel = 'Surat Masuk';
     protected static ?string $navigationGroup = 'Manajemen Surat';
     protected static ?int $navigationSort = 0;
 

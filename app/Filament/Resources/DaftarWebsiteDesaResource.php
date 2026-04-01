@@ -199,11 +199,6 @@ class DaftarWebsiteDesaResource extends Resource
 
                 Tables\Actions\DeleteAction::make()
                     ->button()
-                    // ->extraAttributes([
-                    //     'style' => 'background-color: #dc2626; color: white ;'
-                    // ])
-                    // ->visible(fn() => auth()->user()?->unitKerja?->tipe === 'Desa')
-
                     ->extraAttributes([
                         'style' => 'background-color: #dc2626; color: white;'
                     ])

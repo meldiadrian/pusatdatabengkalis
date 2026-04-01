@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\DaftarAplikasiPerangkatDaerahResource\Pages;
 
-use App\Filament\Resources\DaftarAplikasiPerangkatDaerahResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\DaftarAplikasiPerangkatDaerahResource;
+use App\Filament\Resources\DaftarAplikasiPerangkatDaerahResource\Widgets\StatistikAplikasiOpd;
 
 class ListDaftarAplikasiPerangkatDaerahs extends ListRecords
 {
@@ -14,8 +15,25 @@ class ListDaftarAplikasiPerangkatDaerahs extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->label('Tambah Data'),
+                ->label('Tambah Data')
+                // ->visible(fn() => auth()->user()?->unitKerja?->tipe === 'OPD'),
+                ->visible(
+                    fn($record) => (
+                        auth()->user()->role === 'user' &&
+                        auth()->user()->unitKerja?->tipe === 'OPD'
+                    )
+                        ||
+                        ($record && $record->user_id === auth()->id())
+                ),
 
+
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            StatistikAplikasiOpd::class,
         ];
     }
 }

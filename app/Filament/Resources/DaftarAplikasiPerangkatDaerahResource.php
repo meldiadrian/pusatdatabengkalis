@@ -30,8 +30,13 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
     {
         return parent::getEloquentQuery()
             ->whereHas('unitKerja', function ($q) {
-                $q->where('tipe', 'opd');
+                $q->where('tipe', 'OPD');
             });
+    }
+
+    public function unitKerja()
+    {
+        return $this->belongsTo(UnitKerja::class, 'unit_kerja_id');
     }
 
 
@@ -288,18 +293,45 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->button()
                     ->icon('heroicon-s-pencil')
+                    // ->extraAttributes([
+                    //     'style' => 'background-color: #facc15; color: black;'
+                    // ])
+                    // ->visible(fn() => auth()->user()?->unitKerja?->tipe === 'OPD'),
                     ->extraAttributes([
                         'style' => 'background-color: #facc15; color: black;'
                     ])
-                    ->visible(fn() => auth()->user()?->unitKerja?->tipe === 'OPD'),
+                    // ->visible(
+                    //     fn($record) =>
+                    //     auth()->user()->role === 'user' ||
+                    //         $record->user_id === auth()->id()
+                    // ),
+                    ->visible(
+                        fn($record) => (
+                            auth()->user()->role === 'user' &&
+                            auth()->user()->unitKerja?->tipe === 'OPD'
+                        )
+                            ||
+                            $record->user_id === auth()->id()
+                    ),
 
                 Tables\Actions\DeleteAction::make()
                     ->button()
                     ->extraAttributes([
-                        'style' => 'background-color: #dc2626; color: white ;'
+                        'style' => 'background-color: danger; color: white;'
                     ])
-                    ->visible(fn() => auth()->user()?->unitKerja?->tipe === 'OPD'),
-
+                    // ->visible(
+                    //     fn($record) =>
+                    //     auth()->user()->role === 'user' ||
+                    //         $record->user_id === auth()->id()
+                    // ),
+                    ->visible(
+                        fn($record) => (
+                            auth()->user()->role === 'user' &&
+                            auth()->user()->unitKerja?->tipe === 'OPD'
+                        )
+                            ||
+                            $record->user_id === auth()->id()
+                    ),
 
             ])
 
