@@ -16,6 +16,14 @@ class StatistikAplikasiOpd extends BaseWidget
             $q->where('tipe', 'OPD');
         })
             ->count();
+
+        // $totalDesa = DaftarAplikasiPerangkatDaerah::query()
+        //     ->select('unit_kerja_id')
+        //     ->get()
+        //     ->pluck('unit_kerja_id')
+        //     ->flatten() // karena array/json
+        //     ->unique()
+        //     ->count();
         $total = DaftarAplikasiPerangkatDaerah::whereHas('unitKerja', function ($q) {
             $q->where('tipe', 'OPD');
         })
@@ -30,7 +38,7 @@ class StatistikAplikasiOpd extends BaseWidget
             ->unique()
             ->count();
 
-        $totalAktif = DaftarAplikasiPerangkatDaerah::whereIn('status', ['aktif', 'Aktif'])->count();
+        $totalAktif = DaftarAplikasiPerangkatDaerah::where('status', 'aktif')->count();
 
         return [
             Stat::make('Total Organisasi Perangkat Daerah ', $total)

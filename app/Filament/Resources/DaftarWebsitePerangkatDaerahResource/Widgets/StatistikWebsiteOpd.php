@@ -17,28 +17,10 @@ class StatistikWebsiteOpd extends BaseWidget
 
     protected function getStats(): array
     {
-        // $total = WebsitePerangkatDaerah::query()
-        //     ->whereHas('unitKerja', function ($q) {
-        //         $q->where('tipe', 'OPD');
-        //     })
-        //     ->count(); // ✅ ini akan jadi 3
 
         $total = WebsitePerangkatDaerah::query()
             ->whereHas('unitKerja', fn($q) => $q->where('tipe', 'OPD'))
             ->count();
-        // $total = WebsitePerangkatDaerah::query()
-        //     //     ->get()
-        //     //     ->pluck('kecamatan_id')
-        //     //     ->flatten() // karena array/json
-        //     //     ->unique()
-        //     //     ->count();
-
-        //     ->select('unit_kerja_id')
-        //     ->get()
-        //     ->pluck('unit_kerja_id')
-        //     ->flatten() // karena array/json
-        //     ->unique()
-        //     ->count();
 
         $totalWebOpd = WebsitePerangkatDaerah::query()
             ->select('websiteopd')
@@ -48,13 +30,7 @@ class StatistikWebsiteOpd extends BaseWidget
             ->unique()
             ->count();
 
-        $totalAktif = WebsitePerangkatDaerah::query()
-            ->select('mode')
-            ->get()
-            ->pluck('mode')
-            ->unique()
-            ->count();
-
+        $totalAktif = WebsitePerangkatDaerah::where('status', 'aktif')->count();
         return [
             Stat::make('Total Organisasi Perangkat Daerah ', $total)
                 ->icon('heroicon-s-map-pin')
