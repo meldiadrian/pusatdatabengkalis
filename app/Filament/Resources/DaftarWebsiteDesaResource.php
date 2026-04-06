@@ -4,10 +4,13 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use App\Models\Desa;
+use App\Models\User;
 use Filament\Tables;
 use Filament\Forms\Form;
 use App\Models\Kecamatan;
+use App\Models\UnitKerja;
 use Filament\Tables\Table;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use App\Models\DaftarWebsiteDesa;
 use Filament\Forms\Components\Select;
@@ -19,6 +22,7 @@ use App\Models\DaftarAplikasiPerangkatDaerah;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\DaftarWebsiteDesaResource\Pages;
 use App\Filament\Resources\DaftarWebsiteDesaResource\RelationManagers;
+
 
 
 
@@ -38,17 +42,35 @@ class DaftarWebsiteDesaResource extends Resource
     //     return parent::getEloquentQuery()
     //         ->with('kecamatan');
     // }
-
-    public static function getEloquentQuery(): Builder
+    public static function canViewAny(): bool
     {
-        $user = auth()->user();
-
-        return parent::getEloquentQuery()
-            ->when($user->role === 'user', function ($query) use ($user) {
-                $query->where('id', $user->id);
-            })
-            ->with('kecamatan');
+        return auth()->check(); // semua role boleh lihat tabel
     }
+
+
+    // public static function getEloquentQuery(): Builder
+    // {
+    //     return parent::getEloquentQuery()
+    //         ->whereHas('unitKerja', function ($q) {
+    //             $q->where('tipe', 'OPD');
+    //         });
+    // }
+
+    // public function unitKerja()
+    // {
+    //     return $this->belongsTo(UnitKerja::class, 'unit_kerja_id');
+    // }
+
+    // public static function getEloquentQuery(): Builder
+    // {
+    //     $user = auth()->user();
+
+    //     return parent::getEloquentQuery()
+    //         ->when($user->role === 'user', function ($query) use ($user) {
+    //             $query->where('id', $user->id);
+    //         })
+    //         ->with('kecamatan', 'UnitKerja');
+    // }
 
     public static function form(Form $form): Form
     {
@@ -127,15 +149,18 @@ class DaftarWebsiteDesaResource extends Resource
             ->columns([
                 TextColumn::make('no')
                     ->label('No')
+                    ->disableClick()
                     ->rowIndex(isFromZero: false),
 
                 TextColumn::make('kecamatan.nama_kecamatan')
                     ->label('Kecamatan')
+                    ->disableClick()
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('desa_ids')
                     ->label('Nama Desa')
+                    ->disableClick()
                     ->formatStateUsing(function ($state) {
                         if (empty($state)) {
                             return '-';
@@ -151,6 +176,7 @@ class DaftarWebsiteDesaResource extends Resource
 
                 TextColumn::make('websitedesa')
                     ->label('Alamat Website')
+                    ->disableClick()
                     ->wrap()
                     ->copyable()
                     ->limit(80)
@@ -165,14 +191,17 @@ class DaftarWebsiteDesaResource extends Resource
                     ]),
 
                 TextColumn::make('pembuat')
+                    ->disableClick()
                     ->label('Pembuat')
                     ->searchable(),
 
                 TextColumn::make('status')
+                    ->disableClick()
                     ->label('Status')
                     ->searchable(),
 
                 TextColumn::make('keterangan')
+                    ->disableClick()
                     ->label('Keterangan')
                     ->wrap()
                     ->limit(80)
@@ -190,11 +219,12 @@ class DaftarWebsiteDesaResource extends Resource
                     ->extraAttributes([
                         'style' => 'background-color: #facc15; color: black;'
                     ])
-                    ->visible(
-                        fn($record) =>
-                        auth()->user()->role === 'user' ||
-                            $record->user_id === auth()->id()
-                    ),
+                    ->visible(fn($record) => $record->user_id === auth()->id()),
+                // ->visible(
+                //     fn($record) =>
+                //     auth()->user()->role === 'admin'
+                //         || $record->user_id === auth()->id()
+                //),
 
 
                 Tables\Actions\DeleteAction::make()
@@ -202,10 +232,17 @@ class DaftarWebsiteDesaResource extends Resource
                     ->extraAttributes([
                         'style' => 'background-color: #dc2626; color: white;'
                     ])
+                    // ->visible(
+                    //     fn($record) =>
+                    //     auth()->user()->role === 'admin' ||
+
+                    //         $record->user_id === auth()->id()
+                    // )
+
                     ->visible(
                         fn($record) =>
-                        auth()->user()->role === 'user' ||
-                            $record->user_id === auth()->id()
+                        auth()->user()->role === 'admin'
+                            || $record->user_id === auth()->id()
                     )
             ])
 

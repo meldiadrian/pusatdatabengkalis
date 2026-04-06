@@ -64,5 +64,8 @@ class User extends Authenticatable
         return $this->role === 'user';
     }
 
-              
+    public function isOPD(): bool
+    {
+        return $this->role === 'OPD';
+    }
 }

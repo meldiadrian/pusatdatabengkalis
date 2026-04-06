@@ -1,54 +1,64 @@
 <?php
 
-namespace App\Filament\Resources\DaftarAplikasiPerangkatDaerahResource\Widgets;
+namespace App\Filament\Resources\DaftarWebsitePerangkatDaerahResource\Widgets;
 
-use App\Models\DaftarAplikasiPerangkatDaerah;
-use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+use App\Models\UnitKerja;
+use Illuminate\Support\Facades\DB;
+use App\Models\WebsitePerangkatDaerah;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+use Illuminate\Database\Eloquent\Model;
 
-class StatistikAplikasiOpd extends BaseWidget
+
+class StatistikWebsiteOpd extends BaseWidget
 {
+
+
 
     protected function getStats(): array
     {
-        // $total = DaftarAplikasiPerangkatDaerah::count();
-        $total = DaftarAplikasiPerangkatDaerah::whereHas('unitKerja', function ($q) {
-            $q->where('tipe', 'OPD');
-        })
-            ->count();
+        // $total = WebsitePerangkatDaerah::query()
+        //     ->whereHas('unitKerja', function ($q) {
+        //         $q->where('tipe', 'OPD');
+        //     })
+        //     ->count(); // ✅ ini akan jadi 3
 
-        // $totalDesa = DaftarAplikasiPerangkatDaerah::query()
+        $total = WebsitePerangkatDaerah::query()
+            ->whereHas('unitKerja', fn($q) => $q->where('tipe', 'OPD'))
+            ->count();
+        // $total = WebsitePerangkatDaerah::query()
+        //     //     ->get()
+        //     //     ->pluck('kecamatan_id')
+        //     //     ->flatten() // karena array/json
+        //     //     ->unique()
+        //     //     ->count();
+
         //     ->select('unit_kerja_id')
         //     ->get()
         //     ->pluck('unit_kerja_id')
         //     ->flatten() // karena array/json
         //     ->unique()
         //     ->count();
-        $total = DaftarAplikasiPerangkatDaerah::whereHas('unitKerja', function ($q) {
-            $q->where('tipe', 'OPD');
-        })
-            ->distinct('unit_kerja_id')
-            ->count('unit_kerja_id');
 
-        $totalDesa = DaftarAplikasiPerangkatDaerah::query()
-            ->select('unit_kerja_id')
+        $totalWebOpd = WebsitePerangkatDaerah::query()
+            ->select('websiteopd')
             ->get()
-            ->pluck('unit_kerja_id')
+            ->pluck('websiteopd')
             ->flatten() // karena array/json
             ->unique()
             ->count();
 
-        $totalAktif = DaftarAplikasiPerangkatDaerah::query()
-            ->select('status')
+        $totalAktif = WebsitePerangkatDaerah::query()
+            ->select('mode')
             ->get()
-            ->pluck('status')
+            ->pluck('mode')
             ->unique()
             ->count();
 
         return [
             Stat::make('Total Organisasi Perangkat Daerah ', $total)
-                ->icon('heroicon-s-circle-stack')
-                ->description('Jumlah keseluruhan unit kerja yang terdaftar')
+                ->icon('heroicon-s-map-pin')
+                ->description('Jumlah keseluruhan OPD yang terdaftar')
                 ->extraAttributes([
                     'style' => '
            box-shadow: 0 -4px 6px -2px rgba(0, 0, 255, 0.6);
@@ -56,9 +66,9 @@ class StatistikAplikasiOpd extends BaseWidget
                     'class' => '!bg-blue-600 !text-danger',
                 ]),
 
-            Stat::make('Total Desa', $totalDesa)
-                ->icon('heroicon-o-map')
-                ->description('Jumlah keseluruhan Desa yang terdaftar')
+            Stat::make('Total Website', $totalWebOpd)
+                ->icon('heroicon-s-globe-alt')
+                ->description('Jumlah keseluruhan website yang terdaftar')
                 ->extraAttributes([
                     'style' => '
             --fi-stats-card-color: #ffffff;       
@@ -68,7 +78,7 @@ class StatistikAplikasiOpd extends BaseWidget
                 ]),
 
             Stat::make('Total Website Aktif', $totalAktif)
-                ->icon('heroicon-o-map')
+                ->icon('heroicon-s-globe-alt')
                 ->description('Jumlah Website Aktif')
                 ->extraAttributes([
                     'style' => '
@@ -78,7 +88,6 @@ class StatistikAplikasiOpd extends BaseWidget
                 border-radius:12px;',
                     'class' => '!bg-danger-600 !text-danger',
                 ]),
-
 
         ];
     }

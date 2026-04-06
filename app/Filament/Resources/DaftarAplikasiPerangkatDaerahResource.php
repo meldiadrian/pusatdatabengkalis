@@ -44,13 +44,26 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('unit_kerja_id', fn($query) => $query->where('tipe', 'opd'))
-                    ->relationship('unitKerja', 'nama_opd')
+                // Forms\Components\Select::make('unit_kerja_id', fn($query) => $query->where('tipe', 'opd'))
+                //     ->relationship('unitKerja', 'nama_opd')
+                //     ->label('Perangkat Daerah')
+                //     // ->default(fn() => auth()->user()->unit_kerja_id)
+                //     //->disabled()
+                //     ->dehydrated()
+                //     ->placeholder('Pilih perangkat daerah')
+                //     ->required(),
+
+                Forms\Components\Select::make('unit_kerja_id')
+                    ->relationship(
+                        name: 'unitKerja',
+                        titleAttribute: 'nama_opd',
+                        modifyQueryUsing: fn($query) => $query->where('tipe', 'opd')
+                    )
                     ->label('Perangkat Daerah')
+                    ->default(fn() => auth()->user()->unit_kerja_id)
                     // ->default(fn() => auth()->user()->unit_kerja_id)
-                    //->disabled()
-                    ->dehydrated()
                     ->placeholder('Pilih perangkat daerah')
+                    //->disabled()
                     ->required(),
 
 
@@ -133,6 +146,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                         DaftarAplikasiPerangkatDaerah::STATUS,
                         DaftarAplikasiPerangkatDaerah::STATUS
                     ))
+                    ->searchable()
                     ->required(),
 
 
@@ -300,38 +314,15 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->extraAttributes([
                         'style' => 'background-color: #facc15; color: black;'
                     ])
-                    // ->visible(
-                    //     fn($record) =>
-                    //     auth()->user()->role === 'user' ||
-                    //         $record->user_id === auth()->id()
-                    // ),
-                    ->visible(
-                        fn($record) => (
-                            auth()->user()->role === 'user' &&
-                            auth()->user()->unitKerja?->tipe === 'OPD'
-                        )
-                            ||
-                            $record->user_id === auth()->id()
-                    ),
+                    ->visible(fn($record) => $record->user_id === auth()->id()),
+
 
                 Tables\Actions\DeleteAction::make()
                     ->button()
                     ->extraAttributes([
                         'style' => 'background-color: danger; color: white;'
                     ])
-                    // ->visible(
-                    //     fn($record) =>
-                    //     auth()->user()->role === 'user' ||
-                    //         $record->user_id === auth()->id()
-                    // ),
-                    ->visible(
-                        fn($record) => (
-                            auth()->user()->role === 'user' &&
-                            auth()->user()->unitKerja?->tipe === 'OPD'
-                        )
-                            ||
-                            $record->user_id === auth()->id()
-                    ),
+                    ->visible(fn($record) => $record->user_id === auth()->id())
 
             ])
 

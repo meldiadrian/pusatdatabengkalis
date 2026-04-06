@@ -24,6 +24,7 @@ class WilayahBengkalisSeeder extends Seeder
             'Kelapapati',
             'Pedekik',
             'Penampi',
+            'Penebal',
             'Rimba Sekampung',
             'Sebauk',
             'Sekodi',
@@ -31,6 +32,9 @@ class WilayahBengkalisSeeder extends Seeder
             'Teluk Latak',
             'Wonosari',
         ];
+
+        // 🔥 URUTKAN A–Z
+        sort($desas);
 
         // Insert semua desa
         foreach ($desas as $desa) {

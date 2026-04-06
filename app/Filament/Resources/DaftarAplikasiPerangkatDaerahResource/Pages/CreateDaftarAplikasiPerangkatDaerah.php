@@ -47,7 +47,10 @@ class CreateDaftarAplikasiPerangkatDaerah extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+
         $data['unit_kerja_id'] = auth()->user()->unit_kerja_id;
+        $data['user_id'] = auth()->id();
+
         return $data;
     }
 

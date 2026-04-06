@@ -19,4 +19,14 @@ class CreateDaftarWebsiteDesa extends CreateRecord
     {
         return '';
     }
+    public static function canCreate(): bool
+    {
+        return !auth()->user()->isOPD();
+    }
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['user_id'] = auth()->id();
+        return $data;
+    }
 }
