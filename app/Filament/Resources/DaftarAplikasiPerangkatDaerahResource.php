@@ -66,10 +66,6 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     //->disabled()
                     ->required(),
 
-
-
-
-
                 Forms\Components\TextInput::make('websiteopd')
                     ->label('Domain Website Kantor')
                     ->placeholder('Ex. www.bengkaliskab.go.id, Isi Dengan Tanda (-) Jika tidak ada')
@@ -149,7 +145,6 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->searchable()
                     ->required(),
 
-
                 Forms\Components\TextInput::make('dimanfaatkan_untuk_layanan')
                     ->label('Dimanfaatkan Untuk Layanan')
                     ->placeholder('Isi dimanfaatkan untuk layanan')
@@ -162,17 +157,12 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
-
-
             ]);
     }
 
     public static function table(Table $table): Table
     {
 
-        //$user = Filament::auth()->user();
-        // $isBasicUser = $user->hasRole(User::user);
-        // $isBasicUser = $user->hasRole('user');
         $user = auth()->user();
         $isBasicUser = $user->role === 'user';
         $isBasicAdmin = $user->role === 'admin';
@@ -314,7 +304,12 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->extraAttributes([
                         'style' => 'background-color: #facc15; color: black;'
                     ])
-                    ->visible(fn($record) => $record->user_id === auth()->id()),
+                    // ->visible(fn($record) => $record->user_id === auth()->id()),
+                    ->visible(
+                        fn($record) =>
+                        strtolower(auth()->user()->role) === 'admin'
+                            || $record->user_id == auth()->id()
+                    ),
 
 
                 Tables\Actions\DeleteAction::make()
@@ -322,8 +317,12 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->extraAttributes([
                         'style' => 'background-color: danger; color: white;'
                     ])
-                    ->visible(fn($record) => $record->user_id === auth()->id())
-
+                    //->visible(fn($record) => $record->user_id === auth()->id())
+                    ->visible(
+                        fn($record) =>
+                        strtolower(auth()->user()->role) === 'admin'
+                            || $record->user_id == auth()->id()
+                    ),
             ])
 
             ->bulkActions([

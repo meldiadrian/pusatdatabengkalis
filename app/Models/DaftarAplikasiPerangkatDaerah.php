@@ -10,7 +10,7 @@ class DaftarAplikasiPerangkatDaerah extends Model
 
     use HasFactory;
     public const MODE = ['online', 'offline'];
-    public const STATUS = ['aktif', 'tidak aktif'];
+    public const STATUS = ['Aktif', 'Tidak Aktif'];
 
 
     protected $table = 'daftar_aplikasi_perangkat_daerahs';

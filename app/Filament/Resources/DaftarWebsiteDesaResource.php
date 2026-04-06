@@ -219,12 +219,12 @@ class DaftarWebsiteDesaResource extends Resource
                     ->extraAttributes([
                         'style' => 'background-color: #facc15; color: black;'
                     ])
-                    ->visible(fn($record) => $record->user_id === auth()->id()),
-                // ->visible(
-                //     fn($record) =>
-                //     auth()->user()->role === 'admin'
-                //         || $record->user_id === auth()->id()
-                //),
+                    // ->visible(fn($record) => $record->user_id === auth()->id()),
+                    ->visible(
+                        fn($record) =>
+                        strtolower(auth()->user()->role) === 'admin'
+                            || $record->user_id == auth()->id()
+                    ),
 
 
                 Tables\Actions\DeleteAction::make()
