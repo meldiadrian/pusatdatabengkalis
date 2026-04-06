@@ -17,13 +17,6 @@ class StatistikAplikasiOpd extends BaseWidget
         })
             ->count();
 
-        // $totalDesa = DaftarAplikasiPerangkatDaerah::query()
-        //     ->select('unit_kerja_id')
-        //     ->get()
-        //     ->pluck('unit_kerja_id')
-        //     ->flatten() // karena array/json
-        //     ->unique()
-        //     ->count();
         $total = DaftarAplikasiPerangkatDaerah::whereHas('unitKerja', function ($q) {
             $q->where('tipe', 'OPD');
         })
@@ -34,7 +27,7 @@ class StatistikAplikasiOpd extends BaseWidget
             ->select('unit_kerja_id')
             ->get()
             ->pluck('unit_kerja_id')
-            ->flatten() // karena array/json
+            ->flatten()
             ->unique()
             ->count();
 
