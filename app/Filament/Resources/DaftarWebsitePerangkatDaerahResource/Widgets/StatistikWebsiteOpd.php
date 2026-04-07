@@ -22,6 +22,7 @@ class StatistikWebsiteOpd extends BaseWidget
             ->whereHas('unitKerja', fn($q) => $q->where('tipe', 'OPD'))
             ->count();
 
+
         $totalWebOpd = WebsitePerangkatDaerah::query()
             ->select('websiteopd')
             ->get()

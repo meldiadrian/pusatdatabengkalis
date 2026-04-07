@@ -53,11 +53,17 @@ class StatistikWebsiteDesa extends BaseWidget
         //     ->unique()
         //     ->count();
 
-        $totalDesa = DaftarWebsiteDesa::whereHas('unitKerja', function ($q) {
-            $q->whereRaw('LOWER(tipe) = ?', ['desa']);
-        })->count();
+        // $totalDesa = DaftarWebsiteDesa::whereHas('unitKerja', function ($q) {
+        //     $q->whereRaw('LOWER(tipe) = ?', ['Desa']);
+        // })->count();
 
-      
+       $totalDesa = DaftarWebsiteDesa::query()
+            ->select('tipe')
+            ->get()
+            ->pluck('tipe')
+            ->unique()
+            ->count();
+
 
         $totalAktif = DaftarWebsiteDesa::query()
             ->select('websitedesa')
