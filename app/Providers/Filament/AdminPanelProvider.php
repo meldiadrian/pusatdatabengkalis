@@ -25,7 +25,7 @@ use App\Filament\Pages\Auth\Login;
 use Filament\View\PanelsRenderHook;
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
-
+use App\Filament\Resources\DaftarWebsiteDesaResource\Widgets\StatistikWebsiteDesa;
 
 
 
@@ -73,7 +73,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                //Widgets\AccountWidget::class,
+                Widgets\AccountWidget::class,
+               // StatistikWebsiteDesa::class,
                 //widget filament pada dashboard
                 // Widgets\FilamentInfoWidget::class,
                 // -----end---

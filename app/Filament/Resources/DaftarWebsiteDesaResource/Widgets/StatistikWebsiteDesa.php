@@ -38,20 +38,26 @@ class StatistikWebsiteDesa extends BaseWidget
         //     ->unique()
         //     ->count();
 
-         $total = DaftarWebsiteDesa::query()
+        $total = DaftarWebsiteDesa::query()
             ->select('kecamatan_id')
             ->get()
             ->pluck('kecamatan_id')
             ->flatten() // karena array/json
             ->unique()
             ->count();
-        $totalDesa = DaftarWebsiteDesa::query()
-            ->select('desa_ids')
-            ->get()
-            ->pluck('desa_ids')
-            ->flatten() // karena array/json
-            ->unique()
-            ->count();
+        // $totalDesa = DaftarWebsiteDesa::query()
+        //     ->select('desa_ids')
+        //     ->get()
+        //     ->pluck('desa_ids')
+        //     ->flatten() // karena array/json
+        //     ->unique()
+        //     ->count();
+
+        $totalDesa = DaftarWebsiteDesa::whereHas('unitKerja', function ($q) {
+            $q->whereRaw('LOWER(tipe) = ?', ['desa']);
+        })->count();
+
+      
 
         $totalAktif = DaftarWebsiteDesa::query()
             ->select('websitedesa')

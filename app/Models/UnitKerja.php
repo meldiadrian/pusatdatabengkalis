@@ -15,4 +15,10 @@ class UnitKerja extends Model
     {
         return $this->hasMany(DaftarAplikasiPerangkatDaerah::class, 'unit_kerja_id');
     }
+
+
+    public function websiteDesas()
+    {
+        return $this->hasMany(DaftarWebsiteDesa::class, 'unit_kerja_id');
+    }
 }
