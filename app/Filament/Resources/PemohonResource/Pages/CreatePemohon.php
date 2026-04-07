@@ -83,14 +83,14 @@ class CreatePemohon extends CreateRecord
                         ->preload()
                         ->default(auth()->user()->unit_kerja_id)
                         ->disabled()
-                    // ->required(),
+                        ->required(),
                 ]),
 
             Step::make('Data Yang Dibutuhkan')
                 ->schema([
                     Textarea::make('data_diminta') //ke DB
                         ->label('Data Yang Dibutuhkan')
-                    // ->required(),
+                        ->required(),
                 ]),
 
 
@@ -98,7 +98,7 @@ class CreatePemohon extends CreateRecord
                 ->schema([
                     Textarea::make('tujuan_penggunaan') //ke DB
                         ->label('Tujuan Penggunaan Data')
-                    // ->required(),
+                        ->required(),
                 ]),
 
             Step::make('Instansi Yang Dituju')
@@ -109,7 +109,7 @@ class CreatePemohon extends CreateRecord
                         ->relationship('unitKerjaTujuan', 'nama_opd') //relasi/pengambilan data dari tabel unit kerja
                         ->searchable()
                         ->preload()
-                    // ->required(),
+                        ->required(),
                 ]),
 
             Step::make('Upload Dokumen')
@@ -125,7 +125,7 @@ class CreatePemohon extends CreateRecord
                         ->label('📎 Upload Lampiran PDF/Excel')
                         ->directory('Surat') // simpan di folder storage/app/public/surat
                         ->disk('public')     // pakai disk public
-                    // ->required(),
+                        ->required(),
 
                 ]),
 

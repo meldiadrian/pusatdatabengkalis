@@ -20,7 +20,7 @@
     {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::AUTH_LOGIN_FORM_AFTER, scopes: $this->getRenderHookScopes()) }}
 
     <div class="custom-footer text-xs text-gray-500 text-center leading-tight">
-        <p>Dinas Komunikasi, Informatika, Statistik dan Persandian Kab. Bengkalis. All rights reserved. Developed by Adrian.</p>
+        <p>Dinas Komunikasi, Informatika, Statistik dan Persandian Kab. Bengkalis. All rights reserved. Developed by Tim Aplikasi.</p>
         <!-- <p class="mt-0">Developed by Adrian</p> -->
     </div>
 
