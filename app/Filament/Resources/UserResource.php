@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Facades\Filament;
 
 class UserResource extends Resource
 {
@@ -21,11 +22,19 @@ class UserResource extends Resource
     protected static ?string $navigationGroup = 'Manajemen Pengguna & Unit Kerja';
     protected static ?int $navigationSort = 3;
 
-
-    public static function shouldRegisterNavigation(): bool
+    //login session check, admin full akses, user hanya bisa akses data sendiri
+    public static function getEloquentQuery(): Builder
     {
-        return auth()->user()->isAdmin();
+        $user = auth()->user();
+
+        return parent::getEloquentQuery()
+            ->when(
+                $user->role !== 'admin',
+                fn($query) => $query->where('id', $user->id)
+            );
     }
+//------------------end off session check------------------
+
 
     public static function form(Form $form): Form
     {
