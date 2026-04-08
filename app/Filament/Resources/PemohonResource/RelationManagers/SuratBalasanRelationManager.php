@@ -22,6 +22,22 @@ class SuratBalasanRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'keterangan';
 
+    protected function getTableHeaderActions(): array
+    {
+        return [
+            CreateAction::make()
+                ->label('Tambah Surat Balasan')
+                ->icon('heroicon-o-plus')
+                ->color('primary')
+                ->after(function ($record) {
+                    // update status pemohon jadi disetujui
+                    $this->ownerRecord->update([
+                        'status' => 'disetujui'
+                    ]);
+                }),
+        ];
+    }
+
     public function table(Tables\Table $table): Tables\Table
     {
         return $table
@@ -76,7 +92,7 @@ class SuratBalasanRelationManager extends RelationManager
                         'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
                         'image/jpeg', // .jpg, .jpeg
                         'image/png', // .png
-                        
+
                     ])
                     ->required(false),
                 Textarea::make('keterangan')

@@ -56,14 +56,31 @@ class SuratBalasanRelationManager extends RelationManager
             ->filters([
                 //
             ])
+            // ->headerActions([
+            //     Tables\Actions\CreateAction::make()
+            //         ->label('Upload Data yang Diminta')
+            //         ->icon('heroicon-o-plus')
+            //         ->modalHeading('')
+            //         ->color('primary'),
+
+            // ])
+
+
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->label('Upload Data yang Diminta')
                     ->icon('heroicon-o-plus')
                     ->modalHeading('')
-                    ->color('primary'),
-
+                    ->color('primary')
+                    ->after(function ($record) {
+                        // update status pemohon jadi sukses
+                        $this->ownerRecord->update([
+                            'status' => 'sukses'
+                        ]);
+                    }),
             ])
+
+
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
@@ -108,7 +125,15 @@ class SuratBalasanRelationManager extends RelationManager
                     ->maxSize(4096) // 4MB
                     ->disk('public')
                     ->directory('Surat/Balasan')
-                    ->acceptedFileTypes(['application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png'])
+                    //->acceptedFileTypes(['application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png'])
+                     ->acceptedFileTypes([
+                        'application/pdf',
+                        'application/vnd.ms-excel',
+                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        'image/jpeg',
+                        'image/png',
+                    ])
                     ->required(false),
                 Textarea::make('keterangan')
                     ->label('Keterangan')

@@ -13,8 +13,13 @@ use Filament\Infolists\Components\TextEntry;
 class EditPemilikData extends EditRecord
 {
     protected static string $resource = PemilikDataResource::class;
+    protected static ?string $title = 'Upload Data yang Diminta';//ganti judul halaman
 
-   
+     public function getHeading(): string
+    {
+        return '';
+    }
+
 
     protected function getHeaderActions(): array
     {

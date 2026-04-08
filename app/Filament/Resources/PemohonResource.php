@@ -69,6 +69,10 @@ class PemohonResource extends Resource
                         'application/pdf',
                         'application/vnd.ms-excel',
                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        'image/jpeg',
+                        'image/png',
+
                     ])
                     ->label('📎 Upload Lampiran PDF/Excel')
                     ->directory('Surat') // simpan di folder storage/app/public/surat
@@ -112,6 +116,17 @@ class PemohonResource extends Resource
                     ->wrap() //fungsi teks jadi rata kebawah
                     ->limit(80) //limit teks
                     ->searchable(),
+
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn(string $state) => match ($state) {
+                        'pending' => 'warning',
+                        'sukses' => 'success',
+                        'ditolak' => 'danger',
+                        default => 'gray',
+                    }),
+
                 Tables\Columns\TextColumn::make('upload_surat')
                     ->label('Surat Permohonan')
                     ->hidden(),
@@ -128,7 +143,7 @@ class PemohonResource extends Resource
                     ->label('Keterangan')
                     ->getStateUsing(function ($record) {
                         $last = $record->suratBalasan()->latest()->first();
-                        return $last?->keterangan ?? 'Data tidak ada';
+                        return $last?->keterangan ?? '';
                     })
                     ->wrap()
                     ->limit(80),

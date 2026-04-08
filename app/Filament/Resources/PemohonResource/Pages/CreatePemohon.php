@@ -24,6 +24,12 @@ class CreatePemohon extends CreateRecord
     use CreateRecord\Concerns\HasWizard;
     protected static string $resource = PemohonResource::class;
 
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['status'] = 'pending';
+        return $data;
+    }
+
     public function getHeading(): string
     {
         return '';
