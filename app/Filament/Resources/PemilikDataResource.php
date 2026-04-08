@@ -30,8 +30,8 @@ class PemilikDataResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-s-book-open';
     protected static ?string $modelLabel = 'Instansi Penyedia Data';
-    protected static ?string $pluralModelLabel = 'Surat Masuk';
-    protected static ?string $navigationGroup = 'Manajemen Surat';
+    protected static ?string $pluralModelLabel = 'Pemilik Data';
+    protected static ?string $navigationGroup = 'Permintaan Data';
     protected static ?int $navigationSort = 0;
 
     public static function shouldRegisterNavigation(): bool
@@ -51,19 +51,23 @@ class PemilikDataResource extends Resource
                             ->label('Instansi Pemohon')
                             ->required()
                             ->searchable()
+                            ->disabled()
                             ->preload(),
                         Forms\Components\Textarea::make('data_diminta')
                             ->label('Data Yang Dibutuhkan')
                             ->required()
+                            ->disabled()
                             ->columnSpanFull(),
                         Forms\Components\Textarea::make('tujuan_penggunaan')
                             ->label('Tujuan Penggunaan Data')
                             ->required()
+                            ->disabled()
                             ->columnSpanFull(),
                         Forms\Components\Select::make('opd_tujuan')
                             ->relationship('unitKerja', 'nama_opd')
                             ->label('Instansi Tujuan')
                             ->required()
+                            ->disabled()
                             ->searchable()
                             ->preload(),
                         Forms\Components\FileUpload::make('upload_surat')
@@ -76,6 +80,7 @@ class PemilikDataResource extends Resource
                             ->directory('Surat')
                             ->disk('public')
                             ->required()
+                            ->disabled()
                             ->columnSpanFull(),
                     ])->columns(2),
                 // Forms\Components\Section::make('Informasi Keterangan')
@@ -215,6 +220,7 @@ class PemilikDataResource extends Resource
 
 
                 Tables\Actions\EditAction::make()
+                ->label('Proses')
                     ->button()
                     ->icon('heroicon-s-pencil')
                     ->extraAttributes([

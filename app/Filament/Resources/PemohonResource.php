@@ -33,8 +33,8 @@ class PemohonResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-s-book-open';
     protected static ?string $modelLabel = 'Instansi Pemohon';
-    protected static ?string $pluralModelLabel = 'Surat Keluar';
-    protected static ?string $navigationGroup = 'Manajemen Surat';
+    protected static ?string $pluralModelLabel = 'Pemohon';
+    protected static ?string $navigationGroup = 'Permintaan Data';
     protected static ?int $navigationSort = 0;
 
     public static function shouldRegisterNavigation(): bool

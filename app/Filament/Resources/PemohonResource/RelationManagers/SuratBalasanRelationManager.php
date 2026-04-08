@@ -64,7 +64,8 @@ class SuratBalasanRelationManager extends RelationManager
         return $form
             ->schema([
                 FileUpload::make('upload_balasan')
-                    ->label('Upload Surat Balasan Pdf/Excel')
+                    ->label('Upload data yang diminta Pdf,Excel,word,jpg,jpeg,png')
+                    ->maxSize(4096) // 4MB
                     ->directory('Surat/Balasan')
                     ->disk('public')
                     // ->acceptedFileTypes(['application/pdf'])
@@ -72,6 +73,10 @@ class SuratBalasanRelationManager extends RelationManager
                         'application/pdf',
                         'application/vnd.ms-excel', // .xls
                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+                        'image/jpeg', // .jpg, .jpeg
+                        'image/png', // .png
+                        
                     ])
                     ->required(false),
                 Textarea::make('keterangan')

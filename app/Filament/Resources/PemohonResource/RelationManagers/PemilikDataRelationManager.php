@@ -44,7 +44,7 @@ class PemilikDataRelationManager extends RelationManager
                     ->color('success'),
 
                 IconColumn::make('surat_balasan')
-                    ->label('SURAT BALASAN')
+                    ->label('Data yang Diminta')
                     ->tooltip('Download')
                     ->url(function ($record) {
                         $last = $record->suratBalasan()->latest()->first();

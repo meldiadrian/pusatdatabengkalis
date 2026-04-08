@@ -120,11 +120,16 @@ class CreatePemohon extends CreateRecord
                             'application/pdf',
                             'application/vnd.ms-excel', // xls
                             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // xlsx
+                            'application/msword', // .doc
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+                            'image/jpeg', // .jpg, .jpeg
+                            'image/png', // .png
 
                         ])
-                        ->label('📎 Upload Lampiran PDF/Excel')
+                        ->label('📎 Upload Lampiran PDF,Excel,Word,jpg,jpeg,png (Max 2MB)')
                         ->directory('Surat') // simpan di folder storage/app/public/surat
                         ->disk('public')     // pakai disk public
+                        ->maxSize(2048)
                         ->required(),
 
                 ]),

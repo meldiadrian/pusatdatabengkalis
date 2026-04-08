@@ -11,6 +11,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
 use Filament\Tables\Actions\Action;
+use Illuminate\Database\Eloquent\Model;
 
 class SuratBalasanRelationManager extends RelationManager
 {
@@ -18,16 +19,35 @@ class SuratBalasanRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'keterangan';
 
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return 'Data yang Diminta';
+    }
+
     public function table(Tables\Table $table): Tables\Table
     {
         return $table
             ->columns([
                 IconColumn::make('upload_balasan')
-                    ->label('SURAT BALASAN')
-                    ->url(fn($record) => $record->upload_balasan ? route('download.storage.file', ['path' => 'Surat/Balasan/' . $record->upload_balasan]) : null)
+                    ->label('Data yang Diminta')
+                    //->url(fn($record) => $record->upload_balasan ? route('download.storage.file', ['path' => 'Surat/Balasan/' . $record->upload_balasan]) : null)
+                    ->url(function ($record) {
+                        if (!$record->upload_balasan) {
+                            return null;
+                        }
+
+                        if (!\Storage::disk('public')->exists($record->upload_balasan)) {
+                            return null;
+                        }
+
+                        return route('download.storage.file', [
+                            'path' => $record->upload_balasan
+                        ]);
+                    })
                     ->openUrlInNewTab()
                     ->alignCenter()
-                    ->icon('heroicon-s-arrow-down')
+                    ->icon('heroicon-s-circle-stack')
                     ->color('success'),
 
                 TextColumn::make('keterangan')->label('KETERANGAN')->wrap(),
@@ -37,7 +57,12 @@ class SuratBalasanRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label('Upload Data yang Diminta')
+                    ->icon('heroicon-o-plus')
+                    ->modalHeading('')
+                    ->color('primary'),
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -46,12 +71,26 @@ class SuratBalasanRelationManager extends RelationManager
                     ->label('📥 Download')
                     ->icon('heroicon-s-arrow-down')
                     ->color('primary')
+                    // ->url(function ($record) {
+                    //     if ($record->upload_balasan) {
+                    //         return route('download.storage.file', ['path' => 'Surat/Balasan/' . $record->upload_balasan]);
+                    //     }
+                    //     return null;
+                    // })
                     ->url(function ($record) {
-                        if ($record->upload_balasan) {
-                            return route('download.storage.file', ['path' => 'Surat/Balasan/' . $record->upload_balasan]);
+                        if (!$record->upload_balasan) {
+                            return null;
                         }
-                        return null;
+
+                        if (!\Storage::disk('public')->exists($record->upload_balasan)) {
+                            return null;
+                        }
+
+                        return route('download.storage.file', [
+                            'path' => $record->upload_balasan
+                        ]);
                     })
+
                     ->openUrlInNewTab()
                     ->disabled(fn($record) => !$record->upload_balasan),
             ])
@@ -65,10 +104,11 @@ class SuratBalasanRelationManager extends RelationManager
         return $form
             ->schema([
                 FileUpload::make('upload_balasan')
-                    ->label('Upload Surat Balasan')
+                    ->label('Upload Data yang Diminta (PDF, Excel, Word, jpg, jpeg, png - Max 4MB)')
+                    ->maxSize(4096) // 4MB
                     ->disk('public')
                     ->directory('Surat/Balasan')
-                    ->acceptedFileTypes(['application/pdf'])
+                    ->acceptedFileTypes(['application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png'])
                     ->required(false),
                 Textarea::make('keterangan')
                     ->label('Keterangan')
