@@ -35,7 +35,7 @@ class StatistikWebsiteOpd extends BaseWidget
         return [
             Stat::make('Total Organisasi Perangkat Daerah ', $total)
                 ->icon('heroicon-s-map-pin')
-                ->description('Jumlah keseluruhan OPD yang terdaftar')
+                ->description('Jumlah Keseluruhan OPD Terdaftar')
                 ->extraAttributes([
                     'style' => '
            box-shadow: 0 -4px 6px -2px rgba(0, 0, 255, 0.6);
@@ -45,7 +45,7 @@ class StatistikWebsiteOpd extends BaseWidget
 
             Stat::make('Total Website', $totalWebOpd)
                 ->icon('heroicon-s-globe-alt')
-                ->description('Jumlah keseluruhan website yang terdaftar')
+                ->description('Jumlah Keseluruhan Website Terdaftar')
                 ->extraAttributes([
                     'style' => '
             --fi-stats-card-color: #ffffff;       
@@ -56,7 +56,7 @@ class StatistikWebsiteOpd extends BaseWidget
 
             Stat::make('Total Website Aktif', $totalAktif)
                 ->icon('heroicon-s-globe-alt')
-                ->description('Jumlah Website Aktif')
+                ->description('Jumlah Keseluruhan Website yang Aktif')
                 ->extraAttributes([
                     'style' => '
                 --fi-stats-card-color: #ffffff;       

@@ -11,17 +11,19 @@ use Filament\Notifications\Notification;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 ////
-use Filament\Forms\Components\Wizard\Step;
+//use Filament\Forms\Components\Wizard\Step;
 use Filament\Notifications\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\PemohonResource;
 use Filament\Forms\Components\MarkdownEditor;
-////
+use Filament\Forms\Form;
+use Filament\Forms\Components\Wizard;
+use Filament\Forms\Components\Wizard\Step;
 
-///////
 class CreatePemohon extends CreateRecord
 {
     use CreateRecord\Concerns\HasWizard;
+
     protected static string $resource = PemohonResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
@@ -76,8 +78,6 @@ class CreatePemohon extends CreateRecord
 
     protected function getSteps(): array
     {
-
-
         return [
             Step::make('Instansi Pemohon')
                 //->description('Pilih Instansi')
@@ -139,6 +139,7 @@ class CreatePemohon extends CreateRecord
                         ->required(),
 
                 ]),
+
 
         ];
     }

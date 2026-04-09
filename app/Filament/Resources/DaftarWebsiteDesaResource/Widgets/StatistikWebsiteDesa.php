@@ -57,7 +57,7 @@ class StatistikWebsiteDesa extends BaseWidget
         //     $q->whereRaw('LOWER(tipe) = ?', ['Desa']);
         // })->count();
 
-       $totalDesa = DaftarWebsiteDesa::query()
+        $totalDesa = DaftarWebsiteDesa::query()
             ->select('tipe')
             ->get()
             ->pluck('tipe')
@@ -96,7 +96,7 @@ class StatistikWebsiteDesa extends BaseWidget
 
             Stat::make('Total Website Aktif', $totalAktif)
                 ->icon('heroicon-s-globe-alt')
-                ->description('Jumlah Website Aktif')
+                ->description('Jumlah Keseluruhan Website Aktif')
                 ->extraAttributes([
                     'style' => '
                 --fi-stats-card-color: #ffffff;       

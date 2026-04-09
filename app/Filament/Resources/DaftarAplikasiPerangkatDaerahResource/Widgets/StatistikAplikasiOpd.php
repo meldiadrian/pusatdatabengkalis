@@ -39,7 +39,7 @@ class StatistikAplikasiOpd extends BaseWidget
         return [
             Stat::make('Total Organisasi Perangkat Daerah ', $total)
                 ->icon('heroicon-s-circle-stack')
-                ->description('Jumlah keseluruhan unit kerja yang terdaftar')
+                ->description('Jumlah Keseluruhan Unit Kerja yang Terdaftar')
                 ->extraAttributes([
                     'style' => '
            box-shadow: 0 -4px 6px -2px rgba(0, 0, 255, 0.6);
@@ -49,7 +49,7 @@ class StatistikAplikasiOpd extends BaseWidget
 
             Stat::make('Total Aplikasi Organisasi Perangkat Daerah', $totalAplikasi)
                 ->icon('heroicon-o-map')
-                ->description('Jumlah keseluruhan Aplikasi yang terdaftar')
+                ->description('Jumlah Keseluruhan Aplikasi yang Terdaftar')
                 ->extraAttributes([
                     'style' => '
             --fi-stats-card-color: #ffffff;       
@@ -58,9 +58,9 @@ class StatistikAplikasiOpd extends BaseWidget
             border-radius: 12px;',
                 ]),
 
-            Stat::make('Total Website Aktif', $totalAktif)
+            Stat::make('Total Aplikasi Aktif', $totalAktif)
                 ->icon('heroicon-o-map')
-                ->description('Jumlah Website Aktif')
+                ->description('Jumlah Keseluruhan Aplikasi yang Aktif')
                 ->extraAttributes([
                     'style' => '
                 --fi-stats-card-color: #ffffff;       
