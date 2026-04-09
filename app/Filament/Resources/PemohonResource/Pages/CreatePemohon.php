@@ -26,6 +26,13 @@ class CreatePemohon extends CreateRecord
 
     protected static string $resource = PemohonResource::class;
 
+    protected function wizard(): Wizard
+    {
+        return Wizard::make($this->getSteps())
+            ->backButtonLabel('Kembali')
+            ->nextButtonLabel('Selanjutnya');
+    }
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['status'] = 'pending';
@@ -79,6 +86,7 @@ class CreatePemohon extends CreateRecord
     protected function getSteps(): array
     {
         return [
+
             Step::make('Instansi Pemohon')
                 //->description('Pilih Instansi')
                 ->schema([
@@ -96,15 +104,23 @@ class CreatePemohon extends CreateRecord
                 ->schema([
                     Textarea::make('data_diminta') //ke DB
                         ->label('Data Yang Dibutuhkan')
-                        ->required(),
+                        ->required()
+                        ->validationMessages([
+                            'required' => 'Mohon jelaskan data yang dibutuhkan',
+                        ]),
+                    // menyesuaikan nama field di pesan error,
                 ]),
+
 
 
             Step::make('Tujuan Penggunaan Data')
                 ->schema([
                     Textarea::make('tujuan_penggunaan') //ke DB
                         ->label('Tujuan Penggunaan Data')
-                        ->required(),
+                        ->required()
+                        ->validationMessages([
+                            'required' => 'Mohon jelaskan tujuan penggunaan data',
+                        ]),
                 ]),
 
             Step::make('Instansi Yang Dituju')
@@ -115,7 +131,10 @@ class CreatePemohon extends CreateRecord
                         ->relationship('unitKerjaTujuan', 'nama_opd') //relasi/pengambilan data dari tabel unit kerja
                         ->searchable()
                         ->preload()
-                        ->required(),
+                        ->required()
+                        ->validationMessages([
+                            'required' => 'Mohon pilih instansi tujuan',
+                        ]),
                 ]),
 
             Step::make('Upload Dokumen')
@@ -136,7 +155,10 @@ class CreatePemohon extends CreateRecord
                         ->directory('Surat') // simpan di folder storage/app/public/surat
                         ->disk('public')     // pakai disk public
                         ->maxSize(2048)
-                        ->required(),
+                        ->required()
+                        ->validationMessages([
+                            'required' => 'Mohon upload dokumen pendukung',
+                        ]),
 
                 ]),
 
