@@ -140,6 +140,16 @@ class PemilikDataResource extends Resource
                     ->limit(80)
                     ->searchable(),
 
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn(string $state) => match ($state) {
+                        'pending' => 'warning',
+                        'sukses' => 'success',
+                        'ditolak' => 'danger',
+                        default => 'gray',
+                    }),
+
 
                 // IconColumn::make('upload_surat')
                 //     ->label('SURAT PERMOHONAN')
@@ -220,7 +230,7 @@ class PemilikDataResource extends Resource
 
 
                 Tables\Actions\EditAction::make()
-                ->label('Proses')
+                    ->label('Proses')
                     ->button()
                     ->icon('heroicon-s-pencil')
                     ->extraAttributes([

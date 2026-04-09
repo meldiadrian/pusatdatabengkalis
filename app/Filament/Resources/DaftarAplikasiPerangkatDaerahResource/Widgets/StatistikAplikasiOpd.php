@@ -23,8 +23,11 @@ class StatistikAplikasiOpd extends BaseWidget
             ->distinct('unit_kerja_id')
             ->count('unit_kerja_id');
 
-        $totalDesa = DaftarAplikasiPerangkatDaerah::query()
-            ->select('unit_kerja_id')
+        $totalAplikasi = DaftarAplikasiPerangkatDaerah::query()
+            ->select('nama_aplikasi', 'unit_kerja_id')
+             ->whereHas('unitKerja', function ($q) {
+                $q->where('tipe', 'OPD');
+            })
             ->get()
             ->pluck('unit_kerja_id')
             ->flatten()
@@ -44,9 +47,9 @@ class StatistikAplikasiOpd extends BaseWidget
                     'class' => '!bg-blue-600 !text-danger',
                 ]),
 
-            Stat::make('Total Desa', $totalDesa)
+            Stat::make('Total Aplikasi Organisasi Perangkat Daerah', $totalAplikasi)
                 ->icon('heroicon-o-map')
-                ->description('Jumlah keseluruhan Desa yang terdaftar')
+                ->description('Jumlah keseluruhan Aplikasi yang terdaftar')
                 ->extraAttributes([
                     'style' => '
             --fi-stats-card-color: #ffffff;       
