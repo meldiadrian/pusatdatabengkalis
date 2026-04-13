@@ -88,11 +88,10 @@ class CreatePemohon extends CreateRecord
         return [
 
             Step::make('Instansi Pemohon')
-                //->description('Pilih Instansi')
                 ->schema([
                     Select::make('instansi_pemohon')
                         ->label('Pilih Instansi Pemohon')
-                        ->relationship('unitKerja', 'nama_opd') //relasi/pengambilan data dari tabel unit kerja
+                        ->relationship('unitKerja', 'nama_opd')
                         ->searchable()
                         ->preload()
                         ->default(auth()->user()->unit_kerja_id)
@@ -102,20 +101,17 @@ class CreatePemohon extends CreateRecord
 
             Step::make('Data Yang Dibutuhkan')
                 ->schema([
-                    Textarea::make('data_diminta') //ke DB
+                    Textarea::make('data_diminta')
                         ->label('Data Yang Dibutuhkan')
                         ->required()
                         ->validationMessages([
                             'required' => 'Mohon jelaskan data yang dibutuhkan',
                         ]),
-                    // menyesuaikan nama field di pesan error,
                 ]),
-
-
 
             Step::make('Tujuan Penggunaan Data')
                 ->schema([
-                    Textarea::make('tujuan_penggunaan') //ke DB
+                    Textarea::make('tujuan_penggunaan')
                         ->label('Tujuan Penggunaan Data')
                         ->required()
                         ->validationMessages([
@@ -124,11 +120,10 @@ class CreatePemohon extends CreateRecord
                 ]),
 
             Step::make('Instansi Yang Dituju')
-                //->description('Pilih Instansi')
                 ->schema([
                     Select::make('opd_tujuan')
                         ->label('Pilih Instansi Tujuan')
-                        ->relationship('unitKerjaTujuan', 'nama_opd') //relasi/pengambilan data dari tabel unit kerja
+                        ->relationship('unitKerjaTujuan', 'nama_opd')
                         ->searchable()
                         ->preload()
                         ->required()
@@ -138,30 +133,26 @@ class CreatePemohon extends CreateRecord
                 ]),
 
             Step::make('Upload Dokumen')
-                // ->description('Please Upload Your File')
                 ->schema([
-                    FileUpload::make('upload_surat') //ke DB
+                    FileUpload::make('upload_surat')
                         ->acceptedFileTypes([
                             'application/pdf',
-                            'application/vnd.ms-excel', // xls
-                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // xlsx
-                            'application/msword', // .doc
-                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-                            'image/jpeg', // .jpg, .jpeg
-                            'image/png', // .png
-
+                            'application/vnd.ms-excel',
+                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            'application/msword',
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                            'image/jpeg',
+                            'image/png',
                         ])
                         ->label('📎 Upload Lampiran PDF,Excel,Word,jpg,jpeg,png (Max 2MB)')
-                        ->directory('Surat') // simpan di folder storage/app/public/surat
-                        ->disk('public')     // pakai disk public
+                        ->directory('Surat')
+                        ->disk('public')
                         ->maxSize(2048)
                         ->required()
                         ->validationMessages([
                             'required' => 'Mohon upload dokumen pendukung',
                         ]),
-
                 ]),
-
 
         ];
     }

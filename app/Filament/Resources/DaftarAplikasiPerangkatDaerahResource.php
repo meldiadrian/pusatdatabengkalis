@@ -73,13 +73,16 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
                 Forms\Components\TextInput::make('nama_aplikasi')
                     ->label('Nama Aplikasi')
-                    ->placeholder('Isi nama aplikasi')
+                    ->placeholder('Mohon Isi Nama Aplikasi')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->validationMessages([
+                        'required' => 'Mohon diisi Nama Aplikasi',
+                    ]),
 
                 Forms\Components\Select::make('jenis_aplikasi')
                     ->label('Jenis Aplikasi')
-                    ->placeholder('Pilih jenis aplikasi')
+                    ->placeholder('Pilih Jenis Aplikasi')
                     ->required()
                     ->options([
                         'web' => 'Web',
@@ -89,7 +92,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                 Forms\Components\TextInput::make('alamat_domain')
                     ->label('Alamat Domain')
                     ->required()
-                    ->placeholder('Isi Alamat Domain')
+                    ->placeholder('Mohon Isi Alamat Domain')
                     ->maxLength(255),
 
                 Forms\Components\Textarea::make('spesifikasi_teknis')
@@ -100,7 +103,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
                 Select::make('mode')
                     ->label('Sifat')
-                    ->placeholder('Pilih sifat aplikasi online/offline')
+                    ->placeholder('Pilih Sifat Aplikasi Online/Offline')
                     ->options(array_combine(
                         DaftarAplikasiPerangkatDaerah::MODE,
                         DaftarAplikasiPerangkatDaerah::MODE
@@ -119,7 +122,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
                 Forms\Components\Select::make('pembuat')
                     ->label('Pembuat')
-                    ->placeholder('Pilih pembuat pihak ketiga/diskominfotik')
+                    ->placeholder('Pilih Pembuat Pihak Ketiga/Diskominfotik')
                     ->required()
                     ->options([
                         'pihak ketiga' => 'Pihak Ketiga',
@@ -128,7 +131,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
                 Forms\Components\Select::make('pemilik_aplikasi')
                     ->label('Pemilik Aplikasi')
-                    ->placeholder('Pilih pemilik aplikasi')
+                    ->placeholder('Pilih Pemilik Aplikasi')
                     ->required()
                     ->options([
                         'pusat' => 'Pusat',
@@ -137,7 +140,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
                 Select::make('status')
                     ->label('Status')
-                    ->placeholder('Pilih status aplikasi aktif/tidak aktif')
+                    ->placeholder('Pilih Status Aplikasi Aktif/Tidak Aktif')
                     ->options(array_combine(
                         DaftarAplikasiPerangkatDaerah::STATUS,
                         DaftarAplikasiPerangkatDaerah::STATUS
@@ -147,13 +150,13 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
                 Forms\Components\TextInput::make('dimanfaatkan_untuk_layanan')
                     ->label('Dimanfaatkan Untuk Layanan')
-                    ->placeholder('Isi dimanfaatkan untuk layanan')
+                    ->placeholder(' Mohon Isi dimanfaatkan Untuk Layanan Apa')
                     ->required()
                     ->maxLength(255),
 
                 Forms\Components\Textarea::make('keterangan')
                     ->label('Keterangan')
-                    ->placeholder('Isi keterangan')
+                    ->placeholder('Mohon Isi keterangan')
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
