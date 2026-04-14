@@ -76,22 +76,18 @@ class PemilikDataResource extends Resource
                                 'application/pdf',
                                 'application/vnd.ms-excel',
                                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                'image/jpeg',
+                                'image/png',
                             ])
                             ->directory('Surat')
+                            ->maxSize(4096) // 4MB
                             ->disk('public')
                             ->required()
                             ->disabled()
                             ->columnSpanFull(),
                     ])->columns(2),
-                // Forms\Components\Section::make('Informasi Keterangan')
-                //     ->description('Kelola data keterangan untuk instansi penyedia data')
-                //     ->schema([
-                //         Forms\Components\Textarea::make('keterangan')
-                //             ->label('Keterangan')
-                //             ->required()
-                //             ->columnSpanFull()
-                //             ->helperText('Masukkan keterangan detail tentang instansi penyedia data'),
-                //     ])->columnSpanFull(),
+
             ]);
     }
 

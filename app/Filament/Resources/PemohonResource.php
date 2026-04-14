@@ -54,7 +54,7 @@ class PemohonResource extends Resource
                     ->validationMessages([
                         'required' => 'Mohon jelaskan data yang dibutuhkan',
                     ]),
-                    
+
                 Forms\Components\Textarea::make('data_diminta')
                     ->label('Data Yang Dibutuhkan')
                     ->required()
@@ -76,9 +76,9 @@ class PemohonResource extends Resource
                         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                         'image/jpeg',
                         'image/png',
-
                     ])
                     ->label('📎 Upload Lampiran PDF/Excel')
+                    ->maxSize(2048) // 2MB
                     ->directory('Surat') // simpan di folder storage/app/public/surat
                     ->disk('public')     // pakai disk public
                     ->visibility('public')
