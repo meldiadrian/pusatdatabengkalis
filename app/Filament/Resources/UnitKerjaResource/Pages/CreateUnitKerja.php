@@ -56,7 +56,10 @@ class CreateUnitKerja extends CreateRecord
                 ->schema([
                     TextInput::make('nama_opd') //ke DB
                         ->label('Isi Unit Kerja')
-                        ->required(),
+                        ->required()
+                        ->validationMessages([
+                            'required' => 'Mohon diisi unit kerja',
+                        ]),
                 ]),
 
             Step::make('Tipe')
@@ -68,6 +71,9 @@ class CreateUnitKerja extends CreateRecord
                         ->options([
                             'opd' => 'OPD',
                             'desa' => 'Desa',
+                        ])
+                        ->validationMessages([
+                            'required' => 'Mohon dipilih tipe',
                         ]),
                 ]),
 
@@ -75,7 +81,10 @@ class CreateUnitKerja extends CreateRecord
                 ->schema([
                     TextInput::make('alamat') //ke DB
                         ->label('Isi Alamat')
-                        ->required(),
+                        ->required()
+                        ->validationMessages([
+                            'required' => 'Mohon diisi alamat',
+                        ]),
                 ]),
 
 
@@ -84,6 +93,9 @@ class CreateUnitKerja extends CreateRecord
                     TextInput::make('telp') //ke DB
                         ->label('Isi Telpon')
                         ->required()
+                        ->validationMessages([
+                            'required' => 'Mohon diisi nomor telpon',
+                        ])
                         ->numeric()
                         ->maxLength(12),
                 ]),
@@ -93,6 +105,9 @@ class CreateUnitKerja extends CreateRecord
                     TextInput::make('email') //ke DB
                         ->label('Isi Email')
                         ->required()
+                        ->validationMessages([
+                            'required' => 'Mohon diisi email',
+                        ])
                         ->email()
                         ->maxLength(255),
                 ]),

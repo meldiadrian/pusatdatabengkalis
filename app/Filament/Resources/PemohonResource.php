@@ -50,7 +50,11 @@ class PemohonResource extends Resource
                 Forms\Components\Select::make('instansi_pemohon')
                     ->relationship('unitKerja', 'nama_opd') //relasi/pengambilan data dari tabel unit kerja
                     ->label('Instansi Pemohon')
-                    ->required(),
+                    ->required()
+                    ->validationMessages([
+                        'required' => 'Mohon jelaskan data yang dibutuhkan',
+                    ]),
+                    
                 Forms\Components\Textarea::make('data_diminta')
                     ->label('Data Yang Dibutuhkan')
                     ->required()

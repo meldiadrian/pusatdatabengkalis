@@ -6,6 +6,9 @@ use App\Filament\Resources\UnitKerjaResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
+use App\Filament\Resources\UnitKerjaResource\Widgets\StatistikUnitKerja;
+
+
 class ListUnitKerjas extends ListRecords
 {
     protected static string $resource = UnitKerjaResource::class;
@@ -14,7 +17,15 @@ class ListUnitKerjas extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-             ->label('Tambah Data'),
+                ->label('Tambah Data'),
+        ];
+    }
+
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            StatistikUnitKerja::class,
         ];
     }
 }
