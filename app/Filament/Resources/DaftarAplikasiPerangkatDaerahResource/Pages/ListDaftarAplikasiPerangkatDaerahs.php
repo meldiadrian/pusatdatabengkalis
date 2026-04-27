@@ -16,17 +16,48 @@ class ListDaftarAplikasiPerangkatDaerahs extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->label('Tambah Data')
-            // ->visible(fn() => auth()->user()?->unitKerja?->tipe === 'OPD'),
-            ->visible(
-                fn($record) => (
-                    auth()->user()->role === 'user' &&
-                    auth()->user()->unitKerja?->tipe === 'OPD'
+               
+                // ->visible(
+                //     fn($record) => (
+                //         auth()->user()->role === 'user' &&
+                //         auth()->user()->unitKerja?->tipe === 'OPD'
+                //     )
+                //         ||
+                //         ($record && $record->user_id === auth()->id())
+                // ),
+//---------------------------------------------------------------------------------------------
+                // ->visible(
+                //     fn($record) =>
+                //     auth()->user()?->email !== 'sekre@admin.com'
+                //         &&
+                //         (
+                //             (
+                //                 auth()->user()->role === 'user' &&
+                //                 auth()->user()->unitKerja?->tipe === 'OPD'
+                //             )
+                //             ||
+                //             ($record && $record->user_id === auth()->id())
+                //         )
+                // )
+
+
+                ->visible(
+                    fn($record) =>
+                    auth()->user()?->email === 'admin@admin.com'
+                        ||
+                        (
+                            auth()->user()?->email !== 'sekre@admin.com'
+                            &&
+                            (
+                                (
+                                    auth()->user()->role === 'user' &&
+                                    auth()->user()->unitKerja?->tipe === 'OPD'
+                                )
+                                ||
+                                ($record && $record->user_id === auth()->id())
+                            )
+                        )
                 )
-                    ||
-                    ($record && $record->user_id === auth()->id())
-            ),
-
-
         ];
     }
 

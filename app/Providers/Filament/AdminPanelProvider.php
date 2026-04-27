@@ -46,14 +46,22 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('SISTEM INFORMASI PERMINTAAN DATA')
             ->brandLogo(asset('images/lgo.png'))
             ->brandLogoHeight('2.5rem')
-            ->sidebarCollapsibleOnDesktop()
+           // ->sidebarCollapsibleOnDesktop()
             ->spa()
             ->default()
             ->id('admin')
             ->path('admin')
+            // ->styles([
+            //     asset('css/sidebar.css'),
+            // ])
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
                 fn() => '<link rel="stylesheet" href="' . asset('admin.css') . '">'
+            )
+
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn(): string => '<link rel="stylesheet" href="' . asset('css/custom.css') . '">'
             )
             //->brandName('Hoaxs')
             // ->loginHeading('Masuk Aplikasi')
@@ -74,7 +82,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-               // StatistikWebsiteDesa::class,
+                // StatistikWebsiteDesa::class,
                 //widget filament pada dashboard
                 // Widgets\FilamentInfoWidget::class,
                 // -----end---

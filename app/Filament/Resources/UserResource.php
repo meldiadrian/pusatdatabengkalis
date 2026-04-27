@@ -2,15 +2,16 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\User;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Facades\Filament;
+use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class UserResource extends Resource
 {
@@ -33,7 +34,7 @@ class UserResource extends Resource
                 fn($query) => $query->where('id', $user->id)
             );
     }
-//------------------end off session check------------------
+    //------------------end off session check------------------
 
 
     public static function form(Form $form): Form
@@ -48,6 +49,18 @@ class UserResource extends Resource
                     ->label('Email')
                     ->email()
                     ->required()
+                    ->visible(function (string $operation) {
+                        $user = Filament::auth()->user();
+
+                        // admin selalu boleh lihat
+                        if ($user?->role === 'admin') {
+                            return true;
+                        }
+
+                        // selain admin hanya saat create
+                        return $operation === 'create';
+                    })
+
                     ->unique(ignoreRecord: true),
 
                 Forms\Components\TextInput::make('password')
@@ -61,17 +74,43 @@ class UserResource extends Resource
 
                 Forms\Components\Select::make('role')
                     ->label('Role')
-                    ->options([
-                        'admin' => 'Admin',
-                        'user' => 'User',
-                    ])
+                    ->options(function () {
+                        $user = Filament::auth()->user();
+
+                        $options = [
+                            'user' => 'User',
+                        ];
+
+                        // Tampilkan opsi Admin hanya jika user yang login adalah admin
+                        if ($user && $user->email === 'admin@admin.com') {
+                            $options['admin'] = 'Admin';
+                        }
+
+                        return $options;
+                    })
                     ->required()
-                    ->default('user'),
+                    ->visible(fn(string $operation) => $operation === 'create')
+                    ->default('user')
+                    ->disabled(fn() => !optional(Filament::auth()->user())->email === 'admin@admin.com') // Opsional: nonaktifkan field jika bukan admin
+                    ->dehydrated(fn() => optional(Filament::auth()->user())->email === 'admin@admin.com'), // Pastikan nilai tidak dikirim jika bukan admin
+
                 Forms\Components\Select::make('unit_kerja_id')
                     ->label('Unit Kerja')
                     ->relationship('unitKerja', 'nama_opd')
                     ->searchable()
                     ->preload()
+                    ->visible(function (string $operation) {
+                        $user = Filament::auth()->user();
+
+                        // admin selalu boleh lihat
+                        if ($user?->role === 'admin') {
+                            return true;
+                        }
+
+                        // selain admin hanya saat create
+                        return $operation === 'create';
+                    })
+
                     ->required(fn(Forms\Get $get) => $get('role') === 'user')
                     ->hidden(fn(Forms\Get $get) => $get('role') === 'admin'),
             ]);
@@ -130,7 +169,7 @@ class UserResource extends Resource
                     ->extraAttributes([
                         'style' => 'background-color: #dc2626; color: white ;'
                     ])
-                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin'])),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

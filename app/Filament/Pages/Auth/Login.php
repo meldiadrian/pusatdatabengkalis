@@ -10,7 +10,7 @@ class Login extends BaseLogin
 {
     public function getHeading(): Htmlable|string
     {
-        return 'Sistem Informasi Permintaan Data Kab.Bengkalis';
+        return 'Pusat Data Kabupaten Bengkalis';
     }
 
     protected function getAuthenticateFormAction(): Action

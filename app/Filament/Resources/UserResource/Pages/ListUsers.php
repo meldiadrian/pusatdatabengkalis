@@ -14,7 +14,20 @@ class ListUsers extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->label('Tambah Data'),
+                ->label('Tambah Data')
+                ->visible(
+                    fn() =>
+                    auth()->check() &&
+                        in_array(auth()->user()->email, [
+                            'desapenebal@desa.id',
+                            'desaapiapi@desa.id',
+                            'diskominfo@admin.com',
+                            'setda@admin.com',
+                            'admin@admin.com',
+                        ])
+                )
+            //->visible(fn() => auth()->user()?->email !== 'sekre@admin.com'),
+
         ];
     }
 }

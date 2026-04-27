@@ -58,6 +58,9 @@ class PemohonResource extends Resource
                 Forms\Components\Textarea::make('data_diminta')
                     ->label('Data Yang Dibutuhkan')
                     ->required()
+                    ->validationMessages([
+                        'required' => 'Mohon jelaskan data yang dibutuhkan',
+                    ])
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('tujuan_penggunaan')
                     ->label('Tujuan Penggunaan Data')

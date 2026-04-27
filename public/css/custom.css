@@ -1,0 +1,71 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap"); /* resources/css/filament/admin/custom.css */
+
+/* Warna background sidebar utama */
+.fi-sidebar {
+    background-color: #1e3a8a !important;
+    /* background-color: #d90000 !important; /* contoh dark slate */
+    /* atau gunakan warna lain: #0f172a, #111827, dll */
+}
+
+/* Warna sidebar header (logo + nama panel) */
+.fi-sidebar-header {
+    /* background-color: #374151 !important; */
+    background-color: #1e3a8a !important;
+}
+
+.fi-sidebar-header::after {
+    content: "Pusat Data Kabupaten Bengkalis";
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+/* Warna item menu biasa */
+.fi-sidebar-item {
+    color: #e2e8f0 !important;
+}
+
+/* Warna item menu saat hover */
+.fi-sidebar-item:hover {
+    background-color: #3b82f6 !important;
+    color: #3b82f6 !important;
+}
+
+/* Warna item menu ACTIVE (yang sedang dibuka) */
+.fi-sidebar-item-active > a {
+    background-color: #3b82f6 !important; /* biru misalnya */
+    color: #ffffff !important;
+}
+
+.fi-sidebar-item-active > a svg,
+.fi-sidebar-item-active > a span {
+    color: #ffffff !important;
+}
+
+/* Warna group title di sidebar */
+.fi-sidebar-group-label {
+    color: #ffffff !important;
+}
+
+/* 1. Teks & icon jadi putih */
+.fi-sidebar .fi-sidebar-item a *:not(.fi-sidebar-item-badge) {
+    color: #ffffff !important;
+}
+
+/* Default menu */
+.fi-sidebar .fi-sidebar-item a {
+    color: #ffffff !important;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Hover menu */
+.fi-sidebar .fi-sidebar-item a:hover {
+    background-color: #3b82f6 !important;
+    color: #ef4444 !important;
+}
+
+.fi-sidebar span[class*="badge"] {
+    background-color: #374151 !important;
+    color: #ffffff !important;
+}
