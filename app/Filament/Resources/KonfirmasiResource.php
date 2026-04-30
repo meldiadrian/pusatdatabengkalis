@@ -40,10 +40,30 @@ class KonfirmasiResource extends Resource
 
     //---------------------------badge notifikasi menu-----------------
 
+
     public static function getNavigationBadge(): ?string
     {
-        //return static::getModel()::whereNull('pemohon_id')->count();
-        return static::getModel()::where('status', 'pending')->count();
+        //return static::getModel()::where('status', 'pending')->count();
+
+        $user = auth()->user();
+
+        $query = static::getModel()::query()
+            ->where('status', 'pending');
+
+        // Filter berdasarkan role sekre
+        if ($user->role == 'sekre' && $user->unitKerja->tipe == 'OPD') {
+            $query->whereHas('pemohon', function ($q) use ($user) {
+                $q->where('instansi_pemohon', $user->unit_kerja_id);
+            });
+        }
+
+        if ($user->role == 'sekre' && $user->unitKerja->tipe == 'Desa') {
+            $query->whereHas('pemohon', function ($q) use ($user) {
+                $q->where('instansi_pemohon', $user->unit_kerja_id);
+            });
+        }
+
+        return (string) $query->count();
     }
 
     public static function getNavigationBadgeColor(): ?string
@@ -59,45 +79,51 @@ class KonfirmasiResource extends Resource
     //---------------------------badge notifikasi menu hanya divalidator-----------------
 
 
+    // public static function getEloquentQuery(): Builder
+    // {
+
+
+    //     $query = parent::getEloquentQuery();
+    //     $user = auth()->user();
+
+    //     // Jika sekre → hanya lihat data miliknya sendiri
+    //     if ($user->role == 'sekre' && $user->unitKerja->tipe == 'OPD') {
+
+    //         $query->whereHas('pemohon', function ($q) use ($user) {
+    //             $q->where('instansi_pemohon', $user->unit_kerja_id);
+    //         });
+    //     }
+    //     if ($user->role == 'sekre' && $user->unitKerja->tipe == 'Desa') {
+    //         $query->whereHas('pemohon', function ($q) use ($user) {
+    //             $q->where('instansi_pemohon', $user->unit_kerja_id);
+    //         });
+    //     }
+    //     return $query;
+    // }
+
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
         $user = auth()->user();
 
+        // FILTER: hanya tampilkan yang pending
+        $query->where('status', 'pending');
+
         // Jika sekre → hanya lihat data miliknya sendiri
         if ($user->role == 'sekre' && $user->unitKerja->tipe == 'OPD') {
-
             $query->whereHas('pemohon', function ($q) use ($user) {
                 $q->where('instansi_pemohon', $user->unit_kerja_id);
             });
         }
+
         if ($user->role == 'sekre' && $user->unitKerja->tipe == 'Desa') {
             $query->whereHas('pemohon', function ($q) use ($user) {
                 $q->where('instansi_pemohon', $user->unit_kerja_id);
             });
         }
+
         return $query;
     }
-
-    // public static function getEloquentQuery(): Builder
-    // {
-    //     $query = parent::getEloquentQuery();
-    //     $user = auth()->user();
-
-    //     if ($user && $user->role === 'sekre') {
-    //         $query->whereHas('pemohon.unitKerja', function ($q) use ($user) {
-    //             $q->where('id', $user->unit_kerja)
-    //                 ->where('tipe', function ($sub) use ($user) {
-    //                     $sub->select('tipe')
-    //                         ->from('unit_kerjas')
-    //                         ->where('id', $user->unit_kerja)
-    //                         ->limit(1);
-    //                 });
-    //         });
-    //     }
-
-    //     return $query;
-    // }
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -159,6 +185,7 @@ class KonfirmasiResource extends Resource
                             ]);
                         }
                     })
+
                 // Tables\Columns\TextColumn::make('status')
                 //     ->badge()
                 //     ->label('Status')
@@ -218,15 +245,6 @@ class KonfirmasiResource extends Resource
                             ->danger()
                             ->send();
                     }),
-
-
-                Tables\Actions\EditAction::make()
-                    ->button()
-                    ->icon('heroicon-s-pencil')
-                    ->extraAttributes([
-                        'style' => 'background-color: #facc15; color: black;'
-                    ])
-                    ->visible(fn() => in_array(auth()->user()?->role, ['admin'])),
 
                 Tables\Actions\DeleteAction::make()
                     ->label('Hapus')

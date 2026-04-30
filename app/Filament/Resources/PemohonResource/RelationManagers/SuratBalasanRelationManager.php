@@ -34,6 +34,10 @@ class SuratBalasanRelationManager extends RelationManager
                     $this->ownerRecord->update([
                         'status' => 'disetujui'
                     ]);
+                    // 🔥 TAMBAHAN: update konfirmasi juga
+                    $this->ownerRecord->konfirmasi()?->update([
+                        'status' => 'sukses'
+                    ]);
                 }),
         ];
     }

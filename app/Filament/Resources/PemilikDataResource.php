@@ -25,6 +25,47 @@ use App\Filament\Resources\PemilikDataResource\RelationManagers;
 class PemilikDataResource extends Resource
 {
 
+
+    //---------------------------badge notifikasi menu-----------------
+
+
+    public static function getNavigationBadge(): ?string
+    {
+        //return static::getModel()::where('status', 'pending')->count();
+
+        $user = auth()->user();
+
+        $query = static::getModel()::query()
+            ->where('status', 'pending');
+
+        // Filter berdasarkan role sekre
+        if ($user->role == 'sekre' && $user->unitKerja->tipe == 'OPD') {
+            $query->whereHas('pemohon', function ($q) use ($user) {
+                $q->where('instansi_pemohon', $user->unit_kerja_id);
+            });
+        }
+
+        if ($user->role == 'sekre' && $user->unitKerja->tipe == 'Desa') {
+            $query->whereHas('pemohon', function ($q) use ($user) {
+                $q->where('instansi_pemohon', $user->unit_kerja_id);
+            });
+        }
+
+        return (string) $query->count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'danger';
+    }
+
+    public static function getNavigationBadgePollingInterval(): ?string
+    {
+        return '1s';
+    }
+
+    //---------------------------badge notifikasi menu hanya divalidator-----------------
+
     // protected static ?string $model = PemilikData::class;
     protected static ?string $model = Pemohon::class;
 
@@ -143,7 +184,7 @@ class PemilikDataResource extends Resource
                         'pending' => 'warning',
                         'sukses' => 'success',
                         'ditolak' => 'danger',
-                        default => 'gray',
+                        default => 'primary',
                     }),
 
 
