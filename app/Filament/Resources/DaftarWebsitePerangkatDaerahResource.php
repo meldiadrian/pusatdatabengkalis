@@ -125,6 +125,7 @@ class DaftarWebsitePerangkatDaerahResource extends Resource
                             "', '_blank', 'width=900,height=600,resizable=yes,scrollbars=yes')",
                     ]),
 
+                    
                 Tables\Columns\TextColumn::make('pembuat')
                     ->label('Pembuat')
                     ->disableClick()

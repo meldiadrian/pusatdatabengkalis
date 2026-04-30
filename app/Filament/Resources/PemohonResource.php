@@ -37,9 +37,15 @@ class PemohonResource extends Resource
     protected static ?string $navigationGroup = 'Pusat Data Kabupaten Bengkalis';
     protected static ?int $navigationSort = 0;
 
+    // public static function shouldRegisterNavigation(): bool
+    // {
+    //     return true;
+    // }
+
+
     public static function shouldRegisterNavigation(): bool
     {
-        return true;
+        return auth()->user()?->email !== 'sekre@admin.com';
     }
 
     public static function form(Form $form): Form
@@ -131,7 +137,7 @@ class PemohonResource extends Resource
                         'pending' => 'warning',
                         'sukses' => 'success',
                         'ditolak' => 'danger',
-                        default => 'gray',
+                        default => 'primary',
                     }),
 
                 Tables\Columns\TextColumn::make('upload_surat')

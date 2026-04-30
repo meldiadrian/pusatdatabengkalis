@@ -35,4 +35,11 @@ class Pemohon extends Model
     {
         return $this->belongsTo(UnitKerja::class, 'opd_tujuan');
     }
+
+    public function konfirmasi()
+    {
+        return $this->hasOne(Konfirmasi::class);
+    }
+
+    
 }

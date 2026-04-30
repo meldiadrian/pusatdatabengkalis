@@ -43,24 +43,24 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->label('Nama')
-                    ->required()
+                    ->required(fn(string $context) => $context === 'create')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->label('Email')
                     ->email()
-                    ->required()
-                    ->visible(function (string $operation) {
-                        $user = Filament::auth()->user();
+                    // ->required()
+                    // ->visible(function (string $operation) {
+                    //     $user = Filament::auth()->user();
 
-                        // admin selalu boleh lihat
-                        if ($user?->role === 'admin') {
-                            return true;
-                        }
+                    //     // admin selalu boleh lihat
+                    //     if ($user?->role === 'admin') {
+                    //         return true;
+                    //     }
 
-                        // selain admin hanya saat create
-                        return $operation === 'create';
-                    })
-
+                    //     // selain admin hanya saat create
+                    //     return $operation === 'create';
+                    // })
+                    ->required(fn(string $context) => $context === 'create')
                     ->unique(ignoreRecord: true),
 
                 Forms\Components\TextInput::make('password')
@@ -74,25 +74,32 @@ class UserResource extends Resource
 
                 Forms\Components\Select::make('role')
                     ->label('Role')
-                    ->options(function () {
-                        $user = Filament::auth()->user();
-
-                        $options = [
-                            'user' => 'User',
-                        ];
-
-                        // Tampilkan opsi Admin hanya jika user yang login adalah admin
-                        if ($user && $user->email === 'admin@admin.com') {
-                            $options['admin'] = 'Admin';
-                        }
-
-                        return $options;
-                    })
+                    ->options([
+                        'user' => 'User',
+                        'sekre' => 'Sekre',
+                        'admin' => 'Admin',
+                    ])
+                    ->hidden(fn() => Filament::auth()->user()->role !== 'admin')
                     ->required()
-                    ->visible(fn(string $operation) => $operation === 'create')
+                    // ->visible(fn(string $operation) => $operation === 'create')
                     ->default('user')
                     ->disabled(fn() => !optional(Filament::auth()->user())->email === 'admin@admin.com') // Opsional: nonaktifkan field jika bukan admin
                     ->dehydrated(fn() => optional(Filament::auth()->user())->email === 'admin@admin.com'), // Pastikan nilai tidak dikirim jika bukan admin
+                // ->options(function () {
+                //     $user = Filament::auth()->user();
+
+                //     $options = [
+                //         'user' => 'User',
+                //         'sekre' => 'Sekre',
+                //     ];
+
+                //     // Tampilkan opsi Admin hanya jika user yang login adalah admin
+                //     if ($user && $user->email === 'admin@admin.com') {
+                //         $options['admin'] = 'Admin';
+                //     }
+
+                //     return $options;
+                // })
 
                 Forms\Components\Select::make('unit_kerja_id')
                     ->label('Unit Kerja')
@@ -162,7 +169,7 @@ class UserResource extends Resource
                     ->extraAttributes([
                         'style' => 'background-color: #facc15; color: black;'
                     ])
-                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user', 'sekre'])),
 
                 Tables\Actions\DeleteAction::make()
                     ->button()

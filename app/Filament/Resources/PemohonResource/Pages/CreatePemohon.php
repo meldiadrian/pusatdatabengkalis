@@ -19,6 +19,7 @@ use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Form;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
+use App\Models\Konfirmasi;
 
 class CreatePemohon extends CreateRecord
 {
@@ -31,6 +32,20 @@ class CreatePemohon extends CreateRecord
         return Wizard::make($this->getSteps())
             ->backButtonLabel('Kembali')
             ->nextButtonLabel('Selanjutnya');
+    }
+
+    protected function afterCreate(): void
+    {
+        // set status pending di pemohon
+        $this->record->update([
+            'status' => 'pending',
+        ]);
+
+        // insert ke tabel konfirmasi
+        Konfirmasi::create([
+            'pemohon_id' => $this->record->id,
+            'status' => 'pending',
+        ]);
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array

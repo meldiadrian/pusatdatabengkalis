@@ -187,7 +187,7 @@ class DaftarWebsiteDesaResource extends Resource
                             (str_starts_with($record->website, 'http')
                                 ? $record->website
                                 : 'https://' . $record->website) .
-                            "', '_blank')",
+                            "', '_blank', 'width=900,height=600,resizable=yes,scrollbars=yes')",
                     ]),
 
                 TextColumn::make('pembuat')

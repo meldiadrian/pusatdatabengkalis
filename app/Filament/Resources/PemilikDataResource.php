@@ -36,7 +36,7 @@ class PemilikDataResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return true;
+        return auth()->user()?->email !== 'sekre@admin.com';
     }
 
     public static function form(Form $form): Form
