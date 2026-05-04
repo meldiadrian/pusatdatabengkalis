@@ -316,6 +316,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
 
                 Tables\Actions\DeleteAction::make()
+                    ->label('Hapus')
                     ->button()
                     ->extraAttributes([
                         'style' => 'background-color: danger; color: white;'

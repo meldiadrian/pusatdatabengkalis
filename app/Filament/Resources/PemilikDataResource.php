@@ -54,6 +54,35 @@ class PemilikDataResource extends Resource
         return (string) $query->count();
     }
 
+    
+    // public static function getNavigationBadge(): ?string
+    // {
+    //     $user = auth()->user();
+
+    //     $isAdmin = $user->role === 'admin';
+    //     $isSekre = $user->role === 'sekre';
+    //     $isValidTipe = in_array(optional($user->unitKerja)->tipe, ['OPD', 'Desa']);
+
+    //     // ❌ Jika bukan tujuan → tidak tampil badge
+    //     if (! $isAdmin && ! ($isSekre && $isValidTipe)) {
+    //         return null;
+    //     }
+
+    //     $query = static::getModel()::query()
+    //         ->where('status', 'pending');
+
+    //     // ✅ Jika sekre → filter sesuai instansi (tujuan dia)
+    //     if ($isSekre && $isValidTipe) {
+    //         $query->whereHas('pemohon', function ($q) use ($user) {
+    //             $q->where('instansi_pemohon', $user->unit_kerja_id);
+    //         });
+    //     }
+
+    //     // ✅ Admin → semua pending (tanpa filter tujuan)
+    //     return (string) $query->count();
+    // }
+
+
     public static function getNavigationBadgeColor(): ?string
     {
         return 'danger';
@@ -275,6 +304,7 @@ class PemilikDataResource extends Resource
                     ])
                     ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
                 Tables\Actions\DeleteAction::make()
+                    ->label('Hapus')
                     ->button()
                     ->extraAttributes([
                         'style' => 'background-color: #dc2626; color: white ;'

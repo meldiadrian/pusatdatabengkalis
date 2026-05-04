@@ -11,11 +11,15 @@ use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
 
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
+
+
 
     protected static ?string $navigationIcon = 'heroicon-s-user-group';
     protected static ?string $modelLabel = 'Tambah User';
@@ -24,6 +28,8 @@ class UserResource extends Resource
     protected static ?int $navigationSort = 3;
 
     //login session check, admin full akses, user hanya bisa akses data sendiri
+
+
     public static function getEloquentQuery(): Builder
     {
         $user = auth()->user();
@@ -31,10 +37,21 @@ class UserResource extends Resource
         return parent::getEloquentQuery()
             ->when(
                 $user->role !== 'admin',
-                fn($query) => $query->where('id', $user->id)
+                fn($query) =>
+                $query->where('id', $user->id)
+                    ->orWhere('created_by', $user->id)
             );
     }
+
     //------------------end off session check------------------
+
+
+    public static function canEdit(Model $record): bool
+    {
+        $user = auth()->user();
+
+        return $user->role === 'admin' || $user->id === $record->id;
+    }
 
 
     public static function form(Form $form): Form
@@ -48,18 +65,6 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('email')
                     ->label('Email')
                     ->email()
-                    // ->required()
-                    // ->visible(function (string $operation) {
-                    //     $user = Filament::auth()->user();
-
-                    //     // admin selalu boleh lihat
-                    //     if ($user?->role === 'admin') {
-                    //         return true;
-                    //     }
-
-                    //     // selain admin hanya saat create
-                    //     return $operation === 'create';
-                    // })
                     ->required(fn(string $context) => $context === 'create')
                     ->unique(ignoreRecord: true),
 
@@ -85,21 +90,6 @@ class UserResource extends Resource
                     ->default('user')
                     ->disabled(fn() => !optional(Filament::auth()->user())->email === 'admin@admin.com') // Opsional: nonaktifkan field jika bukan admin
                     ->dehydrated(fn() => optional(Filament::auth()->user())->email === 'admin@admin.com'), // Pastikan nilai tidak dikirim jika bukan admin
-                // ->options(function () {
-                //     $user = Filament::auth()->user();
-
-                //     $options = [
-                //         'user' => 'User',
-                //         'sekre' => 'Sekre',
-                //     ];
-
-                //     // Tampilkan opsi Admin hanya jika user yang login adalah admin
-                //     if ($user && $user->email === 'admin@admin.com') {
-                //         $options['admin'] = 'Admin';
-                //     }
-
-                //     return $options;
-                // })
 
                 Forms\Components\Select::make('unit_kerja_id')
                     ->label('Unit Kerja')
@@ -135,6 +125,7 @@ class UserResource extends Resource
                     ->label('Nama')
                     ->searchable()
                     ->sortable(),
+
                 Tables\Columns\TextColumn::make('email')
                     ->label('Email')
                     ->searchable()
@@ -157,6 +148,7 @@ class UserResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+
             ->filters([
                 Tables\Filters\SelectFilter::make('unit_kerja_id')
                     ->label('Unit Kerja')
@@ -165,6 +157,11 @@ class UserResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->button()
+                    ->visible(
+                        fn($record) =>
+                        auth()->user()->role === 'admin' ||
+                            $record->id === auth()->id()
+                    )
                     ->icon('heroicon-s-pencil')
                     ->extraAttributes([
                         'style' => 'background-color: #facc15; color: black;'
@@ -172,6 +169,7 @@ class UserResource extends Resource
                     ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user', 'sekre'])),
 
                 Tables\Actions\DeleteAction::make()
+                    ->label('Hapus')
                     ->button()
                     ->extraAttributes([
                         'style' => 'background-color: #dc2626; color: white ;'

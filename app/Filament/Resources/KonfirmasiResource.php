@@ -29,40 +29,98 @@ class KonfirmasiResource extends Resource
     protected static ?string $navigationGroup = 'Pusat Data Kabupaten Bengkalis';
 
 
-    // public static function canViewAny(): bool
+    // public static function getEloquentQuery(): Builder
     // {
+    //     $query = parent::getEloquentQuery();
     //     $user = auth()->user();
 
-    //     return $user && in_array($user->role, ['admin', 'sekre']);
+    //     // FILTER: hanya tampilkan yang pending
+    //     $query->where('status', 'pending');
+
+    //     // ✅ Admin: lihat semua data pending
+    //     if ($user->role === 'admin') {
+    //         return $query;
+    //     }
+
+    //     // ❌ Jika bukan sekre → tidak boleh lihat
+    //     if ($user->role !== 'sekre') {
+    //         return $query->whereRaw('1 = 0');
+    //     }
+
+    //     // ❌ Jika sekre tapi tipe tidak sesuai
+    //     if (!in_array(optional($user->unitKerja)->tipe, ['OPD', 'Desa'])) {
+    //         return $query->whereRaw('1 = 0');
+    //     }
+
+    //     // ✅ Sekre valid → filter berdasarkan instansi
+    //     return $query->whereHas('pemohon', function ($q) use ($user) {
+    //         $q->where('instansi_pemohon', $user->unit_kerja_id);
+    //     });
     // }
 
+    public static function canViewAny(): bool
+    {
+        $user = auth()->user();
 
+        $isAdmin = $user->role === 'admin';
+        $isSekre = $user->role === 'sekre';
+        $isValidTipe = in_array(optional($user->unitKerja)->tipe, ['OPD', 'Desa']);
+
+        return $isAdmin || ($isSekre && $isValidTipe);
+    }
 
     //---------------------------badge notifikasi menu-----------------
 
 
+    // public static function getNavigationBadge(): ?string
+    // {
+    //     //return static::getModel()::where('status', 'pending')->count();
+
+    //     $user = auth()->user();
+
+    //     $query = static::getModel()::query()
+    //         ->where('status', 'pending');
+
+    //     // Filter berdasarkan role sekre
+    //     if ($user->role == 'sekre' && $user->unitKerja->tipe == 'OPD') {
+    //         $query->whereHas('pemohon', function ($q) use ($user) {
+    //             $q->where('instansi_pemohon', $user->unit_kerja_id);
+    //         });
+    //     }
+
+    //     if ($user->role == 'sekre' && $user->unitKerja->tipe == 'Desa') {
+    //         $query->whereHas('pemohon', function ($q) use ($user) {
+    //             $q->where('instansi_pemohon', $user->unit_kerja_id);
+    //         });
+    //     }
+
+    //     return (string) $query->count();
+    // }
+
     public static function getNavigationBadge(): ?string
     {
-        //return static::getModel()::where('status', 'pending')->count();
-
         $user = auth()->user();
+
+        $isAdmin = $user->role === 'admin';
+        $isSekre = $user->role === 'sekre';
+        $isValidTipe = in_array(optional($user->unitKerja)->tipe, ['OPD', 'Desa']);
+
+        // ❌ Selain admin & sekre valid → tidak tampil badge
+        if (! $isAdmin && ! ($isSekre && $isValidTipe)) {
+            return null;
+        }
 
         $query = static::getModel()::query()
             ->where('status', 'pending');
 
-        // Filter berdasarkan role sekre
-        if ($user->role == 'sekre' && $user->unitKerja->tipe == 'OPD') {
+        // ✅ Jika sekre → filter berdasarkan instansi
+        if ($isSekre && $isValidTipe) {
             $query->whereHas('pemohon', function ($q) use ($user) {
                 $q->where('instansi_pemohon', $user->unit_kerja_id);
             });
         }
 
-        if ($user->role == 'sekre' && $user->unitKerja->tipe == 'Desa') {
-            $query->whereHas('pemohon', function ($q) use ($user) {
-                $q->where('instansi_pemohon', $user->unit_kerja_id);
-            });
-        }
-
+        // ✅ Admin → langsung count semua pending
         return (string) $query->count();
     }
 
@@ -78,52 +136,29 @@ class KonfirmasiResource extends Resource
 
     //---------------------------badge notifikasi menu hanya divalidator-----------------
 
-
     // public static function getEloquentQuery(): Builder
     // {
-
-
     //     $query = parent::getEloquentQuery();
     //     $user = auth()->user();
 
+    //     // FILTER: hanya tampilkan yang pending
+    //     $query->where('status', 'pending');
+
     //     // Jika sekre → hanya lihat data miliknya sendiri
     //     if ($user->role == 'sekre' && $user->unitKerja->tipe == 'OPD') {
-
     //         $query->whereHas('pemohon', function ($q) use ($user) {
     //             $q->where('instansi_pemohon', $user->unit_kerja_id);
     //         });
     //     }
+
     //     if ($user->role == 'sekre' && $user->unitKerja->tipe == 'Desa') {
     //         $query->whereHas('pemohon', function ($q) use ($user) {
     //             $q->where('instansi_pemohon', $user->unit_kerja_id);
     //         });
     //     }
+
     //     return $query;
     // }
-
-    public static function getEloquentQuery(): Builder
-    {
-        $query = parent::getEloquentQuery();
-        $user = auth()->user();
-
-        // FILTER: hanya tampilkan yang pending
-        $query->where('status', 'pending');
-
-        // Jika sekre → hanya lihat data miliknya sendiri
-        if ($user->role == 'sekre' && $user->unitKerja->tipe == 'OPD') {
-            $query->whereHas('pemohon', function ($q) use ($user) {
-                $q->where('instansi_pemohon', $user->unit_kerja_id);
-            });
-        }
-
-        if ($user->role == 'sekre' && $user->unitKerja->tipe == 'Desa') {
-            $query->whereHas('pemohon', function ($q) use ($user) {
-                $q->where('instansi_pemohon', $user->unit_kerja_id);
-            });
-        }
-
-        return $query;
-    }
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

@@ -208,7 +208,9 @@ class PemohonResource extends Resource
                         'style' => 'background-color: #facc15; color: black;'
                     ])
                     ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
+
                 Tables\Actions\DeleteAction::make()
+                    ->label('Hapus')
                     ->button()
                     ->extraAttributes([
                         'style' => 'background-color: #dc2626; color: white ;'

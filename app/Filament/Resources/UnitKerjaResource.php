@@ -38,7 +38,7 @@ class UnitKerjaResource extends Resource
                     ->label('Nama Instansi')
                     ->required()
                     ->maxLength(255),
-                    
+
                 Forms\Components\Select::make('tipe')
                     ->label('Tipe')
                     ->placeholder('Pilih OPD / Desa')
@@ -109,6 +109,7 @@ class UnitKerjaResource extends Resource
                     ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
 
                 Tables\Actions\DeleteAction::make()
+                    ->label('Hapus')
                     ->button()
                     ->extraAttributes([
                         'style' => 'background-color: #dc2626; color: white ;'

@@ -13,12 +13,29 @@ class EditUser extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-           // Actions\DeleteAction::make(),
+            // Actions\DeleteAction::make(),
         ];
     }
 
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
+    }
+
+    // protected function mutateFormDataBeforeSave(array $data): array
+    // {
+    //     $data['created_by'] ??= auth()->id();
+
+    //     return $data;
+    // }
+
+
+    protected function authorizeAccess(): void
+    {
+        $user = auth()->user();
+
+        if ($user->role !== 'admin' && $this->record->id !== $user->id) {
+            abort(403);
+        }
     }
 }

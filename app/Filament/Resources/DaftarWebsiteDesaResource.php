@@ -228,6 +228,7 @@ class DaftarWebsiteDesaResource extends Resource
 
 
                 Tables\Actions\DeleteAction::make()
+                    ->label('Hapus')
                     ->button()
                     ->extraAttributes([
                         'style' => 'background-color: #dc2626; color: white;'

@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'unit_kerja_id',
         'role',
+        'created_by',
     ];
 
     /**
@@ -67,5 +68,15 @@ class User extends Authenticatable
     public function isOPD(): bool
     {
         return $this->role === 'OPD';
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function usersCreated()
+    {
+        return $this->hasMany(User::class, 'created_by');
     }
 }
