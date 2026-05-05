@@ -61,24 +61,55 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('Nama')
                     ->required(fn(string $context) => $context === 'create')
+                    ->placeholder('Mohon isikan nama pengguna')
+                    ->validationMessages([
+                        'required' => 'Mohon isikan nama pengguna.',
+                    ])
+                    ->extraAttributes([
+                        'novalidate' => 'novalidate',
+                    ])
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('email')
                     ->label('Email')
                     ->email()
+                    ->validationMessages([
+                        'required' => 'Mohon isikan email pengguna.',
+                        'email' => 'Mohon isikan email yang valid.',
+                    ])
                     ->required(fn(string $context) => $context === 'create')
+                    ->placeholder('contoh: xxxxxx@gmail.com')
                     ->unique(ignoreRecord: true),
 
                 Forms\Components\TextInput::make('password')
                     ->label('Password')
                     ->password()
+                    ->validationMessages([
+                        'required' => 'Mohon isikan password pengguna.',
+                    ])
                     ->dehydrateStateUsing(fn($state) => filled($state) ? bcrypt($state) : null)
                     ->dehydrated(fn($state) => filled($state))
                     ->required(fn(string $operation) => $operation === 'create')
                     ->maxLength(255),
 
+                Forms\Components\TextInput::make('unitKerja.telp')
+                    ->label('No HP')
+                    ->validationMessages([
+                        'required' => 'Mohon isikan nomor HP pengguna.',
+                        'regex' => 'Nomor HP harus diawali 628 dan hanya berisi angka.',
+                    ])
+                    ->tel()
+                    ->prefix('628')
+                    ->rules(['regex:/^628[0-9]{8,11}$/'])
+                    ->placeholder('628xxxxxxxx')
+                    ->required(fn(string $operation) => $operation === 'create') //wajib isikan saat create
+                    ->maxLength(15),
 
                 Forms\Components\Select::make('role')
                     ->label('Role')
+                    ->validationMessages([
+                        'required' => 'Mohon pilih role pengguna.',
+                    ])
                     ->options([
                         'user' => 'User',
                         'sekre' => 'Sekre',
@@ -93,6 +124,9 @@ class UserResource extends Resource
 
                 Forms\Components\Select::make('unit_kerja_id')
                     ->label('Unit Kerja')
+                    ->validationMessages([
+                        'required' => 'Mohon pilih unit kerja pengguna.',
+                    ])
                     ->relationship('unitKerja', 'nama_opd')
                     ->searchable()
                     ->preload()
@@ -123,29 +157,31 @@ class UserResource extends Resource
 
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama')
-                    ->searchable()
-                    ->sortable(),
+                    ->searchable(),
 
                 Tables\Columns\TextColumn::make('email')
                     ->label('Email')
-                    ->searchable()
-                    ->sortable(),
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('no_hp')
+                    ->label('No HP')
+                    ->searchable(),
+
                 Tables\Columns\BadgeColumn::make('role')
                     ->label('Role')
                     ->colors([
                         'danger' => 'admin',
                         'success' => 'user',
                     ])
-                    ->formatStateUsing(fn($state) => ucfirst($state))
-                    ->sortable(),
+                    ->formatStateUsing(fn($state) => ucfirst($state)),
+
                 Tables\Columns\TextColumn::make('unitKerja.nama_opd')
                     ->label('Unit Kerja')
-                    ->searchable()
-                    ->sortable(),
+                    ->searchable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat pada')
                     ->dateTime()
-                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
 

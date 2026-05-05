@@ -2,9 +2,9 @@
 
 return [
 
-    'title' => 'Login',
+    'title' => 'Masuk',
 
-    'heading' => 'Sign in',
+    'heading' => 'Masuk',
 
     'actions' => [
 
@@ -22,21 +22,21 @@ return [
     'form' => [
 
         'email' => [
-            'label' => 'Email address',
+            'label' => 'Silahkan masukkan email Anda',
         ],
 
         'password' => [
-            'label' => 'Password',
+            'label' => 'Silahkan masukkan password Anda',
         ],
 
         'remember' => [
-            'label' => 'Remember me',
+            'label' => 'Ingat saya',
         ],
 
         'actions' => [
 
             'authenticate' => [
-                'label' => 'Sign in',
+                'label' => 'Masuk',
             ],
 
         ],
@@ -45,15 +45,15 @@ return [
 
     'messages' => [
 
-        'failed' => 'These credentials do not match our records.',
+        'failed' => 'Data login tidak cocok dengan data kami.',
 
     ],
 
     'notifications' => [
 
         'throttled' => [
-            'title' => 'Too many login attempts',
-            'body' => 'Please try again in :seconds seconds.',
+            'title' => 'Terlalu banyak percobaan login',
+            'body' => 'Silakan coba beberapa saat lagi.',
         ],
 
     ],

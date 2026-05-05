@@ -26,6 +26,7 @@ use Filament\View\PanelsRenderHook;
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
 use App\Filament\Resources\DaftarWebsiteDesaResource\Widgets\StatistikWebsiteDesa;
+use Filament\Navigation\NavigationItem;
 
 
 
@@ -54,6 +55,22 @@ class AdminPanelProvider extends PanelProvider
             // ->styles([
             //     asset('css/sidebar.css'),
             // ])
+            ->darkMode(false)
+            // ->navigationItems([
+            //     NavigationItem::make('WA Login')
+            //         ->icon('heroicon-o-qr-code')
+            //         ->group('Integrasi')
+            //         ->sort(99) // biar di bawah
+            //         ->url(url('/wa-login'), shouldOpenInNewTab: true)
+            //         ->visible(fn() => auth()->check() && auth()->user()->role === 'admin'),
+
+            // ])
+
+            ->renderHook(
+                'panels::body.start',
+                fn() => view('components.loader')
+            )
+
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
                 fn() => '<link rel="stylesheet" href="' . asset('admin.css') . '">'
