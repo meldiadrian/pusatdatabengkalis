@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\PemohonResource\Pages;
 
+use App\Models\User;
 use Filament\Actions;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
@@ -20,6 +21,12 @@ use Filament\Forms\Form;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
 use App\Models\Konfirmasi;
+use App\Jobs\SendWhatsAppMessage;
+use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
+use App\Services\WhatsAppService;
+
+
 
 class CreatePemohon extends CreateRecord
 {
@@ -45,6 +52,45 @@ class CreatePemohon extends CreateRecord
         Konfirmasi::create([
             'pemohon_id' => $this->record->id,
             'status' => 'pending',
+        ]);
+
+        //-------------------------------------------------
+        SendWhatsAppMessage::dispatch(
+            $this->record->phone,
+            'Data berhasil dibuat'
+        );
+
+
+        //     //whatssapp notifikasi
+        $token = config('services.whatsapp.token');
+        $url   = config('services.whatsapp.url');
+        $record = $this->record;
+
+        $nosekre = User::whereRole('sekre')->first()?->no_hp;
+        $message =
+            "🔔 *Informasi Permohonan Data Baru!*\n\n" .
+            "Yth. Bapak/Ibu,\n\n" .
+            "Terdapat *permohonan data baru* yang telah diajukan dan membutuhkan tindak lanjut.\n" .
+            "Mohon untuk segera diproses ke tahap selanjutnya.\n\n"
+
+            // .  "📌 *Tujuan Permohonan Data:* " . (
+            //     $record->unitKerja
+            //     ?? optional($record->opd)->nama_opd
+            //     ?? '-'
+            // ) . "\n"
+            // . "👤 *Instansi Yang Dituju:* " . (
+            //     $record->opd_tujuan
+            //     ?? optional($record->unitKerja)->nama_opd
+            //     ?? '-'
+            // ) . "\n"
+            // . "📂 *Data Yang Dibutuhkan:* {$record->data_diminta}\n"
+            // . "📊 *Tujuan Penggunaan Data:* {$record->tujuan_penggunaan}\n"
+            . "🕐 Waktu: " . Carbon::now('Asia/Jakarta')->format('d-m-Y H:i:s');
+        Http::post($url . '/message/send-text', [
+            "session"  => $token,
+            $nosekre = User::whereRole('sekre')->first()?->no_hp,
+            app(WhatsAppService::class)->send($nosekre, $message),
+            "text" => $message,
         ]);
     }
 
