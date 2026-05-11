@@ -12,6 +12,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
 use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Model;
+use App\Filament\Resources\PemilikDataResource;
 
 class SuratBalasanRelationManager extends RelationManager
 {
@@ -66,6 +67,22 @@ class SuratBalasanRelationManager extends RelationManager
             // ])
 
 
+            // ->headerActions([
+            //     Tables\Actions\CreateAction::make()
+            //         ->label('Upload Data yang Diminta')
+            //         ->icon('heroicon-o-plus')
+            //         ->modalHeading('Mohon mengisi data sesuai intruksi*')
+            //         ->modalCancelActionLabel('Batal')
+            //         ->color('primary')
+            //         ->after(function ($record) {
+            //             // update status pemohon jadi sukses
+            //             $this->ownerRecord->update([
+            //                 'status' => 'sukses'
+            //             ]);
+
+            //         }),
+            // ])
+
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->label('Upload Data yang Diminta')
@@ -73,14 +90,20 @@ class SuratBalasanRelationManager extends RelationManager
                     ->modalHeading('Mohon mengisi data sesuai intruksi*')
                     ->modalCancelActionLabel('Batal')
                     ->color('primary')
+
                     ->after(function ($record) {
+
                         // update status pemohon jadi sukses
                         $this->ownerRecord->update([
                             'status' => 'sukses'
                         ]);
-                    }),
-            ])
+                    })
 
+                    // redirect ke halaman index setelah simpan
+                    ->successRedirectUrl(
+                        PemilikDataResource::getUrl()
+                    ),
+            ])
 
             ->actions([
                 Tables\Actions\EditAction::make(),
