@@ -136,30 +136,6 @@ class KonfirmasiResource extends Resource
 
     //---------------------------badge notifikasi menu hanya divalidator-----------------
 
-    // public static function getEloquentQuery(): Builder
-    // {
-    //     $query = parent::getEloquentQuery();
-    //     $user = auth()->user();
-
-    //     // FILTER: hanya tampilkan yang pending
-    //     $query->where('status', 'pending');
-
-    //     // Jika sekre → hanya lihat data miliknya sendiri
-    //     if ($user->role == 'sekre' && $user->unitKerja->tipe == 'OPD') {
-    //         $query->whereHas('pemohon', function ($q) use ($user) {
-    //             $q->where('instansi_pemohon', $user->unit_kerja_id);
-    //         });
-    //     }
-
-    //     if ($user->role == 'sekre' && $user->unitKerja->tipe == 'Desa') {
-    //         $query->whereHas('pemohon', function ($q) use ($user) {
-    //             $q->where('instansi_pemohon', $user->unit_kerja_id);
-    //         });
-    //     }
-
-    //     return $query;
-    // }
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -173,14 +149,31 @@ class KonfirmasiResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(
-                fn(Builder $query) =>
-                auth()->user()->role === 'admin'
-                    ? $query
-                    : $query->whereHas('pemohon', function (Builder $q) {
-                        $q->where('instansi_pemohon', auth()->user()->unit_kerja_id);
-                    })
-            )
+
+            // ->modifyQueryUsing(
+            //     fn(Builder $query) =>
+            //     auth()->user()->role === 'admin'
+            //         ? $query
+            //         : $query->whereHas('pemohon', function (Builder $q) {
+            //             $q->where('instansi_pemohon', auth()->user()->unit_kerja_id);
+            //         })
+            // )
+
+            ->modifyQueryUsing(function (Builder $query) {
+
+                // tampilkan hanya status pending
+                $query->where('status', 'pending');
+
+                // jika admin tampil semua pending
+                if (auth()->user()->role === 'admin') {
+                    return $query;
+                }
+
+                // selain admin filter berdasarkan instansi
+                return $query->whereHas('pemohon', function (Builder $q) {
+                    $q->where('instansi_pemohon', auth()->user()->unit_kerja_id);
+                });
+            })
 
             ->columns([
                 TextColumn::make('no')
@@ -223,21 +216,23 @@ class KonfirmasiResource extends Resource
                     ->action(function ($record) {
                         if ($record->status === 'pending') {
                             $record->update([
-                                'status' => 'sukses', // ubah ke sukses saat diklik
+                                'status' => 'sukses',
                             ]);
+
+                            // update juga tabel pemohon menjadi sukses
+                            $record->pemohon->update([
+                                'status' => 'sukses',
+                            ]);
+
+                            Notification::make()
+                                ->title('Status berhasil diubah')
+                                ->body('Status berubah menjadi SUKSES')
+                                ->success()
+                                ->send();
                         }
                     })
 
-                // Tables\Columns\TextColumn::make('status')
-                //     ->badge()
-                //     ->label('Status')
-                //     ->disableClick()
-                //     ->color(fn($state) => match ($state) {
-                //         'pending' => 'warning',
-                //         'sukses' => 'success',
-                //         'ditolak' => 'danger',
-                //         default => 'gray',
-                //     }),
+
 
             ])
 
@@ -245,41 +240,74 @@ class KonfirmasiResource extends Resource
                 //
             ])
             ->actions([
+                // Action::make('proses')
+                //     ->button()
+                //     ->label('Proses')
+                //     ->icon('heroicon-o-check-circle')
+                //     ->color('success')
+                //     ->visible(fn($record) => auth()->user()?->role === 'sekre' && $record->status === 'pending')
+                //     // ->action(function ($record) {
+                //     //     $record->update([
+                //     //         'status' => 'proses pengajuan data',
+                //     //     ]);
+
+                //     //     // optional: update juga ke pemohon
+                //     //     $record->pemohon->update([
+                //     //         'status' => 'proses pengajuan data',
+                //     //     ]);
+
+                //     ->action(function ($record) {
+
+                //         $record->update([
+                //             'status' => 'proses',
+                //         ]);
+
+                //         // update juga tabel pemohon
+                //         $record->pemohon->update([
+                //             'status' => 'proses',
+                //         ]);
+
+
+
+                //         Notification::make()
+                //             ->title('Berhasil diproses')
+                //             ->body('Status berubah menjadi PROSES')
+                //             ->success()
+                //             ->send();
+                //     }),
+
                 Action::make('proses')
                     ->button()
                     ->label('Proses')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->visible(fn($record) => auth()->user()?->role === 'sekre' && $record->status === 'pending')
-                    // ->action(function ($record) {
-                    //     $record->update([
-                    //         'status' => 'proses pengajuan data',
-                    //     ]);
-
-                    //     // optional: update juga ke pemohon
-                    //     $record->pemohon->update([
-                    //         'status' => 'proses pengajuan data',
-                    //     ]);
-
+                    ->visible(
+                        fn($record) =>
+                        auth()->user()?->role === 'sekre'
+                            && $record->status === 'pending'
+                    )
                     ->action(function ($record) {
 
                         $record->update([
                             'status' => 'proses',
                         ]);
 
-                        // update juga tabel pemohon
                         $record->pemohon->update([
                             'status' => 'proses',
                         ]);
-
-
 
                         Notification::make()
                             ->title('Berhasil diproses')
                             ->body('Status berubah menjadi PROSES')
                             ->success()
                             ->send();
+                    })
+                    ->after(function ($livewire) {
+                        $livewire->dispatch('$refresh');
                     }),
+
+
+
                 Action::make('tolak')
                     ->button()
                     ->label('Tolak')
@@ -300,6 +328,12 @@ class KonfirmasiResource extends Resource
                             ->danger()
                             ->send();
                     }),
+
+
+
+
+
+
 
                 Tables\Actions\DeleteAction::make()
                     ->label('Hapus')

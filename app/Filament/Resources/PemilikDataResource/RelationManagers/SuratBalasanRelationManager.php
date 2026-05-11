@@ -122,7 +122,9 @@ class SuratBalasanRelationManager extends RelationManager
         return $form
             ->schema([
                 FileUpload::make('upload_balasan')
-                    ->label('Upload Data (PDF, Excel, Word, jpg, jpeg, png - Max 4MB)')
+                    ->label('Upload PDF, Excel, Word, jpg, jpeg, png - Max 4MB')
+                    ->placeholder('📁 Tarik & letakkan file di sini atau klik untuk memilih')
+                    ->hintIcon('heroicon-m-question-mark-circle')
                     ->maxSize(4096) // 4MB
                     ->disk('public')
                     ->directory('Surat/Balasan')

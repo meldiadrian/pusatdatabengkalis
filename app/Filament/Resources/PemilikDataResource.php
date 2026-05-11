@@ -96,7 +96,7 @@ class PemilikDataResource extends Resource
             in_array($user->unitKerja->tipe, ['OPD', 'Desa'])
         ) {
             $count = static::getModel()::query()
-                ->where('status', 'pending')
+                ->whereIn('status', ['pending', 'proses'])
                 ->where('opd_tujuan', $user->unit_kerja_id)
                 ->count();
 
@@ -238,7 +238,7 @@ class PemilikDataResource extends Resource
                     ->label('Keterangan')
                     ->getStateUsing(function ($record) {
                         $last = $record->suratBalasan()->latest()->first();
-                        return $last?->keterangan ?? 'Data tidak ada';
+                        return $last?->keterangan ?? '';
                     })
                     ->wrap()
                     ->limit(80),
