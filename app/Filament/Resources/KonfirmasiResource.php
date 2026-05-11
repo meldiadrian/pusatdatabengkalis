@@ -173,7 +173,14 @@ class KonfirmasiResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-
+            ->modifyQueryUsing(
+                fn(Builder $query) =>
+                auth()->user()->role === 'admin'
+                    ? $query
+                    : $query->whereHas('pemohon', function (Builder $q) {
+                        $q->where('instansi_pemohon', auth()->user()->unit_kerja_id);
+                    })
+            )
 
             ->columns([
                 TextColumn::make('no')
@@ -244,15 +251,28 @@ class KonfirmasiResource extends Resource
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
                     ->visible(fn($record) => auth()->user()?->role === 'sekre' && $record->status === 'pending')
+                    // ->action(function ($record) {
+                    //     $record->update([
+                    //         'status' => 'proses pengajuan data',
+                    //     ]);
+
+                    //     // optional: update juga ke pemohon
+                    //     $record->pemohon->update([
+                    //         'status' => 'proses pengajuan data',
+                    //     ]);
+
                     ->action(function ($record) {
+
                         $record->update([
-                            'status' => 'proses pengajuan data',
+                            'status' => 'proses',
                         ]);
 
-                        // optional: update juga ke pemohon
+                        // update juga tabel pemohon
                         $record->pemohon->update([
-                            'status' => 'proses pengajuan data',
+                            'status' => 'proses',
                         ]);
+
+
 
                         Notification::make()
                             ->title('Berhasil diproses')

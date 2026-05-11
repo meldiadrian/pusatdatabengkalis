@@ -70,7 +70,8 @@ class SuratBalasanRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make()
                     ->label('Upload Data yang Diminta')
                     ->icon('heroicon-o-plus')
-                    ->modalHeading('')
+                    ->modalHeading('Mohon mengisi data sesuai intruksi*')
+                    ->modalCancelActionLabel('Batal')
                     ->color('primary')
                     ->after(function ($record) {
                         // update status pemohon jadi sukses
@@ -121,12 +122,12 @@ class SuratBalasanRelationManager extends RelationManager
         return $form
             ->schema([
                 FileUpload::make('upload_balasan')
-                    ->label('Upload Data yang Diminta (PDF, Excel, Word, jpg, jpeg, png - Max 4MB)')
+                    ->label('Upload Data (PDF, Excel, Word, jpg, jpeg, png - Max 4MB)')
                     ->maxSize(4096) // 4MB
                     ->disk('public')
                     ->directory('Surat/Balasan')
                     //->acceptedFileTypes(['application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png'])
-                     ->acceptedFileTypes([
+                    ->acceptedFileTypes([
                         'application/pdf',
                         'application/vnd.ms-excel',
                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

@@ -68,6 +68,8 @@ class StatistikPemohon extends BaseWidget
             ->where('status', 'proses')
             ->count();
 
+
+
         $totalSukses = (clone $query)
             ->where('status', 'sukses')
             ->count();

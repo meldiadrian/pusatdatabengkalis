@@ -25,63 +25,88 @@ use App\Filament\Resources\PemilikDataResource\RelationManagers;
 class PemilikDataResource extends Resource
 {
 
+    // protected static ?string $model = PemilikData::class;
+    protected static ?string $model = Pemohon::class;
+    protected static ?string $navigationIcon = 'heroicon-s-book-open';
+    protected static ?string $modelLabel = 'Instansi Penyedia Data';
+    protected static ?string $pluralModelLabel = 'Pemilik Data';
+    protected static ?string $navigationGroup = 'Pusat Data Kabupaten Bengkalis';
+    protected static ?int $navigationSort = 0;
+
 
     //---------------------------badge notifikasi menu-----------------
 
 
-    public static function getNavigationBadge(): ?string
-    {
-        //return static::getModel()::where('status', 'pending')->count();
-
-        $user = auth()->user();
-
-        $query = static::getModel()::query()
-            ->where('status', 'pending');
-
-        // Filter berdasarkan role sekre
-        if ($user->role == 'sekre' && $user->unitKerja->tipe == 'OPD') {
-            $query->whereHas('pemohon', function ($q) use ($user) {
-                $q->where('instansi_pemohon', $user->unit_kerja_id);
-            });
-        }
-
-        if ($user->role == 'sekre' && $user->unitKerja->tipe == 'Desa') {
-            $query->whereHas('pemohon', function ($q) use ($user) {
-                $q->where('instansi_pemohon', $user->unit_kerja_id);
-            });
-        }
-
-        return (string) $query->count();
-    }
-
-    
     // public static function getNavigationBadge(): ?string
     // {
+    //     //return static::getModel()::where('status', 'pending')->count();
+
     //     $user = auth()->user();
-
-    //     $isAdmin = $user->role === 'admin';
-    //     $isSekre = $user->role === 'sekre';
-    //     $isValidTipe = in_array(optional($user->unitKerja)->tipe, ['OPD', 'Desa']);
-
-    //     // ❌ Jika bukan tujuan → tidak tampil badge
-    //     if (! $isAdmin && ! ($isSekre && $isValidTipe)) {
-    //         return null;
-    //     }
 
     //     $query = static::getModel()::query()
     //         ->where('status', 'pending');
 
-    //     // ✅ Jika sekre → filter sesuai instansi (tujuan dia)
-    //     if ($isSekre && $isValidTipe) {
+    //     // Filter berdasarkan role sekre
+    //     if ($user->role == 'sekre' && $user->unitKerja->tipe == 'OPD') {
     //         $query->whereHas('pemohon', function ($q) use ($user) {
     //             $q->where('instansi_pemohon', $user->unit_kerja_id);
     //         });
     //     }
 
-    //     // ✅ Admin → semua pending (tanpa filter tujuan)
+    //     if ($user->role == 'sekre' && $user->unitKerja->tipe == 'Desa') {
+    //         $query->whereHas('pemohon', function ($q) use ($user) {
+    //             $q->where('instansi_pemohon', $user->unit_kerja_id);
+    //         });
+    //     }
+
     //     return (string) $query->count();
     // }
+    //-------------------------------
 
+    public static function getNavigationBadge(): ?string
+    {
+        $user = auth()->user();
+
+        if (!$user || !$user->unitKerja) {
+            return null;
+        }
+
+        // Hide badge untuk pemohon
+        if ($user->role === 'pemohon') {
+            return null;
+        }
+
+        // ROLE SEKRE - hanya untuk OPD dan Desa
+        if ($user->role === 'sekre') {
+            if (in_array($user->unitKerja->tipe, ['OPD', 'Desa'])) {
+                $count = static::getModel()::query()
+                    ->where('status', 'pending')
+                    ->where('instansi_pemohon', $user->unit_kerja_id)
+                    ->count();
+
+                return $count > 0 ? (string) $count : null;
+            }
+            return null;
+        }
+
+        // OPD TUJUAN - untuk admin_opd, user, dan role apapun dengan tipe OPD/Desa
+        if (
+            $user->role === 'admin_opd' ||
+            $user->role === 'user' ||
+            in_array($user->unitKerja->tipe, ['OPD', 'Desa'])
+        ) {
+            $count = static::getModel()::query()
+                ->where('status', 'pending')
+                ->where('opd_tujuan', $user->unit_kerja_id)
+                ->count();
+
+            return $count > 0 ? (string) $count : null;
+        }
+
+        return null;
+    }
+
+    //------------------------------
 
     public static function getNavigationBadgeColor(): ?string
     {
@@ -95,14 +120,6 @@ class PemilikDataResource extends Resource
 
     //---------------------------badge notifikasi menu hanya divalidator-----------------
 
-    // protected static ?string $model = PemilikData::class;
-    protected static ?string $model = Pemohon::class;
-
-    protected static ?string $navigationIcon = 'heroicon-s-book-open';
-    protected static ?string $modelLabel = 'Instansi Penyedia Data';
-    protected static ?string $pluralModelLabel = 'Pemilik Data';
-    protected static ?string $navigationGroup = 'Pusat Data Kabupaten Bengkalis';
-    protected static ?int $navigationSort = 0;
 
     public static function shouldRegisterNavigation(): bool
     {
@@ -217,26 +234,6 @@ class PemilikDataResource extends Resource
                     }),
 
 
-                // IconColumn::make('upload_surat')
-                //     ->label('SURAT PERMOHONAN')
-                //     ->tooltip('Download')
-                //     ->url(function ($record) {
-                //         if ($record->upload_surat) {
-                //             return route('download.storage.file', ['path' => $record->upload_surat]);
-                //         }
-                //         return null;
-                //     })
-                //     ->openUrlInNewTab()
-                //     ->alignCenter()
-                //     // ->icon('heroicon-s-arrow-down')
-                //     ->icon('heroicon-o-circle-stack')
-                //     ->color('warning'),
-
-                // Tables\Columns\TextColumn::make('keterangan')
-                //     ->label('KETERANGAN')
-                //     ->wrap()
-                //     ->limit(80)
-                //     ->searchable(),
                 Tables\Columns\TextColumn::make('keterangan_surat_balasan')
                     ->label('Keterangan')
                     ->getStateUsing(function ($record) {
@@ -277,10 +274,6 @@ class PemilikDataResource extends Resource
 
                 Action::make('downloadBalasan')
                     ->label('Surat Balasan')
-                    // ->label(fn() => new HtmlString('<div class="text-center leading-tight">
-                    //                                     <span class="text-xs text-warning-500">Surat</span><br>
-                    //                                     <span class="font-semibold">Permohonan</span>
-                    //                                 </div>'))
                     ->tooltip('Download')
                     ->icon('heroicon-m-circle-stack')
                     ->color('success')

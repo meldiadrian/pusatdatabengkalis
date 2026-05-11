@@ -22,6 +22,7 @@ class SuratBalasanRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'keterangan';
 
+
     protected function getTableHeaderActions(): array
     {
         return [
@@ -29,6 +30,7 @@ class SuratBalasanRelationManager extends RelationManager
                 ->label('Tambah Surat Balasan')
                 ->icon('heroicon-o-plus')
                 ->color('primary')
+                ->modalCancelActionLabel('Batal')
                 ->after(function ($record) {
                     // update status pemohon jadi disetujui
                     $this->ownerRecord->update([
@@ -39,6 +41,7 @@ class SuratBalasanRelationManager extends RelationManager
                         'status' => 'sukses'
                     ]);
                 }),
+
         ];
     }
 
@@ -73,6 +76,7 @@ class SuratBalasanRelationManager extends RelationManager
                 // Read-only: no edit/delete actions
 
 
+
             ])
             ->bulkActions([
                 // Read-only: no bulk actions
@@ -84,7 +88,7 @@ class SuratBalasanRelationManager extends RelationManager
         return $form
             ->schema([
                 FileUpload::make('upload_balasan')
-                    ->label('Upload data yang diminta Pdf,Excel,word,jpg,jpeg,png')
+                    ->label('Upload data Pdf,Excel,word,jpg,jpeg,png')
                     ->maxSize(4096) // 4MB
                     ->directory('Surat/Balasan')
                     ->disk('public')
