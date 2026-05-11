@@ -43,9 +43,22 @@ class PemohonResource extends Resource
     // }
 
 
-    public static function shouldRegisterNavigation(): bool
+    // public static function shouldRegisterNavigation(): bool
+    // {
+    //     return auth()->user()?->email !== 'sekre@admin.com';
+
+    // }
+
+
+    public static function canViewAny(): bool
     {
-        return auth()->user()?->email !== 'sekre@admin.com';
+        $user = auth()->user();
+
+        $isAdmin = $user->role === 'admin';
+        $isUser = $user->role === 'user';
+        $isValidTipe = in_array(optional($user->unitKerja)->tipe, ['OPD', 'Desa']);
+
+        return $isAdmin || ($isUser && $isValidTipe);
     }
 
     public static function form(Form $form): Form
@@ -172,6 +185,8 @@ class PemohonResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
 
             ])
+            ->poll('1s')
+
             ->filters([
                 //
             ])

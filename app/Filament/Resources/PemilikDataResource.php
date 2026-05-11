@@ -121,9 +121,21 @@ class PemilikDataResource extends Resource
     //---------------------------badge notifikasi menu hanya divalidator-----------------
 
 
-    public static function shouldRegisterNavigation(): bool
+    // public static function shouldRegisterNavigation(): bool
+    // {
+    //     return auth()->user()?->email !== 'sekre@admin.com';
+
+    // }
+
+    public static function canViewAny(): bool
     {
-        return auth()->user()?->email !== 'sekre@admin.com';
+        $user = auth()->user();
+
+        $isAdmin = $user->role === 'admin';
+        $isUser = $user->role === 'user';
+        $isValidTipe = in_array(optional($user->unitKerja)->tipe, ['OPD', 'Desa']);
+
+        return $isAdmin || ($isUser && $isValidTipe);
     }
 
     public static function form(Form $form): Form
@@ -253,6 +265,7 @@ class PemilikDataResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->poll('1s')
             ->filters([
                 //
             ])
@@ -296,6 +309,7 @@ class PemilikDataResource extends Resource
                         'style' => 'background-color: #facc15; color: black;'
                     ])
                     ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
+
                 Tables\Actions\DeleteAction::make()
                     ->label('Hapus')
                     ->button()
