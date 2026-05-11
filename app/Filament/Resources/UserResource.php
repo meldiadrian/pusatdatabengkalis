@@ -92,7 +92,7 @@ class UserResource extends Resource
                     ->required(fn(string $operation) => $operation === 'create')
                     ->maxLength(255),
 
-                Forms\Components\TextInput::make('unitKerja.telp')
+                Forms\Components\TextInput::make('no_hp')
                     ->label('No HP')
                     ->validationMessages([
                         'required' => 'Mohon isikan nomor HP pengguna.',
@@ -189,6 +189,9 @@ class UserResource extends Resource
                 Tables\Filters\SelectFilter::make('unit_kerja_id')
                     ->label('Unit Kerja')
                     ->relationship('unitKerja', 'nama_opd'),
+
+
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make()

@@ -2,13 +2,14 @@
 
 namespace App\Filament\Pages;
 
-use App\Filament\Resources\DaftarWebsiteDesaResource\Widgets\StatistikWebsiteDesa as WidgetsStatistikWebsiteDesa;
 use Filament\Pages\Dashboard as BaseDashboard;
-use App\Filament\Widgets\SuratPermohonanStatsWidget;
-use App\Filament\Widgets\SuratBalasanStatsWidget;
-use App\Models\User;
-use App\Filament\Resources\DaftarWebsiteResource\Widgets\StatistikWebsiteDesa;
-use Filament\Widgets\AccountWidget;
+use App\Filament\Widgets\CustomAccountWidget;
+
+use App\Filament\Resources\DaftarAplikasiPerangkatDaerahResource\Widgets\StatAplikasiOpd;
+use App\Filament\Resources\DaftarAplikasiPerangkatDaerahResource\Widgets\StatistikAplikasiOpd;
+use App\Filament\Resources\DaftarWebsiteDesaResource\Widgets\StatTotalDesa;
+use App\Filament\Resources\DaftarWebsitePerangkatDaerahResource\Widgets\StatistikWebsiteOpd;
+use App\Filament\Resources\DaftarWebsiteDesaResource\Widgets\StatistikWebsiteDesa;
 
 
 
@@ -16,19 +17,21 @@ class Dashboard extends BaseDashboard
 {
     protected static ?string $title = 'Dashboard';
 
+
     public function getWidgets(): array
     {
         return [
-            SuratPermohonanStatsWidget::class,
-            SuratBalasanStatsWidget::class,
-            \Filament\Widgets\AccountWidget::class,
-            WidgetsStatistikWebsiteDesa::class,
+            CustomAccountWidget::class,
+            // StatAplikasiOpd::class,
+            // StatTotalDesa::class,
+            StatistikWebsiteOpd::class,
+            StatistikWebsiteDesa::class,
+
         ];
     }
 
-
     public function getColumns(): int|string|array
     {
-        return 2;
+        return 3;
     }
 }

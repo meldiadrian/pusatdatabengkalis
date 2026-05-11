@@ -5,6 +5,8 @@ namespace App\Filament\Resources\PemohonResource\Pages;
 use App\Filament\Resources\PemohonResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\PemohonResource\Widgets\StatistikPemohon;
+
 
 class ListPemohons extends ListRecords
 {
@@ -15,6 +17,14 @@ class ListPemohons extends ListRecords
         return [
             Actions\CreateAction::make()
             ->label('Tambah Data'),
+        ];
+    }
+
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            StatistikPemohon::class,
         ];
     }
 }

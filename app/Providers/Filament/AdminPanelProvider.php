@@ -6,6 +6,8 @@ use App\Filament\Resources\PemohonResource;
 use App\Filament\Resources\PemilikDataResource;
 use App\Filament\Resources\UserResource;
 use App\Filament\Resources\UnitKerjaResource;
+use App\Filament\Resources\AplikasiPerangkatDaerahResource;
+
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -27,6 +29,11 @@ use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
 use App\Filament\Resources\DaftarWebsiteDesaResource\Widgets\StatistikWebsiteDesa;
 use Filament\Navigation\NavigationItem;
+use App\Filament\Resources\UserResource\Widgets\StatistikUser;
+use App\Filament\Resources\DaftarAplikasiPerangkatDaerahResource\Widgets\StatistikAplikasiOpd;
+use App\Filament\Resources\DaftarAplikasiPerangkatDaerahResource\Widgets\StatAplikasiOpd;
+use App\Filament\Resources\DaftarWebsiteDesaResource\Widgets\StatTotalDesa;
+
 
 
 
@@ -43,15 +50,16 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+            ->default()
+            ->id('admin')
+            ->path('admin')
+            //->login()
             ->login(Login::class)
             ->brandName('SISTEM INFORMASI PERMINTAAN DATA')
             ->brandLogo(asset('images/lgo.png'))
             ->brandLogoHeight('2.5rem')
             // ->sidebarCollapsibleOnDesktop()
             ->spa()
-            ->default()
-            ->id('admin')
-            ->path('admin')
             // ->styles([
             //     asset('css/sidebar.css'),
             // ])
@@ -98,16 +106,21 @@ class AdminPanelProvider extends PanelProvider
                 for: 'App\\Filament\\Resources'
             )
             ->pages([
-                Pages\Dashboard::class,
+                //Pages\Dashboard::class,
+
+                \App\Filament\Pages\Dashboard::class,
+
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->widgets([
-                Widgets\AccountWidget::class,
-                // StatistikWebsiteDesa::class,
-                //widget filament pada dashboard
-                // Widgets\FilamentInfoWidget::class,
-                // -----end---
-            ])
+            // ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            // ->widgets([
+            //     Widgets\AccountWidget::class,
+            //     StatAplikasiOpd::class,
+            //     StatTotalDesa::class,
+
+            //widget filament pada dashboard
+            // Widgets\FilamentInfoWidget::class,
+            // -----end---
+            // ])
             ->navigationGroups([
                 'Manajemen',
                 'Data',
