@@ -230,7 +230,7 @@ class PemohonResource extends Resource
                     ->extraAttributes([
                         'style' => 'background-color: #dc2626; color: white ;'
                     ])
-                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin'])),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
