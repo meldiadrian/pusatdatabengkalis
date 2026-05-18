@@ -92,7 +92,7 @@ class StatistikPemohon extends BaseWidget
                 ->icon('heroicon-o-users')
                 ->description('Akumulasi permohonan berdasarkan pengguna login')
                 ->extraAttributes([
-                    'style' => 'box-shadow: 0 -4px 6px -2px rgba(0, 0, 255, 0.6); border-radius:12px;',
+                    'style' => 'border-left: 8px solid #93c5fd; border-radius:12px;',
                     'class' => '!bg-blue-600 text-white',
                 ]),
 
@@ -106,7 +106,7 @@ class StatistikPemohon extends BaseWidget
                 ->icon('heroicon-o-clock')
                 ->description('Permohonan yang masih menunggu proses')
                 ->extraAttributes([
-                    'style' => 'box-shadow: 0 -4px 6px -2px rgba(255, 0, 0, 0.4); border-radius:12px;',
+                    'style' => 'border-left: 8px solid #f87171; border-radius:12px;',
                     'class' => 'text-white',
                 ]),
 
@@ -121,7 +121,7 @@ class StatistikPemohon extends BaseWidget
                 ->description('Permohonan yang sedang diproses')
                 ->extraAttributes([
 
-                    'style' => 'box-shadow: 0 -4px 6px -2px rgba(255, 193, 7, 0.4); border-radius:12px;',
+                    'style' => 'border-left: 8px solid #fbbf24; border-radius:12px;',
                     'class' => 'text-white',
                 ]),
 
@@ -135,7 +135,7 @@ class StatistikPemohon extends BaseWidget
                 ->icon('heroicon-o-check-circle')
                 ->description('Permohonan yang telah berhasil diproses')
                 ->extraAttributes([
-                    'style' =>  'box-shadow: 0 -4px 6px -2px rgba(0, 128, 0, 0.4);  border-radius:12px;',
+                    'style' =>  'border-left: 8px solid #4ade80;  border-radius:12px;',
                     'class' => '!bg-success-600 text-white',
                 ]),
         ];

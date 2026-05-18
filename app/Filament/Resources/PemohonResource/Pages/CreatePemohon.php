@@ -196,6 +196,9 @@ class CreatePemohon extends CreateRecord
             Step::make('Upload Dokumen')
                 ->schema([
                     FileUpload::make('upload_surat')
+                        ->label('📎 Upload Lampiran PDF,Excel,Word,jpg,jpeg,png (Max 2MB)')
+                        ->placeholder('📁 Tarik & letakkan file di sini atau klik untuk memilih')
+                        ->hintIcon('heroicon-m-question-mark-circle')
                         ->acceptedFileTypes([
                             'application/pdf',
                             'application/vnd.ms-excel',
@@ -205,7 +208,7 @@ class CreatePemohon extends CreateRecord
                             'image/jpeg',
                             'image/png',
                         ])
-                        ->label('📎 Upload Lampiran PDF,Excel,Word,jpg,jpeg,png (Max 2MB)')
+
                         ->directory('Surat')
                         ->disk('public')
                         ->maxSize(2048)

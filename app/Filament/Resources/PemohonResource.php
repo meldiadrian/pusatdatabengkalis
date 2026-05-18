@@ -91,6 +91,8 @@ class PemohonResource extends Resource
                     ->required(),
                 Forms\Components\FileUpload::make('upload_surat')
                     ->label('📎 Upload Surat Permohonan')
+                    ->placeholder('📁 Tarik & letakkan file di sini atau klik untuk memilih')
+                    ->hintIcon('heroicon-m-question-mark-circle')
                     ->acceptedFileTypes([
                         'application/pdf',
                         'application/vnd.ms-excel',
@@ -99,7 +101,6 @@ class PemohonResource extends Resource
                         'image/jpeg',
                         'image/png',
                     ])
-                    ->label('📎 Upload Lampiran PDF/Excel')
                     ->maxSize(2048) // 2MB
                     ->directory('Surat') // simpan di folder storage/app/public/surat
                     ->disk('public')     // pakai disk public

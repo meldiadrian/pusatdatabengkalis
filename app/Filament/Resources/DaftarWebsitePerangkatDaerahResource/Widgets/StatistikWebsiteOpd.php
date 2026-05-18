@@ -37,33 +37,28 @@ class StatistikWebsiteOpd extends BaseWidget
                 ->icon('heroicon-s-map-pin')
                 ->description('Jumlah Keseluruhan OPD Terdaftar')
                 ->extraAttributes([
-                    'style' => '
-           box-shadow: 0 -4px 6px -2px rgba(0, 0, 255, 0.6);
-            border-radius:12px;',
-                    'class' => '!bg-blue-600 !text-danger',
+                    'style' => 'border-left: 8px solid #93c5fd; border-radius:12px;',
+                    // 'style' => 'box-shadow: 0 -4px 6px -2px rgba(59, 130, 246, 0.4); border-radius:12px;', --- IGNORE ---
+                    'class' => '!bg-blue-600 !text-white',
+
                 ]),
 
             Stat::make('Total Website', $totalWebOpd)
                 ->icon('heroicon-s-globe-alt')
                 ->description('Jumlah Keseluruhan Website Terdaftar')
                 ->extraAttributes([
-                    'style' => '
-            --fi-stats-card-color: #ffffff;       
-            color: white;
-            box-shadow: 0 -4px 6px -2px rgba(255, 0, 0, 0.4);
-            border-radius: 12px;',
+                    'style' => 'border-left: 8px solid #f87171; border-radius:12px;',
+                    // 'style' => 'box-shadow: 0 -4px 6px -2px rgba(255, 0, 0, 0.4); border-radius:12px;', --- IGNORE ---
+                    'class' => '!bg-red-500 !text-white',
                 ]),
 
             Stat::make('Total Website Aktif', $totalAktif)
                 ->icon('heroicon-s-globe-alt')
                 ->description('Jumlah Keseluruhan Website yang Aktif')
                 ->extraAttributes([
-                    'style' => '
-                --fi-stats-card-color: #ffffff;       
-               color:white;
-                box-shadow: 0 -4px 6px -2px rgba(0, 128, 0, 0.4);            
-                border-radius:12px;',
-                    'class' => '!bg-danger-600 !text-danger',
+                    'style' => 'border-left: 8px solid #4ade80; border-radius:12px;',
+                    // 'style' => 'box-shadow: 0 -4px 6px -2px rgba(0, 128, 0, 0.4); border-radius:12px;', --- IGNORE ---
+                    'class' => '!bg-green-500 !text-white', 
                 ]),
 
         ];
