@@ -1,38 +1,222 @@
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    font-family: sans-serif;
+}
+
+/* background utama */
 .fi-simple-main-ctn {
-    min-height: 100vh;
-    background-image: url("/images/log-data.png");
+    height: 100vh;
+    width: 100%;
+
+    background-image: url("/images/gss.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    pointer-events: none;
-    position: relative;
-}
-/* Kembalikan pointer-events ke elemen anak yang penting */
-.fi-simple-main-ctn > * {
-    /* semua anak langsung */
+
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+
+    padding-left: 10px;
+    padding-top: 15px;
+
+    overflow: hidden;
     pointer-events: auto;
 }
 
-.fi-simple-auth-card,
-.fi-auth-card,
-form,
-input,
-button,
-label,
-a {
-    pointer-events: auto !important; /* force agar form & elemennya clickable */
-}
-
-/* container */
+/* wrapper */
 .fi-simple-main {
-    background: transparent !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
 }
 
-/* card */
-.fi-simple-auth-card {
-    background: none !important;
-    backdrop-filter: none;
-    border: none;
+/* ukuran wrapper */
+.fi-simple-main > div {
+    width: 320px !important;
+    max-width: 320px !important;
+    min-width: 320px !important;
+
+    margin: 0 !important;
+}
+
+/* card transparan */
+.fi-simple-auth-card,
+.fi-auth-card {
+    width: 320px !important;
+    max-width: 320px !important;
+    min-width: 320px !important;
+
+    padding: 18px !important;
+
+    border-radius: 14px !important;
+
+    /* background transparan */
+    background: rgba(255, 255, 255, 0.08) !important;
+
+    /* efek blur glass */
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+
+    /* border tipis transparan */
+    border: 1px solid rgba(255,255,255,0.15) !important;
+
+    /* shadow transparan */
+    box-shadow:
+        0 8px 30px rgba(0,0,0,0.15) !important;
+
+    margin: 0 !important;
+}
+
+/* logo */
+.fi-logo {
+    max-height: 32px !important;
+    margin-bottom: 8px !important;
+}
+
+/* judul */
+.fi-simple-header-heading,
+.fi-header-heading,
+h1 {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    /* color: #656363 !important; */
+
+    text-align: center !important;
+
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    /* text-shadow: 0 2px 4px rgba(0,0,0,0.4); */
+
+    margin-bottom: 16px !important;
+}
+
+/* subjudul */
+.fi-simple-header-subheading {
+    display: none !important;
+}
+
+/* label */
+label {
+    font-size: 11px !important;
+    font-weight: 500 !important;
+
+    color: #363535 !important;
+}
+
+/* input */
+.fi-input,
+input {
+    height: 36px !important;
+
+    border-radius: 8px !important;
+
+    font-size: 12px !important;
+
+    background: rgba(255,255,255,0.12) !important;
+
+    border: 1px solid rgba(255,255,255,0.15) !important;
+
+    color: #363535 !important;
+
+    box-shadow: none !important;
+}
+
+/* placeholder */
+input::placeholder {
+    color: rgba(255,255,255,0.6) !important;
+}
+
+/* checkbox */
+input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    border: 1px solid rgba(45, 43, 43, 0.6) !important;
+    background: transparent;
+
+    border-radius: 4px;
+
+    cursor: pointer;
+    position: relative;
+    transition: 0.2s ease;
+}
+
+/* saat di klik / checked */
+
+
+/* tanda centang */
+input[type="checkbox"]:checked::after {
+    content: "✓";
+    position: absolute;
+    top: -2px;
+    left: 3px;
+
+    font-size: 14px;
+    color: #2563eb;
+    font-weight: bold;
 }
 
 
+/* tombol */
+button {
+    height: 36px !important;
+
+    border-radius: 8px !important;
+
+    font-size: 12px !important;
+    font-weight: 600 !important;
+
+    /* background: rgba(37, 99, 235, 0.85) !important; */
+
+    border: none !important;
+
+    color: #e7dddd !important;
+}
+
+/* footer */
+.fi-simple-footer {
+    font-size: 9px !important;
+    text-align: center;
+
+    margin-top: 12px !important;
+
+    line-height: 1.5;
+
+    color: rgba(255,255,255,0.75) !important;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+
+    .fi-simple-main-ctn {
+        justify-content: center !important;
+
+        padding-left: 0;
+        padding-top: 80px;
+    }
+
+    .fi-simple-main > div,
+    .fi-simple-auth-card,
+    .fi-auth-card {
+        width: 90% !important;
+        max-width: 300px !important;
+        min-width: unset !important;
+    }
+}
+```

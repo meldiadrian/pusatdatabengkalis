@@ -13,11 +13,11 @@ class Login extends BaseLogin
         return 'Pusat Data Kabupaten Bengkalis';
     }
 
-    protected function getAuthenticateFormAction(): Action
-    {
-        return parent::getAuthenticateFormAction()
-            ->label('Login');
-    }
+    // protected function getAuthenticateFormAction(): Action
+    // {
+    //     return parent::getAuthenticateFormAction()
+    //         ->label('Login');
+    // }
 
     // public function getHeading(): string
     // {
