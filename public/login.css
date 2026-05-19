@@ -1,68 +1,230 @@
+/* ===============================
+   BACKGROUND UTAMA
+================================= */
 .fi-simple-main-ctn {
     min-height: 100vh;
-    background-image: url("/images/gss.png");
+    background-image: url("/images/dd.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-
     display: flex !important;
     justify-content: flex-start !important;
     align-items: flex-start !important;
-
-    padding-left: 10px;
-    padding-top: 15px;
-    pointer-events: auto;
+    padding: 16px;
 }
 
-
-/* Kembalikan pointer-events ke elemen anak yang penting */
-.fi-simple-main-ctn > * {
-    /* semua anak langsung */
-    pointer-events: auto;
-}
-
-/* wrapper */
+/* ===============================
+   WRAPPER CARD
+================================= */
 .fi-simple-main {
     width: auto !important;
     max-width: none !important;
     margin: 0 !important;
-
-    display: flex !important;
-    justify-content: flex-start !important;
-    align-items: flex-start !important;
 }
 
-/* container */
+/* ===============================
+   CARD UTAMA - EXTRA PENDEK & KECIL
+================================= */
 .fi-simple-main > div {
-    width: 320px !important;
-    max-width: 320px !important;
-    min-width: 320px !important;
-
+    width: 260px !important;
+    max-width: 260px !important;
+    min-width: 260px !important;
     margin: 0 !important;
 }
 
 .fi-simple-auth-card,
 .fi-auth-card {
-    width: 320px !important;
-    max-width: 320px !important;
-    min-width: 320px !important;
+    width: 260px !important;
+    max-width: 260px !important;
+    min-width: 260px !important;
 
-    padding: 18px !important;
+    /* PADDING SANGAT KECIL */
+    padding: 8px 12px !important;
 
-    border-radius: 14px !important;
+    border-radius: 16px !important;
 
-    /* background transparan */
-    background: rgba(255, 255, 255, 0.08) !important;
-
-    /* efek blur glass */
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-
-    /* border tipis transparan */
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-
-    /* shadow transparan */
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
-
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
     margin: 0 !important;
+
+    /* Batasi tinggi maksimal agar tidak memanjang */
+    max-height: 340px !important;
+    overflow-y: auto !important;
+}
+
+/* ===============================
+   HEADER (opsional, jika ada judul)
+================================= */
+.fi-simple-header-heading,
+.fi-header-heading {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    color: #0f0f0f !important;
+    margin-bottom: 0px !important;
+    line-height: 1.2 !important;
+}
+
+.fi-simple-header-subheading,
+.fi-header-subheading {
+    font-size: 9px !important;
+    text-align: center !important;
+    color: rgba(44, 41, 41, 0.7) !important;
+    margin-bottom: 6px !important;
+}
+
+/* ===============================
+   FORM FIELD - JARAK SANGAT RAPAT
+================================= */
+.fi-fo-field-wrp {
+    margin-bottom: 6px !important;
+}
+
+.fi-fo-field-wrp-label label {
+    font-size: 9px !important;
+    font-weight: 600 !important;
+    color: #222121 !important;
+    margin-bottom: 2px !important;
+    display: inline-block !important;
+}
+
+/* ===============================
+   INPUT FIELD - TINGGI MINIMAL
+================================= */
+.fi-input-wrp {
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    min-height: 28px !important;
+}
+
+.fi-input-wrp:focus-within {
+    border-color: rgba(18, 18, 18, 0.08) !important;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
+}
+
+.fi-input,
+input:not([type="checkbox"]):not([type="radio"]) {
+    min-height: 28px !important;
+    font-size: 10px !important;
+    color: rgb(39, 38, 38) !important;
+    background: transparent !important;
+}
+
+.fi-input::placeholder,
+input::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 9px !important;
+}
+
+/* Ikon input kecil */
+.fi-input-wrp-prefix svg,
+.fi-input-wrp-suffix svg {
+    width: 10px !important;
+    height: 10px !important;
+    color: rgba(44, 41, 41, 0.7) !important;
+}
+
+/* ===============================
+   CHECKBOX - SANGAT KECIL
+================================= */
+.fi-checkbox {
+    border-radius: 3px !important;
+    width: 10px !important;
+    height: 10px !important;
+}
+
+.fi-checkbox + span,
+.fi-checkbox-label {
+    font-size: 8px !important;
+    color: rgba(44, 41, 41, 0.7) !important;
+}
+
+/* ===============================
+   TOMBOL LOGIN - RAMPING
+================================= */
+.fi-btn {
+    min-height: 28px !important;
+    border-radius: 20px !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    padding: 3px 10px !important;
+    width: 100% !important;
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+    colo: rgba(235, 226, 226, 0.9) !important;
+}
+
+.fi-btn-color-primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+    border: none !important;
+    color: rgba(44, 41, 41, 0.7) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+.fi-btn-color-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.35) !important;
+}
+
+/* ===============================
+   LINK (lupa password, dll)
+================================= */
+.fi-link {
+    font-size: 8px !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    text-decoration: none !important;
+}
+
+/* ===============================
+   LOGO - OPSIONAL
+================================= */
+.fi-logo img,
+.fi-logo svg {
+    max-height: 28px !important;
+    width: auto !important;
+    margin-bottom: 4px !important;
+}
+
+/* ===============================
+   FOOTER / COPYRIGHT
+================================= */
+/* Jika ada teks copyright di dalam card */
+.fi-simple-main div[class*="text-center"],
+.fi-simple-main .text-sm,
+footer p {
+    font-size: 10px !important;
+    text-align: center !important;
+    color: rgba(26, 23, 23, 0.6) !important;
+    margin-top: 6px !important;
+    margin-bottom: 0 !important;
+    line-height: 1.2 !important;
+}
+
+/* ===============================
+   RESPONSIVE MOBILE - TETAP PENDEK
+================================= */
+@media (max-width: 640px) {
+    .fi-simple-main-ctn {
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 12px !important;
+    }
+
+    .fi-simple-main > div,
+    .fi-simple-auth-card,
+    .fi-auth-card {
+        width: 100% !important;
+        max-width: 280px !important;
+        min-width: auto !important;
+    }
+
+    .fi-simple-auth-card,
+    .fi-auth-card {
+        padding: 6px 10px !important;
+        max-height: 330px !important;
+    }
 }
