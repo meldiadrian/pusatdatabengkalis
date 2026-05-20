@@ -108,10 +108,13 @@
 
 .fi-input,
 input:not([type="checkbox"]):not([type="radio"]) {
-    min-height: 28px !important;
-    font-size: 10px !important;
+    /* min-height: 28px !important;
+    font-size: 10px !important; */
     color: rgb(39, 38, 38) !important;
     background: transparent !important;
+
+    min-height: 44px !important;
+    font-size: 14px !important;
 }
 
 .fi-input::placeholder,
@@ -146,7 +149,10 @@ input::placeholder {
 /* ===============================
    TOMBOL LOGIN - RAMPING
 ================================= */
-.fi-btn {
+/* ===============================
+   TOMBOL LOGIN - RAMPING
+================================= */
+/* .fi-btn {
     min-height: 28px !important;
     border-radius: 20px !important;
     font-size: 10px !important;
@@ -155,20 +161,40 @@ input::placeholder {
     width: 100% !important;
     margin-top: 4px !important;
     margin-bottom: 4px !important;
-    colo: rgba(235, 226, 226, 0.9) !important;
+    color: #ffffff !important;
 }
 
 .fi-btn-color-primary {
-    background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+    background: #4018f5 !important;
     border: none !important;
-    color: rgba(44, 41, 41, 0.7) !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
-}
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+} */
 
 .fi-btn-color-primary:hover {
     transform: translateY(-1px);
     box-shadow: 0 3px 8px rgba(37, 99, 235, 0.35) !important;
 }
+
+/* WARNA TEKS BUTTON */
+/* .fi-btn,
+.fi-btn span,
+.fi-btn-label,
+button[type="submit"] {
+    color: #222121 !important;
+} */
+
+/* BUTTON LOGIN */
+/* .fi-btn-color-primary {
+    background: linear-gradient(135deg, #4f46e5, #3b82f6) !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    transition: all 0.2s ease;
+}
+
+.fi-btn-color-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
+} */
 
 /* ===============================
    LINK (lupa password, dll)
@@ -184,9 +210,9 @@ input::placeholder {
 ================================= */
 .fi-logo img,
 .fi-logo svg {
-    max-height: 28px !important;
+    max-height: 58px !important;
     width: auto !important;
-    margin-bottom: 4px !important;
+    margin-bottom: 14px !important;
 }
 
 /* ===============================
@@ -198,10 +224,11 @@ input::placeholder {
 footer p {
     font-size: 10px !important;
     text-align: center !important;
-    color: rgba(26, 23, 23, 0.6) !important;
+    color: rgba(27, 24, 24, 0.6)mportant;
     margin-top: 6px !important;
     margin-bottom: 0 !important;
     line-height: 1.2 !important;
+    opacity: 0.7;
 }
 
 /* ===============================
