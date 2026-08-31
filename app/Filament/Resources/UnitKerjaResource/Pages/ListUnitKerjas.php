@@ -12,6 +12,7 @@ use App\Filament\Resources\UnitKerjaResource\Widgets\StatistikUnitKerja;
 class ListUnitKerjas extends ListRecords
 {
     protected static string $resource = UnitKerjaResource::class;
+    protected ?string $heading = null;
 
     protected function getHeaderActions(): array
     {
@@ -27,5 +28,10 @@ class ListUnitKerjas extends ListRecords
         return [
             StatistikUnitKerja::class,
         ];
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        return [];
     }
 }

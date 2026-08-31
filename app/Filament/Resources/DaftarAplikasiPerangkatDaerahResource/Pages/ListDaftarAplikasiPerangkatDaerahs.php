@@ -10,13 +10,15 @@ use App\Filament\Resources\DaftarAplikasiPerangkatDaerahResource\Widgets\Statist
 class ListDaftarAplikasiPerangkatDaerahs extends ListRecords
 {
     protected static string $resource = DaftarAplikasiPerangkatDaerahResource::class;
+    protected ?string $heading = null;
+
 
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()
                 ->label('Tambah Data')
-               
+
                 // ->visible(
                 //     fn($record) => (
                 //         auth()->user()->role === 'user' &&
@@ -25,7 +27,7 @@ class ListDaftarAplikasiPerangkatDaerahs extends ListRecords
                 //         ||
                 //         ($record && $record->user_id === auth()->id())
                 // ),
-//---------------------------------------------------------------------------------------------
+                //---------------------------------------------------------------------------------------------
                 // ->visible(
                 //     fn($record) =>
                 //     auth()->user()?->email !== 'sekre@admin.com'
@@ -66,5 +68,9 @@ class ListDaftarAplikasiPerangkatDaerahs extends ListRecords
         return [
             StatistikAplikasiOpd::class,
         ];
+    }
+    public function getBreadcrumbs(): array
+    {
+        return [];
     }
 }

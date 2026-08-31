@@ -122,9 +122,10 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
                 Forms\Components\Select::make('pembuat')
                     ->label('Pembuat')
-                    ->placeholder('Pilih Pembuat Pihak Ketiga/Diskominfotik')
+                    // ->placeholder('Pilih Pembuat Pihak Ketiga/Diskominfotik')
                     ->required()
                     ->options([
+                        'internal' => 'Internal',
                         'pihak ketiga' => 'Pihak Ketiga',
                         'diskominfotik' => 'Diskominfotik',
                     ]),
@@ -170,7 +171,9 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
         $isBasicUser = $user->role === 'user';
         $isBasicAdmin = $user->role === 'admin';
         return $table
-
+            ->emptyStateHeading('Belum ada data')
+            ->emptyStateDescription('Silakan tambahkan data baru.')
+            ->emptyStateIcon('heroicon-o-user')
             ->columns([
                 TextColumn::make('no')
                     ->label('No')
@@ -250,7 +253,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->disableClick()
                     ->wrap()
                     ->limit(80)
-                    ->visible(! $isBasicUser)
+                    ->visible(!$isBasicUser)
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('spesifikasi_teknis')
@@ -258,7 +261,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->disableClick()
                     ->wrap()
                     ->limit(25)
-                    ->visible(! $isBasicUser)
+                    ->visible(!$isBasicUser)
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('jenis_aplikasi')
@@ -311,7 +314,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->visible(
                         fn($record) =>
                         strtolower(auth()->user()->role) === 'admin'
-                            || $record->user_id == auth()->id()
+                        || $record->user_id == auth()->id()
                     ),
 
 
@@ -325,7 +328,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->visible(
                         fn($record) =>
                         strtolower(auth()->user()->role) === 'admin'
-                            || $record->user_id == auth()->id()
+                        || $record->user_id == auth()->id()
                     ),
             ])
 

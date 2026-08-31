@@ -40,4 +40,9 @@ return [
         'url'   => env('WA_URL', 'https://api.fonnte.com/send'),
     ],
 
+    'recaptcha' => [
+        'sitekey' => env('NOCAPTCHA_SITEKEY'),
+        'secret'  => env('NOCAPTCHA_SECRET'),
+    ],
+
 ];

@@ -150,6 +150,9 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->emptyStateHeading('Belum ada data')
+            ->emptyStateDescription('Silakan tambahkan data baru.')
+            ->emptyStateIcon('heroicon-o-user')
             ->columns([
                 TextColumn::make('no')
                     ->label('No')

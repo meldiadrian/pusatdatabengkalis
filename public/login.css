@@ -224,7 +224,7 @@ button[type="submit"] {
 footer p {
     font-size: 10px !important;
     text-align: center !important;
-    color: rgba(27, 24, 24, 0.6)mportant;
+    color: rgba(27, 24, 24, 0.6) mportant;
     margin-top: 6px !important;
     margin-bottom: 0 !important;
     line-height: 1.2 !important;
@@ -255,3 +255,6 @@ footer p {
         max-height: 330px !important;
     }
 }
+
+/*------------------------------------------*
+

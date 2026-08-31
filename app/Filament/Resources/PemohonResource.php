@@ -30,12 +30,13 @@ use Filament\Tables\Columns\TextColumn;
 class PemohonResource extends Resource
 {
     protected static ?string $model = Pemohon::class;
-
     protected static ?string $navigationIcon = 'heroicon-s-book-open';
     protected static ?string $modelLabel = 'Instansi Pemohon';
     protected static ?string $pluralModelLabel = 'Pemohon';
     protected static ?string $navigationGroup = 'Pusat Data Kabupaten Bengkalis';
     protected static ?int $navigationSort = 0;
+
+
 
     // public static function shouldRegisterNavigation(): bool
     // {
@@ -113,6 +114,9 @@ class PemohonResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->emptyStateHeading('Belum ada data')
+            ->emptyStateDescription('Silakan tambahkan data baru.')
+            ->emptyStateIcon('heroicon-o-user')
             ->modifyQueryUsing(
                 fn(Builder $query) =>
                 auth()->user()->isAdmin()

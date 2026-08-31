@@ -89,6 +89,9 @@ class DaftarWebsitePerangkatDaerahResource extends Resource
         $isBasicAdmin = $user->role === 'admin';
 
         return $table
+            ->emptyStateHeading('Belum ada data')
+            ->emptyStateDescription('Silakan tambahkan data baru.')
+            ->emptyStateIcon('heroicon-o-user')
             ->columns([
                 TextColumn::make('no')
                     ->label('No')
@@ -125,7 +128,7 @@ class DaftarWebsitePerangkatDaerahResource extends Resource
                             "', '_blank', 'width=900,height=600,resizable=yes,scrollbars=yes')",
                     ]),
 
-                    
+
                 Tables\Columns\TextColumn::make('pembuat')
                     ->label('Pembuat')
                     ->disableClick()

@@ -25,6 +25,7 @@ use App\Jobs\SendWhatsAppMessage;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use App\Services\WhatsAppService;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -41,57 +42,113 @@ class CreatePemohon extends CreateRecord
             ->nextButtonLabel('Selanjutnya');
     }
 
+    // protected function afterCreate(): void
+    // {
+    //     // set status pending di pemohon
+    //     $this->record->update([
+    //         'status' => 'pending',
+    //     ]);
+
+    //     // insert ke tabel konfirmasi
+    //     Konfirmasi::create([
+    //         'pemohon_id' => $this->record->id,
+    //         'status' => 'pending',
+    //     ]);
+
+    //     //-------------------------------------------------
+    //     SendWhatsAppMessage::dispatch(
+    //         $this->record->phone,
+    //         'Data berhasil dibuat'
+    //     );
+
+
+    //     //     //whatssapp notifikasi
+    //     $token = config('services.whatsapp.token');
+    //     $url   = config('services.whatsapp.url');
+    //     $record = $this->record;
+
+    //     $nosekre = User::whereRole('sekre')->first()?->no_hp;
+    //     $message =
+    //         "🔔 *Informasi Permohonan Data Baru!*\n\n" .
+    //         "Yth. Bapak/Ibu,\n\n" .
+    //         "Terdapat *permohonan data baru* yang telah diajukan dan membutuhkan tindak lanjut.\n" .
+    //         "Mohon untuk segera diproses ke tahap selanjutnya.\n\n"
+
+    //         // .  "📌 *Tujuan Permohonan Data:* " . (
+    //         //     $record->unitKerja
+    //         //     ?? optional($record->opd)->nama_opd
+    //         //     ?? '-'
+    //         // ) . "\n"
+    //         // . "👤 *Instansi Yang Dituju:* " . (
+    //         //     $record->opd_tujuan
+    //         //     ?? optional($record->unitKerja)->nama_opd
+    //         //     ?? '-'
+    //         // ) . "\n"
+    //         // . "📂 *Data Yang Dibutuhkan:* {$record->data_diminta}\n"
+    //         // . "📊 *Tujuan Penggunaan Data:* {$record->tujuan_penggunaan}\n"
+    //         . "🕐 Waktu: " . Carbon::now('Asia/Jakarta')->format('d-m-Y H:i:s');
+    //     Http::post($url . '/message/send-text', [
+    //         "session"  => $token,
+    //         $nosekre = User::whereRole('sekre')->first()?->no_hp,
+    //         app(WhatsAppService::class)->send($nosekre, $message),
+    //         "text" => $message,
+    //     ]);
+    // }
+
     protected function afterCreate(): void
     {
-        // set status pending di pemohon
+        // Update status
         $this->record->update([
             'status' => 'pending',
         ]);
 
-        // insert ke tabel konfirmasi
+        // Simpan konfirmasi
         Konfirmasi::create([
             'pemohon_id' => $this->record->id,
-            'status' => 'pending',
+            'status'     => 'pending',
         ]);
 
-        //-------------------------------------------------
-        SendWhatsAppMessage::dispatch(
-            $this->record->phone,
-            'Data berhasil dibuat'
-        );
+        // ===========================
+        // WA ke Pemohon
+        // ===========================
+        if (!blank($this->record->phone)) {
+            SendWhatsAppMessage::dispatch(
+                $this->record->phone,
+                "✅ Permohonan data berhasil dibuat dan sedang menunggu proses verifikasi."
+            );
+        } else {
+            Log::warning('WA Pemohon tidak terkirim: phone kosong', [
+                'pemohon_id' => $this->record->id,
+            ]);
+        }
 
+        // ===========================
+        // WA ke Sekretariat
+        // ===========================
+        $sekre = User::query()
+            ->whereRole('sekre')
+            ->first();
 
-        //     //whatssapp notifikasi
-        $token = config('services.whatsapp.token');
-        $url   = config('services.whatsapp.url');
-        $record = $this->record;
+        if (!blank($sekre?->no_hp)) {
 
-        $nosekre = User::whereRole('sekre')->first()?->no_hp;
-        $message =
-            "🔔 *Informasi Permohonan Data Baru!*\n\n" .
-            "Yth. Bapak/Ibu,\n\n" .
-            "Terdapat *permohonan data baru* yang telah diajukan dan membutuhkan tindak lanjut.\n" .
-            "Mohon untuk segera diproses ke tahap selanjutnya.\n\n"
-
-            // .  "📌 *Tujuan Permohonan Data:* " . (
-            //     $record->unitKerja
-            //     ?? optional($record->opd)->nama_opd
-            //     ?? '-'
-            // ) . "\n"
-            // . "👤 *Instansi Yang Dituju:* " . (
-            //     $record->opd_tujuan
-            //     ?? optional($record->unitKerja)->nama_opd
-            //     ?? '-'
-            // ) . "\n"
-            // . "📂 *Data Yang Dibutuhkan:* {$record->data_diminta}\n"
-            // . "📊 *Tujuan Penggunaan Data:* {$record->tujuan_penggunaan}\n"
+            $message =
+              "🔔 *INFORMASI PERMOHONAN DATA BARU*\n\n"
+            . "Yth. Bapak/Ibu,\n\n"
+            . "Terdapat permohonan data baru yang telah diajukan dan saat ini membutuhkan tindak lanjut.\n"
+            . "Mohon untuk segera melakukan pengecekan dan proses ke tahap selanjutnya.\n\n"
+            . "Terima kasih.\n\n"
+           
             . "🕐 Waktu: " . Carbon::now('Asia/Jakarta')->format('d-m-Y H:i:s');
-        Http::post($url . '/message/send-text', [
-            "session"  => $token,
-            $nosekre = User::whereRole('sekre')->first()?->no_hp,
-            app(WhatsAppService::class)->send($nosekre, $message),
-            "text" => $message,
-        ]);
+
+            SendWhatsAppMessage::dispatch(
+                $sekre->no_hp,
+                $message
+            );
+        } else {
+            Log::warning('WA Sekretariat tidak terkirim: no_hp kosong', [
+                'user_id' => $sekre?->id,
+            ]);
+        }
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array

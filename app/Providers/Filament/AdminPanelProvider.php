@@ -46,24 +46,29 @@ class AdminPanelProvider extends PanelProvider
         FilamentAsset::register([
             Css::make('login-bg', asset('login.css')),
         ]);
+
+        \Filament\Tables\Table::configureUsing(function (\Filament\Tables\Table $table): void {
+            $table
+                ->striped()
+                ->defaultPaginationPageOption(10);
+        });
     }
     public function panel(Panel $panel): Panel
     {
         return $panel
             ->default()
             ->id('admin')
-            ->path('admin')
+            ->path('bulubabi')
             //->login()
             ->login(Login::class)
             ->brandName('SISTEM INFORMASI PERMINTAAN DATA')
             ->brandLogo(asset('images/lgo.png'))
-            ->brandLogoHeight('2.5rem')
-            // ->sidebarCollapsibleOnDesktop()
+            ->brandLogoHeight('2.25rem')
+            ->font('Inter')
+            ->maxContentWidth('full')
             ->spa()
-            // ->styles([
-            //     asset('css/sidebar.css'),
-            // ])
             ->darkMode(false)
+
             // ->navigationItems([
             //     NavigationItem::make('WA Login')
             //         ->icon('heroicon-o-qr-code')
@@ -73,7 +78,7 @@ class AdminPanelProvider extends PanelProvider
             //         ->visible(fn() => auth()->check() && auth()->user()->role === 'admin'),
 
             // ])
-
+            // ada method ini di beberapa versi
             ->renderHook(
                 'panels::body.start',
                 fn() => view('components.loader')
@@ -86,7 +91,12 @@ class AdminPanelProvider extends PanelProvider
 
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
-                fn(): string => '<link rel="stylesheet" href="' . asset('css/custom.css') . '">'
+                fn(): string => '<link rel="stylesheet" href="' . asset('css/custom.css') . '"><link rel="stylesheet" href="' . asset('css/filament-compact.css') . '">'
+            )
+            // Google reCAPTCHA v2
+            ->renderHook(
+                'panels::head.end',
+                fn(): string => '<script src="https://www.google.com/recaptcha/api.js" async defer></script>'
             )
             //->brandName('Hoaxs')
             // ->loginHeading('Masuk Aplikasi')
@@ -95,7 +105,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Blue,
                 'success' => Color::Green,
                 'warning' => Color::Yellow,
-                'danger'  => Color::Red,
+                'danger' => Color::Red,
 
 
             ])
@@ -136,6 +146,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                // 'throttle:filament-login',
             ])
             ->authMiddleware([
                 Authenticate::class,

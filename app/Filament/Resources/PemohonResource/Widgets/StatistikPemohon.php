@@ -90,7 +90,7 @@ class StatistikPemohon extends BaseWidget
 
             Stat::make('Total Data Pemohon', $totalPemohon)
                 ->icon('heroicon-o-users')
-                ->description('Akumulasi permohonan berdasarkan pengguna login')
+                ->description('Jumlah permohonan berdasarkan pengguna login')
                 ->extraAttributes([
                     'style' => 'border-left: 8px solid #93c5fd; border-radius:12px;',
                     'class' => '!bg-blue-600 text-white',
@@ -104,7 +104,7 @@ class StatistikPemohon extends BaseWidget
 
             Stat::make('Permohonan Pending', $totalPending)
                 ->icon('heroicon-o-clock')
-                ->description('Permohonan yang masih menunggu proses')
+                ->description('Jumlah permohonan yang masih menunggu proses')
                 ->extraAttributes([
                     'style' => 'border-left: 8px solid #f87171; border-radius:12px;',
                     'class' => 'text-white',
@@ -118,7 +118,7 @@ class StatistikPemohon extends BaseWidget
 
             Stat::make('Permohonan Diproses', $totalProses)
                 ->icon('heroicon-o-arrow-path')
-                ->description('Permohonan yang sedang diproses')
+                ->description('Jumlah permohonan yang sedang diproses')
                 ->extraAttributes([
 
                     'style' => 'border-left: 8px solid #fbbf24; border-radius:12px;',
@@ -133,7 +133,7 @@ class StatistikPemohon extends BaseWidget
 
             Stat::make('Permohonan Disetujui', $totalSukses)
                 ->icon('heroicon-o-check-circle')
-                ->description('Permohonan yang telah berhasil diproses')
+                ->description('Jumlah permohonan yang telah berhasil diproses')
                 ->extraAttributes([
                     'style' =>  'border-left: 8px solid #4ade80;  border-radius:12px;',
                     'class' => '!bg-success-600 text-white',

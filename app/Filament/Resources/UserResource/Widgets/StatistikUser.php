@@ -5,34 +5,39 @@ namespace App\Filament\Resources\UserResource\Widgets;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Auth;
 
 class StatistikUser extends BaseWidget
 {
     protected function getStats(): array
     {
-       
-        $totalUser = User::where('role', 'user')->count();
+        $user = Auth::user();
 
-     
-        $totalSekre = User::where('role', 'sekre')->count();
+        // Hanya data user login
+        $totalUser = User::query()
+            ->where('id', $user->id)
+            ->where('role', 'user')
+            ->count();
+
+        $totalSekre = User::query()
+            ->where('id', $user->id)
+            ->where('role', 'sekre')
+            ->count();
 
         return [
-            Stat::make('Total berdasarkan role user', $totalUser)
+            Stat::make('User', $totalUser)
                 ->icon('heroicon-s-users')
-                ->description('Jumlah keseluruhan user')
+                ->description('Jumlah keseluruhan data user')
                 ->extraAttributes([
-                     'style' => 'border-left: 8px solid #93c5fd; border-radius:12px;',
-                    // 'style' => 'box-shadow: 0 -4px 6px -2px rgba(59, 130, 246, 0.4); border-radius:12px;', --- IGNORE ---
+                    'style' => 'border-left: 8px solid #93c5fd; border-radius:12px;',
                     'class' => '!bg-blue-600 !text-white',
                 ]),
 
-            Stat::make('Total berdasarkan role sekre', $totalSekre)
+            Stat::make('Sekretaris', $totalSekre)
                 ->icon('heroicon-s-users')
-                ->description('Jumlah Keseluruhan Sekretaris')
+                ->description('Jumlah keseluruhan data sekretaris')
                 ->extraAttributes([
                     'style' => 'border-left: 8px solid #f87171; border-radius:12px;',
-                    // 'style' => 'box-shadow: 0 -4px 6px -2px rgba(255, 193, 7, 0.4); border-radius:12px;', --- IGNORE ---
                     'class' => '!bg-red-500 !text-white',
                 ]),
         ];

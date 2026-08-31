@@ -67,39 +67,36 @@ class StatistikWebsiteDesa extends BaseWidget
 
         $totalAktif = DaftarWebsiteDesa::query()
             ->select('websitedesa')
-            ->get()
+            ->get() 
             ->pluck('websitedesa')
             ->unique()
             ->count();
 
         return [
-            Stat::make('Total Kecamatan ', $total)
-                ->icon('heroicon-s-map-pin')
-                ->description('Jumlah keseluruhan kecamatan yang terdaftar')
+            Stat::make('Kecamatan', $total)
+                ->icon('heroicon-m-map-pin')
+                ->description('Jumlah keseluruhan Kecamatan terdaftar')
                 ->extraAttributes([
                     'style' => 'border-left: 8px solid #93c5fd; border-radius:12px;',
-                    // 'style' => 'box-shadow: 0 -4px 6px -2px rgba(59, 130, 246, 0.4); border-radius:12px;', --- IGNORE ---
-                    'class' => '!bg-blue-600 !text-white',
+                    'class' => '!bg-blue-600 text-white',
                 ]),
 
-            Stat::make('Total Desa', $totalDesa)
-                ->icon('heroicon-s-map-pin')
-                ->description('Jumlah keseluruhan desa yang terdaftar')
+            Stat::make(' Desa', $totalDesa)
+                ->icon('heroicon-m-map-pin')
+                ->description('Jumlah keseluruhan Desa terdaftar')
                 ->extraAttributes([
                     'style' => 'border-left: 8px solid #f87171; border-radius:12px;',
-                    // 'style' => 'box-shadow: 0 -4px 6px -2px rgba(255, 193, 7, 0.4); border-radius:12px;', --- IGNORE ---
-                    'class' => '!bg-yellow-500 !text-white',
+                    'class' => 'text-white',
                 ]),
 
-            Stat::make('Total Website Aktif', $totalAktif)
-                ->icon('heroicon-s-globe-alt')
-                ->description('Jumlah Keseluruhan Website Aktif')
+            Stat::make('Website Aktif', $totalAktif)
+                ->icon('heroicon-m-globe-alt')
+                ->description('Jumlah keseluruhan Website aktif')
                 ->extraAttributes([
-                    'style' => 'border-left: 8px solid #4ade80; border-radius:12px;',
-                    // 'style' => 'box-shadow: 0 -4px 6px -2px rgba(0, 128, 0, 0.4); border-radius:12px;', --- IGNORE ---
-                    'class' => '!bg-green-500 !text-white',
-                ]),
 
+                    'style' =>  'border-left: 8px solid #4ade80;  border-radius:12px;',
+                    'class' => 'text-white',
+                ]),
         ];
     }
 }

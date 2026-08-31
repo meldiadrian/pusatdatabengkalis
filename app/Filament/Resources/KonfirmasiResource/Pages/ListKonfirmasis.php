@@ -9,6 +9,7 @@ use Filament\Resources\Pages\ListRecords;
 class ListKonfirmasis extends ListRecords
 {
     protected static string $resource = KonfirmasiResource::class;
+    protected ?string $heading = '';
 
     protected function getHeaderActions(): array
     {

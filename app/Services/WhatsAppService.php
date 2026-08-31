@@ -2,41 +2,97 @@
 
 namespace App\Services;
 
-use App\Models\User;
-use App\Jobs\SendWhatsAppMessage;
-use Illuminate\Support\Facades\Log;
+use Exception;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class WhatsAppService
 {
-    public function send($phone, $message)
+    public function send(string $phone, string $message): bool
     {
-        try {
-            // contoh API call
-            // Http::post(...);
+        $phone = $this->normalizePhone($phone);
 
-            //------
-            $response = Http::withoutVerifying()->post(config('services.whatsapp.url') . '/message/send-text', [
-                'session' => config('services.whatsapp.token'),
-                'to' => $phone,
-                'text' => $message,
-                'is_group' => false,
-            ]);
-            if (!$response->successful()) {
-                SendWhatsAppMessage::dispatch(
-                    $phone,
-                    $message
+        try {
+            $response = Http::withoutVerifying()
+                ->timeout(30)
+                ->post(
+                    config('services.whatsapp.url') . '/message/send-text',
+                    [
+                        'session'  => config('services.whatsapp.token'),
+                        'to'       => $phone,
+                        'text'     => $message,
+                        'is_group' => false,
+                    ]
+                );
+
+            if (! $response->successful()) {
+                Log::error('WhatsApp API Error', [
+                    'phone' => $phone,
+                    'status' => $response->status(),
+                    'response' => $response->body(),
+                ]);
+
+                throw new Exception(
+                    'WhatsApp API Error: ' . $response->body()
                 );
             }
 
-            //------
-
             return true;
-        } catch (\Exception $e) {
+        } catch (RequestException $e) {
+            Log::error('WhatsApp Request Exception', [
+                'phone' => $phone,
+                'error' => $e->getMessage(),
+            ]);
+
             throw $e;
         }
     }
+
+    private function normalizePhone(string $phone): string
+    {
+        $phone = preg_replace('/\D/', '', $phone);
+
+        if (str_starts_with($phone, '0')) {
+            return '62' . substr($phone, 1);
+        }
+
+        if (str_starts_with($phone, '8')) {
+            return '62' . $phone;
+        }
+
+        return $phone;
+    }
 }
+// {
+//     public function send($phone, $message)
+//     {
+//         try {
+//             // contoh API call
+//             // Http::post(...);
+
+//             //------
+//             $response = Http::withoutVerifying()->post(config('services.whatsapp.url') . '/message/send-text', [
+//                 'session' => config('services.whatsapp.token'),
+//                 'to' => $phone,
+//                 'text' => $message,
+//                 'is_group' => false,
+//             ]);
+//             if (!$response->successful()) {
+//                 SendWhatsAppMessage::dispatch(
+//                     $phone,
+//                     $message
+//                 );
+//             }
+
+//             //------
+
+//             return true;
+//         } catch (\Exception $e) {
+//             throw $e;
+//         }
+//     }
+// }
     // public static function send(string $message, ?string $target = null)
     // {
     //     $token = config('services.whatsapp.token');

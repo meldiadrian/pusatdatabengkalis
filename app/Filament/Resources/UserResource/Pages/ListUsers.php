@@ -10,6 +10,7 @@ use App\Filament\Resources\UserResource\Widgets\StatistikUser;
 class ListUsers extends ListRecords
 {
     protected static string $resource = UserResource::class;
+    protected ?string $heading = null;
 
     protected function getHeaderActions(): array
     {
@@ -38,5 +39,10 @@ class ListUsers extends ListRecords
         return [
             StatistikUser::class,
         ];
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        return [];
     }
 }

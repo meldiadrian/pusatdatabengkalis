@@ -33,34 +33,29 @@ class StatistikWebsiteOpd extends BaseWidget
 
         $totalAktif = WebsitePerangkatDaerah::where('status', 'aktif')->count();
         return [
-            Stat::make('Total Organisasi Perangkat Daerah ', $total)
-                ->icon('heroicon-s-map-pin')
-                ->description('Jumlah Keseluruhan OPD Terdaftar')
+            Stat::make('Organisasi Perangkat Daerah', $total)
+                ->icon('heroicon-m-building-office')
+                ->description('Jumlah keseluruhan OPD terdaftar')
                 ->extraAttributes([
                     'style' => 'border-left: 8px solid #93c5fd; border-radius:12px;',
-                    // 'style' => 'box-shadow: 0 -4px 6px -2px rgba(59, 130, 246, 0.4); border-radius:12px;', --- IGNORE ---
-                    'class' => '!bg-blue-600 !text-white',
-
+                    'class' => '!bg-blue-600 text-white',
                 ]),
 
-            Stat::make('Total Website', $totalWebOpd)
-                ->icon('heroicon-s-globe-alt')
-                ->description('Jumlah Keseluruhan Website Terdaftar')
+            Stat::make('Website', $totalWebOpd)
+                ->icon('heroicon-m-globe-alt')
+                ->description('Jumlah keseluruhan Website terdaftar')
                 ->extraAttributes([
                     'style' => 'border-left: 8px solid #f87171; border-radius:12px;',
-                    // 'style' => 'box-shadow: 0 -4px 6px -2px rgba(255, 0, 0, 0.4); border-radius:12px;', --- IGNORE ---
-                    'class' => '!bg-red-500 !text-white',
+                    'class' => 'text-white',
                 ]),
 
-            Stat::make('Total Website Aktif', $totalAktif)
-                ->icon('heroicon-s-globe-alt')
-                ->description('Jumlah Keseluruhan Website yang Aktif')
+            Stat::make('Website Aktif', $totalAktif)
+                ->icon('heroicon-m-check-badge')
+                ->description('Jumlah keseluruhan Website aktif')
                 ->extraAttributes([
-                    'style' => 'border-left: 8px solid #4ade80; border-radius:12px;',
-                    // 'style' => 'box-shadow: 0 -4px 6px -2px rgba(0, 128, 0, 0.4); border-radius:12px;', --- IGNORE ---
-                    'class' => '!bg-green-500 !text-white', 
+                    'style' =>  'border-left: 8px solid #4ade80;  border-radius:12px;',
+                    'class' => 'text-white',
                 ]),
-
         ];
     }
 }

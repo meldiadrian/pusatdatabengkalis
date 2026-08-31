@@ -27,16 +27,10 @@ class StatAplikasiOpd extends BaseWidget
         $total = UnitKerja::where('tipe', 'OPD')->count();
 
         return [
-            Stat::make('Total Organisasi Perangkat Daerah', $total)
-                ->icon('heroicon-s-circle-stack')
-                ->description('Jumlah Keseluruhan Unit Kerja yang Terdaftar')
-                ->extraAttributes([
-                    'style' => '
-                        box-shadow: 0 -4px 6px -2px rgba(0, 0, 255, 0.6);
-                        border-radius: 12px;
-                    ',
-                    'class' => '!bg-blue-600 !text-white',
-                ]),
+            Stat::make('Total OPD', $total)
+                ->icon('heroicon-m-building-office')
+                ->description('OPD terdaftar')
+                ->color('primary'),
         ];
     }
 }

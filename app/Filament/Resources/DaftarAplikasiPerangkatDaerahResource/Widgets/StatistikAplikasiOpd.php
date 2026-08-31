@@ -37,7 +37,7 @@ class StatistikAplikasiOpd extends BaseWidget
         $totalAktif = DaftarAplikasiPerangkatDaerah::where('status', 'aktif')->count();
 
         return [
-            Stat::make('Total Organisasi Perangkat Daerah ', $total)
+            Stat::make('Organisasi Perangkat Daerah ', $total)
                 ->icon('heroicon-s-circle-stack')
                 ->description('Jumlah Keseluruhan Unit Kerja yang Terdaftar')
                 ->extraAttributes([
@@ -46,7 +46,7 @@ class StatistikAplikasiOpd extends BaseWidget
                     'class' => '!bg-blue-600 !text-white',
                 ]),
 
-            Stat::make('Total Aplikasi Organisasi Perangkat Daerah', $totalAplikasi)
+            Stat::make('Aplikasi Organisasi Perangkat Daerah', $totalAplikasi)
                 ->icon('heroicon-o-map')
                 ->description('Jumlah Keseluruhan Aplikasi yang Terdaftar')
                 ->extraAttributes([
@@ -56,7 +56,7 @@ class StatistikAplikasiOpd extends BaseWidget
 
                 ]),
 
-            Stat::make('Total Aplikasi Aktif', $totalAktif)
+            Stat::make('Aplikasi Aktif', $totalAktif)
                 ->icon('heroicon-o-map')
                 ->description('Jumlah Keseluruhan Aplikasi yang Aktif')
                 ->extraAttributes([

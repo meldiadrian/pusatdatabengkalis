@@ -10,6 +10,8 @@ use Filament\Resources\Pages\ListRecords;
 class ListDaftarWebsiteDesas extends ListRecords
 {
     protected static string $resource = DaftarWebsiteDesaResource::class;
+    protected ?string $heading = null;
+
 
     protected function getHeaderActions(): array
     {
@@ -20,10 +22,14 @@ class ListDaftarWebsiteDesas extends ListRecords
         ];
     }
 
-     protected function getHeaderWidgets(): array
+    protected function getHeaderWidgets(): array
     {
         return [
             StatistikWebsiteDesa::class,
         ];
+    }
+    public function getBreadcrumbs(): array
+    {
+        return [];
     }
 }

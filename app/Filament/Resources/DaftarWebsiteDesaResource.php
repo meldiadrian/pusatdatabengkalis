@@ -146,6 +146,9 @@ class DaftarWebsiteDesaResource extends Resource
         $isBasicAdmin = $user->role === 'admin';
 
         return $table
+            ->emptyStateHeading('Belum ada data')
+            ->emptyStateDescription('Silakan tambahkan data baru.')
+            ->emptyStateIcon('heroicon-o-user')
             ->columns([
                 TextColumn::make('no')
                     ->label('No')

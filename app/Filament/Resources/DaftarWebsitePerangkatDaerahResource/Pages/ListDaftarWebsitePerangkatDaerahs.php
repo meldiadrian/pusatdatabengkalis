@@ -10,6 +10,7 @@ use Filament\Resources\Pages\ListRecords;
 class ListDaftarWebsitePerangkatDaerahs extends ListRecords
 {
     protected static string $resource = DaftarWebsitePerangkatDaerahResource::class;
+    protected ?string $heading = '';
 
     protected function getHeaderActions(): array
     {

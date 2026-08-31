@@ -193,6 +193,9 @@ class PemilikDataResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->emptyStateHeading('Belum ada data')
+            ->emptyStateDescription('Silakan tambahkan data baru.')
+            ->emptyStateIcon('heroicon-o-user')
             ->modifyQueryUsing(
                 fn(Builder $query) =>
                 auth()->user()->isAdmin()
@@ -308,7 +311,7 @@ class PemilikDataResource extends Resource
                     ->extraAttributes([
                         'style' => 'background-color: #facc15; color: black;'
                     ])
-                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user'])),
+                    ->visible(fn($record) => in_array(auth()->user()?->role, ['admin', 'user']) && $record->status === 'proses'),
 
                 Tables\Actions\DeleteAction::make()
                     ->label('Hapus')

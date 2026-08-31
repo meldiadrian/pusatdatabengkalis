@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Opd;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -45,4 +46,15 @@ class Pemohon extends Model
     {
         return $this->hasMany(Konfirmasi::class, 'pemohon_id');
     }
+
+   
+    // public function instansiPemohon()
+    // {
+    //     return $this->belongsTo(Opd::class, 'instansi_pemohon');
+    // }
+
+    // public function opdTujuan()
+    // {
+    //     return $this->belongsTo(Opd::class, 'opd_tujuan');
+    // }
 }

@@ -8,9 +8,13 @@ use App\Http\Controllers\DownloadController;
 // });
 
 Route::get('/', function () {
-    return redirect('/admin');
+    return redirect('/bulubabi');
 });
 
+
+// Route::middleware('throttle:10,1')->get('/', function () {
+//     return redirect('/admin');
+// });
 
 
 // Download file route - with proper encoding
