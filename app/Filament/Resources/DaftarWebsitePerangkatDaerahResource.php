@@ -129,20 +129,21 @@ class DaftarWebsitePerangkatDaerahResource extends Resource
                     ]),
 
 
-                Tables\Columns\TextColumn::make('pembuat')
+                Tables\Columns\TextColumn::make('developer')
                     ->label('Pembuat')
                     ->disableClick()
                     ->wrap()
                     ->limit(80)
-                    ->visible(! $isBasicUser)
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user', 'sekre']))
                     ->searchable(),
+
 
                 Tables\Columns\TextColumn::make('status')
                     ->label('Status')
                     ->disableClick()
                     ->wrap()
                     ->limit(80)
-                    ->visible(! $isBasicUser)
+                    ->visible(!$isBasicUser)
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('keterangan')

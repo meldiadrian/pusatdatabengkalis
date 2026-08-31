@@ -6,6 +6,7 @@ use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Tables\Table;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
@@ -13,6 +14,7 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 
 class UserResource extends Resource
@@ -84,13 +86,34 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('password')
                     ->label('Password')
                     ->password()
+                    ->revealable()
                     ->validationMessages([
                         'required' => 'Mohon isikan password pengguna.',
                     ])
                     ->dehydrateStateUsing(fn($state) => filled($state) ? bcrypt($state) : null)
                     ->dehydrated(fn($state) => filled($state))
                     ->required(fn(string $operation) => $operation === 'create')
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->suffixAction(
+                        Forms\Components\Actions\Action::make('generatePassword')
+                            ->label('Generate')
+                            ->icon('heroicon-o-key')
+                            ->color('info')
+                            ->tooltip('Klik untuk generate password otomatis')
+                            ->action(function (Set $set) {
+                                $generated = Str::password(12, letters: true, numbers: true, symbols: false, spaces: false);
+                                $set('password', $generated);
+                                $set('password_preview', $generated);
+                            })
+                    ),
+
+                Forms\Components\TextInput::make('password_preview')
+                    ->label('Password yang Di-generate (Catat / Copy)')
+                    ->helperText('Password ini hanya tampil sekali untuk dicatat. Tidak disimpan ke database.')
+                    ->disabled()
+                    ->dehydrated(false)
+                    ->visible(fn(Forms\Get $get) => filled($get('password_preview')))
+                    ->extraInputAttributes(['style' => 'font-family: monospace; letter-spacing: 2px; font-size: 1.05rem;']),
 
                 Forms\Components\TextInput::make('no_hp')
                     ->label('No HP')
@@ -202,7 +225,7 @@ class UserResource extends Resource
                     ->visible(
                         fn($record) =>
                         auth()->user()->role === 'admin' ||
-                            $record->id === auth()->id()
+                        $record->id === auth()->id()
                     )
                     ->icon('heroicon-s-pencil')
                     ->extraAttributes([

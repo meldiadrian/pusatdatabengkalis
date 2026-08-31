@@ -1,4 +1,5 @@
-/* @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap"); */ /* resources/css/filament/admin/custom.css */
+/* @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap"); */
+/* resources/css/filament/admin/custom.css */
 
 /* Warna background sidebar utama */
 .fi-sidebar {
@@ -33,13 +34,14 @@
 }
 
 /* Warna item menu ACTIVE (yang sedang dibuka) */
-.fi-sidebar-item-active > a {
-    background-color: #3b82f6 !important; /* biru misalnya */
+.fi-sidebar-item-active>a {
+    background-color: #3b82f6 !important;
+    /* biru misalnya */
     color: #ffffff !important;
 }
 
-.fi-sidebar-item-active > a svg,
-.fi-sidebar-item-active > a span {
+.fi-sidebar-item-active>a svg,
+.fi-sidebar-item-active>a span {
     color: #ffffff !important;
 }
 

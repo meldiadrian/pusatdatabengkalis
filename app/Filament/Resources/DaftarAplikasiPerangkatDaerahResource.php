@@ -66,10 +66,24 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     //->disabled()
                     ->required(),
 
-                Forms\Components\TextInput::make('websiteopd')
-                    ->label('Domain Website Kantor')
-                    ->placeholder('Ex. www.bengkaliskab.go.id, Isi Dengan Tanda (-) Jika tidak ada')
-                    ->maxLength(255),
+                Forms\Components\Section::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('websiteopd')
+                            ->label('Domain Website Kantor')
+                            ->placeholder('Ex. www.bengkaliskab.go.id, Isi Dengan Tanda (-) Jika tidak ada')
+                            ->maxLength(255),
+
+                        Forms\Components\Select::make('developer')
+                            ->label('Developer')
+                            ->placeholder('Pilih Developer')
+                            ->options([
+                                'internal' => 'Internal',
+                                'pihak ketiga' => 'Pihak Ketiga',
+                                'diskominfotik' => 'Diskominfotik',
+                            ]),
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull(),
 
                 Forms\Components\TextInput::make('nama_aplikasi')
                     ->label('Nama Aplikasi')
@@ -236,14 +250,14 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
                 Tables\Columns\TextColumn::make('tahun_penganggaran')
                     ->disableClick()
-                    ->label('Tahun Penganggaran')
+                    ->label('Th.Anggaran')
                     ->wrap()
                     // ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('dimanfaatkan_untuk_layanan')
                     ->disableClick()
-                    ->label('Dimanfaatkan Untuk Layanan')
+                    ->label('Pemanfaatan')
                     ->wrap()
                     // ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
                     ->searchable(),
@@ -253,7 +267,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->disableClick()
                     ->wrap()
                     ->limit(80)
-                    ->visible(!$isBasicUser)
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('spesifikasi_teknis')
@@ -290,7 +304,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->label('Keterangan')
                     ->wrap()
                     ->limit(80)
-                    ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
+                    ->visible(fn() => in_array(auth()->user()?->role, ['admin']))
                     ->searchable(),
                 //----------end view admin----------------//
 
