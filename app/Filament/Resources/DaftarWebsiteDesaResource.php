@@ -32,7 +32,7 @@ class DaftarWebsiteDesaResource extends Resource
     protected static ?string $model = DaftarWebsiteDesa::class;
     protected static ?string $modelLabel = 'Daftar Website Desa';
     protected static ?string $pluralModelLabel = 'Daftar Website Desa';
-    protected static ?string $navigationIcon = 'heroicon-s-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-chart-bar-square';
     protected static ?string $navigationGroup = 'Daftar Aplikasi & Website';
     protected static ?int $navigationSort = 3;
 
@@ -226,7 +226,7 @@ class DaftarWebsiteDesaResource extends Resource
                     ->visible(
                         fn($record) =>
                         strtolower(auth()->user()->role) === 'admin'
-                            || $record->user_id == auth()->id()
+                        || $record->user_id == auth()->id()
                     ),
 
 
@@ -246,7 +246,7 @@ class DaftarWebsiteDesaResource extends Resource
                     ->visible(
                         fn($record) =>
                         auth()->user()->role === 'admin'
-                            || $record->user_id === auth()->id()
+                        || $record->user_id === auth()->id()
                     )
             ])
 

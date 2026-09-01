@@ -9,8 +9,13 @@ use Illuminate\Http\Request;
 class DownloadController extends Controller
 {
     /**
-     * Download file by filename parameter (URL path)
+     * Ekstensi yang DIIZINKAN untuk didownload.
+     * PHP dan script TIDAK boleh di-serve walau ada di storage.
      */
+    private const ALLOWED_EXTENSIONS = [
+        'pdf', 'xls', 'xlsx', 'jpg', 'jpeg', 'png',
+    ];
+
     public function downloadFile($filename)
     {
         if (!$filename) {
@@ -24,6 +29,14 @@ class DownloadController extends Controller
             // Remove any path traversal attempts
             $path = str_replace('..', '', $path);
             $path = str_replace('\\', '/', $path);
+            $path = ltrim($path, '/');
+
+            // Cek ekstensi — tolak PHP dan file berbahaya
+            $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+            if (!in_array($ext, self::ALLOWED_EXTENSIONS)) {
+                \Log::warning('[DOWNLOAD BLOCKED] Ekstensi tidak diizinkan: .' . $ext, ['path' => $path]);
+                abort(403, "Download file '.{$ext}' tidak diizinkan.");
+            }
 
             // Check if file exists in public disk
             if (!Storage::disk('public')->exists($path)) {
@@ -71,6 +84,14 @@ class DownloadController extends Controller
             // Remove any path traversal attempts
             $path = str_replace('..', '', $path);
             $path = str_replace('\\', '/', $path);
+            $path = ltrim($path, '/');
+
+            // Cek ekstensi — tolak PHP dan file berbahaya
+            $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+            if (!in_array($ext, self::ALLOWED_EXTENSIONS)) {
+                \Log::warning('[DOWNLOAD BLOCKED] Ekstensi tidak diizinkan (query): .' . $ext, ['path' => $path]);
+                abort(403, "Download file '.{$ext}' tidak diizinkan.");
+            }
 
             // Check if file exists in public disk
             if (!Storage::disk('public')->exists($path)) {

@@ -26,7 +26,7 @@ class DaftarWebsitePerangkatDaerahResource extends Resource
     protected static ?string $modelLabel = 'Daftar Website Perangkat Daerah';
     protected static ?string $pluralModelLabel = 'Daftar Website Perangkat Daerah';
     protected static ?string $navigationGroup = 'Daftar Aplikasi & Website';
-    protected static ?string $navigationIcon = 'heroicon-s-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-chart-bar-square';
     protected static ?int $navigationSort = 2;
 
     public static function getEloquentQuery(): Builder

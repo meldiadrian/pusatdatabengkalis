@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -20,6 +21,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
         'unit_kerja_id',
@@ -53,6 +55,30 @@ class User extends Authenticatable
     public function unitKerja()
     {
         return $this->belongsTo(UnitKerja::class);
+    }
+
+    /**
+     * Generate username unik otomatis dari nama depan user.
+     * Format: nama_depan (lowercase, tanpa spasi/simbol) + angka jika duplikat.
+     * Contoh: "Ahmad Fauzi" → "ahmad", jika sudah ada → "ahmad1", "ahmad2", dst.
+     */
+    public static function generateUsername(string $name, int $excludeId = null): string
+    {
+        $base    = preg_replace('/[^a-z0-9]/', '', strtolower(explode(' ', trim($name))[0]));
+        $base    = $base ?: 'user';
+        $username = $base;
+        $counter  = 1;
+
+        while (
+            static::where('username', $username)
+                ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
+                ->exists()
+        ) {
+            $username = $base . $counter;
+            $counter++;
+        }
+
+        return $username;
     }
 
     public function isAdmin(): bool

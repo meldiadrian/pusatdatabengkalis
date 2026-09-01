@@ -30,7 +30,7 @@ use Filament\Tables\Columns\TextColumn;
 class PemohonResource extends Resource
 {
     protected static ?string $model = Pemohon::class;
-    protected static ?string $navigationIcon = 'heroicon-s-book-open';
+    protected static ?string $navigationIcon = 'heroicon-s-user-circle';
     protected static ?string $modelLabel = 'Instansi Pemohon';
     protected static ?string $pluralModelLabel = 'Pemohon';
     protected static ?string $navigationGroup = 'Pusat Data Kabupaten Bengkalis';
@@ -92,21 +92,104 @@ class PemohonResource extends Resource
                     ->required(),
                 Forms\Components\FileUpload::make('upload_surat')
                     ->label('📎 Upload Surat Permohonan')
-                    ->placeholder('📁 Tarik & letakkan file di sini atau klik untuk memilih')
+                    ->placeholder('📁 Tarik & letakkan file di sini atau klik untuk memilih (PDF, Excel, JPG, PNG — maks 2MB)')
                     ->hintIcon('heroicon-m-question-mark-circle')
+                    ->hintColor('warning')
+                    ->hint('Hanya PDF, Excel (.xls/.xlsx), JPG, JPEG, PNG. Maks 2MB.')
+                    // ── LAPISAN 1: MIME type yang diizinkan ──────────────────────────────
                     ->acceptedFileTypes([
                         'application/pdf',
-                        'application/vnd.ms-excel',
-                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        'application/vnd.ms-excel',                                         // .xls
+                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
                         'image/jpeg',
                         'image/png',
                     ])
+                    // ── LAPISAN 2: Validasi Laravel rules (ekstensi + ukuran) ───────────
+                    ->rules([
+                        'file',
+                        'max:2048', // 2 MB
+                        // Hanya izinkan ekstensi berikut
+                        'mimes:pdf,xls,xlsx,jpg,jpeg,png',
+                        // Tolak ekstensi berbahaya secara eksplisit
+                        function (string $attribute, mixed $value, \Closure $fail) {
+                            // Ekstensi yang DILARANG
+                            $blockedExtensions = [
+                                'php',
+                                'php3',
+                                'php4',
+                                'php5',
+                                'php7',
+                                'php8',
+                                'phtml',
+                                'phar',
+                                'sh',
+                                'bash',
+                                'py',
+                                'rb',
+                                'pl',
+                                'exe',
+                                'bat',
+                                'cmd',
+                                'com',
+                                'htaccess',
+                                'htpasswd',
+                                'ini',
+                                'conf',
+                                'config',
+                                'js',
+                                'jsp',
+                                'asp',
+                                'aspx',
+                                'cgi',
+                                'shtml',
+                                'svg',  // SVG bisa menyisipkan JS
+                            ];
+
+                            if (!$value || !($value instanceof \Illuminate\Http\UploadedFile)) {
+                                return;
+                            }
+
+                            $ext = strtolower($value->getClientOriginalExtension());
+
+                            if (in_array($ext, $blockedExtensions)) {
+                                $fail("❌ File dengan ekstensi '.{$ext}' tidak diizinkan demi keamanan sistem.");
+                                return;
+                            }
+
+                            // ── LAPISAN 3: Cek magic bytes (isi file sungguhan) ───────────
+                            // Pastikan isi file sesuai dengan ekstensinya, bukan sekadar rename
+                            $realMime = $value->getMimeType();
+                            $allowedMimes = [
+                                'application/pdf',
+                                'application/vnd.ms-excel',
+                                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                'image/jpeg',
+                                'image/png',
+                            ];
+
+                            if (!in_array($realMime, $allowedMimes)) {
+                                $fail("❌ Jenis file '{$realMime}' tidak diizinkan. Hanya PDF, Excel, JPG, JPEG, PNG.");
+                                return;
+                            }
+
+                            // ── LAPISAN 4: Cek konten PHP tag dalam file ──────────────────
+                            // Tangkap file yang me-rename diri tapi berisi kode PHP
+                            $content = file_get_contents($value->getRealPath());
+                            $phpPatterns = ['<?php', '<?=', '<? ', 'eval(', 'exec(', 'system(', 'passthru(', 'shell_exec('];
+
+                            foreach ($phpPatterns as $pattern) {
+                                if (stripos($content, $pattern) !== false) {
+                                    $fail('❌ File terdeteksi mengandung skrip berbahaya dan ditolak.');
+                                    return;
+                                }
+                            }
+                        },
+                    ])
                     ->maxSize(2048) // 2MB
-                    ->directory('Surat') // simpan di folder storage/app/public/surat
-                    ->disk('public')     // pakai disk public
+                    ->directory('Surat')
+                    ->disk('public')
                     ->visibility('public')
-                    ->required(),
+                    ->required()
             ]);
     }
 
@@ -120,10 +203,10 @@ class PemohonResource extends Resource
             ->modifyQueryUsing(
                 fn(Builder $query) =>
                 auth()->user()->isAdmin()
-                    ? $query
-                    : $query->whereHas('unitKerja', function ($q) {
-                        $q->where('unit_kerjas.id', auth()->user()->unit_kerja_id);
-                    })
+                ? $query
+                : $query->whereHas('unitKerja', function ($q) {
+                    $q->where('unit_kerjas.id', auth()->user()->unit_kerja_id);
+                })
             )
             ->columns([
 

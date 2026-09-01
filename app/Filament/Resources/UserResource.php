@@ -72,6 +72,40 @@ class UserResource extends Resource
                     ])
                     ->maxLength(255),
 
+                Forms\Components\TextInput::make('username')
+                    ->label('Username Login')
+                    ->helperText('Klik ikon 🔑 untuk generate username')
+                    //->placeholder('Klik ikon kunci atau isi manual...')
+                    ->required(fn(string $context) => $context === 'create')
+                    ->validationMessages([
+                        'required' => 'Username wajib diisi.',
+                        'unique' => 'Username sudah digunakan, pilih username lain.',
+                    ])
+                    ->unique(table: 'users', column: 'username', ignoreRecord: true)
+                    ->rules(['regex:/^[a-z0-9_]+$/'])
+                    ->validationMessages([
+                        'regex' => 'Username hanya boleh huruf kecil, angka, dan underscore (_).',
+                    ])
+                    ->maxLength(50)
+                    ->suffixAction(
+                        Forms\Components\Actions\Action::make('generateUsername')
+                            ->label('Generate Username')
+                            ->icon('heroicon-o-key')
+                            ->color('warning')
+                            ->tooltip('Klik untuk generate username')
+                            ->action(function (Forms\Set $set) {
+                                // Generate username unik: usr_ + random string 8 karakter
+                                do {
+                                    $username = 'usr_' . \Illuminate\Support\Str::lower(
+                                        \Illuminate\Support\Str::random(8)
+                                    );
+                                } while (\App\Models\User::where('username', $username)->exists());
+
+                                $set('username', $username);
+                            })
+                    ),
+
+
                 Forms\Components\TextInput::make('email')
                     ->label('Email')
                     ->email()
@@ -185,6 +219,10 @@ class UserResource extends Resource
                     ->label('Nama')
                     ->searchable(),
 
+                Tables\Columns\TextColumn::make('username')
+                    ->label('Username')
+                    ->searchable(),
+
                 Tables\Columns\TextColumn::make('email')
                     ->label('Email')
                     ->searchable(),
@@ -208,7 +246,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat pada')
                     ->dateTime()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                //->toggleable(isToggledHiddenByDefault: true),
             ])
 
             ->filters([

@@ -27,7 +27,7 @@ class PemilikDataResource extends Resource
 
     // protected static ?string $model = PemilikData::class;
     protected static ?string $model = Pemohon::class;
-    protected static ?string $navigationIcon = 'heroicon-s-book-open';
+    protected static ?string $navigationIcon = 'heroicon-s-user-circle';
     protected static ?string $modelLabel = 'Instansi Penyedia Data';
     protected static ?string $pluralModelLabel = 'Pemilik Data';
     protected static ?string $navigationGroup = 'Pusat Data Kabupaten Bengkalis';
@@ -199,8 +199,8 @@ class PemilikDataResource extends Resource
             ->modifyQueryUsing(
                 fn(Builder $query) =>
                 auth()->user()->isAdmin()
-                    ? $query
-                    : $query->where('opd_tujuan', auth()->user()->unit_kerja_id)
+                ? $query
+                : $query->where('opd_tujuan', auth()->user()->unit_kerja_id)
             )
             ->columns([
                 TextColumn::make('no')

@@ -22,7 +22,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
     protected static ?string $model = DaftarAplikasiPerangkatDaerah::class;
     protected static ?string $modelLabel = 'Daftar Aplikasi Perangkat Daerah';
     protected static ?string $pluralModelLabel = 'Daftar Aplikasi Perangkat Daerah';
-    protected static ?string $navigationIcon = 'heroicon-s-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-chart-bar-square';
     protected static ?string $navigationGroup = 'Daftar Aplikasi & Website';
     protected static ?int $navigationSort = 2;
 
@@ -61,21 +61,22 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     )
                     ->label('Perangkat Daerah')
                     ->default(fn() => auth()->user()->unit_kerja_id)
-                    // ->default(fn() => auth()->user()->unit_kerja_id)
+                    ->disabled(fn() => auth()->user()->role !== 'admin')
+                    ->dehydrated()
                     ->placeholder('Pilih perangkat daerah')
-                    //->disabled()
                     ->required(),
 
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\TextInput::make('websiteopd')
-                            ->label('Domain Website Kantor')
-                            ->placeholder('Ex. www.bengkaliskab.go.id, Isi Dengan Tanda (-) Jika tidak ada')
+                            ->label('Alamat Website Kantor')
+                            ->placeholder('Isi Dengan Tanda (-) Jika tidak ada')
+                            ->helperText('Isi dengan tanda (-) jika tidak ada.')
                             ->maxLength(255),
 
                         Forms\Components\Select::make('developer')
-                            ->label('Developer')
-                            ->placeholder('Pilih Developer')
+                            ->label('Pembuat')
+                            ->placeholder('Pilih Pembuat')
                             ->options([
                                 'internal' => 'Internal',
                                 'pihak ketiga' => 'Pihak Ketiga',
@@ -106,7 +107,8 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                 Forms\Components\TextInput::make('alamat_domain')
                     ->label('Alamat Domain')
                     ->required()
-                    ->placeholder('Mohon Isi Alamat Domain')
+                    ->placeholder('Isi Dengan Tanda (-) Jika tidak ada')
+                    ->helperText('Isi dengan tanda (-) jika tidak ada.')
                     ->maxLength(255),
 
                 Forms\Components\Textarea::make('spesifikasi_teknis')
@@ -117,7 +119,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
                 Select::make('mode')
                     ->label('Sifat')
-                    ->placeholder('Pilih Sifat Aplikasi Online/Offline')
+                    ->placeholder('Pilih Sifat Aplikasi')
                     ->options(array_combine(
                         DaftarAplikasiPerangkatDaerah::MODE,
                         DaftarAplikasiPerangkatDaerah::MODE
@@ -126,6 +128,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
                 Forms\Components\TextInput::make('tahun_penganggaran')
                     ->label('Tahun Pembuatan')
+                    ->helperText('Isi dengan tanda (-) jika tidak ada.')
                     ->required()
                     ->numeric()
                     ->integer()
@@ -136,7 +139,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
                 Forms\Components\Select::make('pembuat')
                     ->label('Pembuat')
-                    // ->placeholder('Pilih Pembuat Pihak Ketiga/Diskominfotik')
+                    ->placeholder('Pilih Pembuat')
                     ->required()
                     ->options([
                         'internal' => 'Internal',
@@ -155,7 +158,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
                 Select::make('status')
                     ->label('Status')
-                    ->placeholder('Pilih Status Aplikasi Aktif/Tidak Aktif')
+                    ->placeholder('Pilih Status Aplikasi')
                     ->options(array_combine(
                         DaftarAplikasiPerangkatDaerah::STATUS,
                         DaftarAplikasiPerangkatDaerah::STATUS
@@ -166,12 +169,13 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                 Forms\Components\TextInput::make('dimanfaatkan_untuk_layanan')
                     ->label('Dimanfaatkan Untuk Layanan')
                     ->placeholder(' Mohon Isi dimanfaatkan Untuk Layanan Apa')
+                    ->helperText('Isi dengan tanda (-) jika tidak ada.')
                     ->required()
                     ->maxLength(255),
 
                 Forms\Components\Textarea::make('keterangan')
                     ->label('Keterangan')
-                    ->placeholder('Mohon Isi keterangan')
+                    ->placeholder('Isi dengan tanda (-) jika tidak ada.')
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
@@ -310,7 +314,12 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
 
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('unit_kerja_id')
+                    ->label('Unit Kerja')
+                    ->relationship('unitKerja', 'nama_opd'),
+
+
+
             ])
 
             ->actions([

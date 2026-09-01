@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\CheckRole;
+use App\Http\Middleware\BlockDangerousFileUpload;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,8 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Blokir upload file berbahaya (PHP, script, exe, dll)
+        // Berlaku untuk endpoint Livewire file upload yang digunakan Filament
+        $middleware->appendToGroup('web', BlockDangerousFileUpload::class);
     })
+
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
