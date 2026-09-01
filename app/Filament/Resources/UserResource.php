@@ -223,13 +223,13 @@ class UserResource extends Resource
                     ->label('Username')
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('email')
-                    ->label('Email')
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('email')
+                //     ->label('Email')
+                //     ->searchable(),
 
-                Tables\Columns\TextColumn::make('no_hp')
-                    ->label('No HP')
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('no_hp')
+                //     ->label('No HP')
+                //     ->searchable(),
 
                 Tables\Columns\BadgeColumn::make('role')
                     ->label('Role')
@@ -243,9 +243,9 @@ class UserResource extends Resource
                     ->label('Unit Kerja')
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Dibuat pada')
-                    ->dateTime()
+                // Tables\Columns\TextColumn::make('created_at')
+                //     ->label('Dibuat pada')
+                //     ->dateTime()
                 //->toggleable(isToggledHiddenByDefault: true),
             ])
 
