@@ -61,7 +61,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('bulubabi')
             //->login()
             ->login(Login::class)
-            ->brandName('SISTEM INFORMASI PERMINTAAN DATA')
+            ->brandName('e-DATA')
             ->brandLogo(asset('images/lgo.png'))
             ->brandLogoHeight('2.25rem')
             ->font('Inter')

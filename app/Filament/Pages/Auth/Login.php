@@ -15,7 +15,7 @@ class Login extends BaseLogin
 {
     public function getHeading(): Htmlable|string
     {
-        return 'Pusat Data Kabupaten Bengkalis';
+        return 'e-Data Kabupaten Bengkalis';
     }
 
     /**
