@@ -135,6 +135,7 @@ class DaftarWebsitePerangkatDaerahResource extends Resource
                     ->wrap()
                     ->limit(80)
                     ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user', 'sekre']))
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
 
 
@@ -152,6 +153,7 @@ class DaftarWebsitePerangkatDaerahResource extends Resource
                     ->wrap()
                     ->limit(80)
                     ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
 
             ])

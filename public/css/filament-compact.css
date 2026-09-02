@@ -142,3 +142,151 @@ html, body {
 .fi-breadcrumbs {
     font-size: 11px !important;
 }
+
+/* ================================================
+   RESPONSIVE — TABLET (≤ 1024px)
+   ================================================ */
+@media (max-width: 1024px) {
+    :root {
+        --sidebar-width: 260px;
+    }
+
+    .fi-main {
+        padding: 0.6rem !important;
+        gap: 0.6rem !important;
+    }
+
+    .fi-wi-stats-overview-stat-value {
+        font-size: 1rem !important;
+    }
+}
+
+/* ================================================
+   RESPONSIVE — MOBILE (≤ 768px)
+   ================================================ */
+@media (max-width: 768px) {
+    /* Reset font ke ukuran normal agar terbaca di HP */
+    html, body {
+        font-size: 14px !important;
+    }
+
+    /* Main content tidak terlalu sempit */
+    .fi-main {
+        padding: 0.5rem !important;
+        gap: 0.5rem !important;
+    }
+
+    /* Topbar mobile */
+    .fi-topbar {
+        height: 3rem !important;
+    }
+
+    /* Tabel: header & cell lebih lega untuk touch */
+    .fi-ta-header-cell {
+        padding: 0.4rem 0.5rem !important;
+        font-size: 11px !important;
+    }
+
+    .fi-ta-cell {
+        padding: 0.35rem 0.5rem !important;
+    }
+
+    .fi-ta-cell-content {
+        font-size: 12px !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Tombol lebih besar untuk jari */
+    .fi-btn {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 12px !important;
+        min-height: 2rem !important;
+    }
+
+    .fi-ta-actions {
+        gap: 0.25rem !important;
+    }
+
+    /* Stats widget */
+    .fi-wi-stats-overview-stat {
+        padding: 0.5rem 0.75rem !important;
+    }
+
+    .fi-wi-stats-overview-stat-value {
+        font-size: 1.25rem !important;
+        font-weight: 800 !important;
+    }
+
+    .fi-wi-stats-overview-stat-label {
+        font-size: 0.75rem !important;
+    }
+
+    .fi-wi-stats-overview-stat-description {
+        font-size: 0.7rem !important;
+    }
+
+    /* Section padding */
+    .fi-section {
+        padding: 0.6rem !important;
+    }
+
+    /* Form input lebih nyaman di HP */
+    .fi-input {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+        font-size: 14px !important;
+    }
+
+    /* Page heading */
+    .fi-header-heading {
+        font-size: 1rem !important;
+    }
+}
+
+/* ================================================
+   RESPONSIVE — SMALL MOBILE (≤ 480px)
+   ================================================ */
+@media (max-width: 480px) {
+    html, body {
+        font-size: 14px !important;
+    }
+
+    .fi-main {
+        padding: 0.4rem !important;
+        gap: 0.4rem !important;
+    }
+
+    .fi-ta-header-cell {
+        padding: 0.3rem 0.4rem !important;
+        font-size: 10px !important;
+    }
+
+    .fi-ta-cell {
+        padding: 0.3rem 0.4rem !important;
+    }
+
+    .fi-ta-cell-content {
+        font-size: 11px !important;
+    }
+
+    .fi-btn {
+        padding: 0.4rem 0.6rem !important;
+        font-size: 11px !important;
+    }
+
+    .fi-wi-stats-overview {
+        gap: 0.4rem !important;
+    }
+
+    .fi-wi-stats-overview-stat-value {
+        font-size: 1.1rem !important;
+    }
+
+    .fi-fo-field-wrp {
+        margin-bottom: 0.6rem !important;
+    }
+
+    .fi-fo-field-wrp-label {
+        font-size: 13px !important;
+    }
+}

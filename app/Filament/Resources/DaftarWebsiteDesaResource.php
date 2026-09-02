@@ -196,6 +196,7 @@ class DaftarWebsiteDesaResource extends Resource
                 TextColumn::make('pembuat')
                     ->disableClick()
                     ->label('Pembuat')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
 
                 TextColumn::make('status')
@@ -208,6 +209,7 @@ class DaftarWebsiteDesaResource extends Resource
                     ->label('Keterangan')
                     ->wrap()
                     ->limit(80)
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
 
             ])

@@ -71,3 +71,64 @@
     background-color: #374151 !important;
     color: #ffffff !important;
 }
+
+/* ================================================
+   RESPONSIF MOBILE SIDEBAR
+   ================================================ */
+
+/* Transisi sidebar saat buka/tutup */
+.fi-sidebar {
+    transition: transform 0.25s ease-in-out !important;
+}
+
+/* Sidebar overlay backdrop di mobile */
+@media (max-width: 1024px) {
+    /* Pastikan sidebar tampil di atas konten saat mobile */
+    .fi-sidebar {
+        z-index: 40 !important;
+    }
+
+    /* Topbar kiri padding tidak makan konten */
+    .fi-topbar-start {
+        flex-shrink: 0 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Header sidebar - tetap biru */
+    .fi-sidebar-header {
+        background-color: #1e3a8a !important;
+        padding: 0.75rem 1rem !important;
+    }
+
+    /* Sidebar item lebih mudah di-tap */
+    .fi-sidebar-item-button {
+        min-height: 2.5rem !important;
+        padding-top: 0.4rem !important;
+        padding-bottom: 0.4rem !important;
+    }
+
+    /* Group label lebih terbaca */
+    .fi-sidebar-group-label {
+        font-size: 0.65rem !important;
+        padding: 0.5rem 1rem 0.25rem !important;
+    }
+
+    /* Main content ambil full width saat sidebar tertutup */
+    .fi-layout-has-sidebar .fi-main-ctn {
+        padding-left: 0 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Sidebar full width di layar sangat kecil */
+    .fi-sidebar {
+        width: 85vw !important;
+        max-width: 300px !important;
+    }
+
+    .fi-sidebar-header::after {
+        font-size: 10px !important;
+        letter-spacing: 1px !important;
+    }
+}

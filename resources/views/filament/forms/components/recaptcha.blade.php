@@ -12,41 +12,80 @@
     </div>
 
     <script>
-        // Callback saat user berhasil mencentang captcha
-        function onRecaptchaSuccess(token) {
-            @this.set('{{ $getStatePath() }}', token);
+        /**
+         * Cari tombol submit login Filament.
+         * Filament 3 merender <button type="submit"> di dalam form.
+         */
+        function getLoginButton() {
+            return document.querySelector('button[type="submit"]');
         }
 
-        // Callback saat token captcha expired (biasanya 2 menit)
-        function onRecaptchaExpired() {
-            @this.set('{{ $getStatePath() }}', '');
+        /**
+         * Kunci tombol submit — tampilan abu-abu + cursor not-allowed.
+         */
+        function disableLoginButton() {
+            const btn = getLoginButton();
+            if (!btn) return;
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor  = 'not-allowed';
+            btn.title = 'Silakan selesaikan verifikasi reCAPTCHA terlebih dahulu';
         }
 
-        // Callback saat terjadi error pada widget captcha
-        function onRecaptchaError() {
-            @this.set('{{ $getStatePath() }}', '');
+        /**
+         * Buka tombol submit — kembalikan ke kondisi normal.
+         */
+        function enableLoginButton() {
+            const btn = getLoginButton();
+            if (!btn) return;
+            btn.disabled = false;
+            btn.style.opacity = '';
+            btn.style.cursor  = '';
+            btn.title = '';
         }
 
-        // Reset captcha setelah Livewire navigasi (SPA mode) atau validation error
-        document.addEventListener('livewire:navigated', () => {
+        // Kunci tombol saat pertama kali halaman dimuat
+        document.addEventListener('DOMContentLoaded', function () {
+            disableLoginButton();
+        });
+
+        // Juga kunci saat Livewire SPA navigasi (mode spa aktif)
+        document.addEventListener('livewire:navigated', function () {
+            disableLoginButton();
+
+            // Reset widget jika sudah di-render
             if (typeof grecaptcha !== 'undefined') {
-                try {
-                    grecaptcha.reset();
-                } catch (e) {
-                    // Widget belum di-render, abaikan
-                }
+                try { grecaptcha.reset(); } catch (e) {}
             }
         });
 
-        // Listen untuk custom event reset dari Login.php
+        // ─── Callback dari Google reCAPTCHA ───────────────────────────
+
+        // Berhasil centang → simpan token ke Livewire + buka tombol
+        function onRecaptchaSuccess(token) {
+            @this.set('{{ $getStatePath() }}', token);
+            enableLoginButton();
+        }
+
+        // Token expired (setelah ~2 menit) → hapus token + kunci tombol
+        function onRecaptchaExpired() {
+            @this.set('{{ $getStatePath() }}', '');
+            disableLoginButton();
+        }
+
+        // Error widget → hapus token + kunci tombol
+        function onRecaptchaError() {
+            @this.set('{{ $getStatePath() }}', '');
+            disableLoginButton();
+        }
+
+        // ─── Listen event reset dari Login.php (saat login gagal) ─────
         Livewire.on('reset-recaptcha', () => {
             if (typeof grecaptcha !== 'undefined') {
-                try {
-                    grecaptcha.reset();
-                } catch (e) {
-                    // Abaikan jika widget belum siap
-                }
+                try { grecaptcha.reset(); } catch (e) {}
             }
+            // Kunci tombol kembali setelah gagal login
+            disableLoginButton();
         });
     </script>
 </x-dynamic-component>

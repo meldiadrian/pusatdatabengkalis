@@ -256,14 +256,14 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->disableClick()
                     ->label('Th.Anggaran')
                     ->wrap()
-                    // ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('dimanfaatkan_untuk_layanan')
                     ->disableClick()
                     ->label('Pemanfaatan')
                     ->wrap()
-                    // ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('pembuat')
@@ -272,6 +272,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->wrap()
                     ->limit(80)
                     ->visible(fn() => in_array(auth()->user()?->role, ['admin', 'user']))
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('spesifikasi_teknis')
@@ -280,6 +281,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->wrap()
                     ->limit(25)
                     ->visible(!$isBasicUser)
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('jenis_aplikasi')
@@ -309,6 +311,7 @@ class DaftarAplikasiPerangkatDaerahResource extends Resource
                     ->wrap()
                     ->limit(80)
                     ->visible(fn() => in_array(auth()->user()?->role, ['admin']))
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 //----------end view admin----------------//
 
