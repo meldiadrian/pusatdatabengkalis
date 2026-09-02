@@ -38,10 +38,10 @@ class Login extends BaseLogin
                 $this->getRememberFormComponent(),
 
                 // Google reCAPTCHA v2 — widget & validasi server-side
-                // ViewField::make('recaptcha_token')
-                //     ->view('filament.forms.components.recaptcha')
-                //     ->label('')
-                //     ->rules([new RecaptchaRule()]),
+                ViewField::make('recaptcha_token')
+                    ->view('filament.forms.components.recaptcha')
+                    ->label('')
+                    ->rules([new RecaptchaRule()]),
             ])
             ->statePath('data');
     }
