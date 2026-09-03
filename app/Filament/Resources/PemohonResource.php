@@ -61,10 +61,10 @@ class PemohonResource extends Resource
 
         return $isAdmin || ($isUser && $isValidTipe);
     }
-    // mematikan tombol tambah data (untuk mengaktifkan return false jadikan true)
+    // mematikan tombol tambah data pada role admin
     public static function canCreate(): bool
     {
-        return false;
+        return auth()->user()?->role !== 'admin';
     }
 
     public static function form(Form $form): Form
@@ -204,7 +204,7 @@ class PemohonResource extends Resource
         return $table
             ->emptyStateHeading('Belum ada data')
             ->emptyStateDescription('Silakan tambahkan data baru.')
-            ->emptyStateIcon('heroicon-o-user')
+            ->emptyStateIcon('heroicon-o-clipboard-document')
             ->modifyQueryUsing(
                 fn(Builder $query) =>
                 auth()->user()->isAdmin()

@@ -195,7 +195,7 @@ class PemilikDataResource extends Resource
         return $table
             ->emptyStateHeading('Belum ada data')
             ->emptyStateDescription('Silakan tambahkan data baru.')
-            ->emptyStateIcon('heroicon-o-user')
+            ->emptyStateIcon('heroicon-o-clipboard-document')
             ->modifyQueryUsing(
                 fn(Builder $query) =>
                 auth()->user()->isAdmin()

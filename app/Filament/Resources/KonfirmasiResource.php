@@ -151,6 +151,10 @@ class KonfirmasiResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->emptyStateHeading('Belum ada data')
+            ->emptyStateDescription('Belum ada data permintaan konfirmasi.')
+            ->emptyStateIcon('heroicon-o-clipboard-document')
+
 
             // ->modifyQueryUsing(
             //     fn(Builder $query) =>
