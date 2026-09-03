@@ -26,7 +26,7 @@ class KonfirmasiResource extends Resource
     protected static ?int $navigationSort = 0;
     protected static ?string $modelLabel = 'Konfirmasi';
     protected static ?string $pluralModelLabel = 'Konfirmasi Permohonan';
-    protected static ?string $navigationGroup = 'Pusat Data Kabupaten Bengkalis';
+    protected static ?string $navigationGroup = 'e-Data Kabupaten Bengkalis';
 
 
     // public static function getEloquentQuery(): Builder
@@ -199,10 +199,10 @@ class KonfirmasiResource extends Resource
                     ->formatStateUsing(fn($state) => $state ? 'Lihat Dokumen' : '-')
                     ->url(
                         fn($record) => $record->pemohon?->upload_surat
-                            ? route('download.storage.file', [
-                                'path' => $record->pemohon->upload_surat
-                            ])
-                            : null
+                        ? route('download.storage.file', [
+                            'path' => $record->pemohon->upload_surat
+                        ])
+                        : null
                     )
                     ->openUrlInNewTab(),
 
@@ -284,7 +284,7 @@ class KonfirmasiResource extends Resource
                     ->visible(
                         fn($record) =>
                         auth()->user()?->role === 'sekre'
-                            && $record->status === 'pending'
+                        && $record->status === 'pending'
                     )
                     ->action(function ($record) {
 

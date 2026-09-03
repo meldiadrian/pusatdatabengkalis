@@ -30,7 +30,7 @@ class PemilikDataResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-s-user-circle';
     protected static ?string $modelLabel = 'Instansi Penyedia Data';
     protected static ?string $pluralModelLabel = 'Pemilik Data';
-    protected static ?string $navigationGroup = 'Pusat Data Kabupaten Bengkalis';
+    protected static ?string $navigationGroup = 'e-Data Kabupaten Bengkalis';
     protected static ?int $navigationSort = 0;
 
 

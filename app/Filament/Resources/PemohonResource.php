@@ -33,7 +33,7 @@ class PemohonResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-s-user-circle';
     protected static ?string $modelLabel = 'Instansi Pemohon';
     protected static ?string $pluralModelLabel = 'Pemohon';
-    protected static ?string $navigationGroup = 'Pusat Data Kabupaten Bengkalis';
+    protected static ?string $navigationGroup = 'e-Data Kabupaten Bengkalis';
     protected static ?int $navigationSort = 0;
 
 
@@ -60,6 +60,11 @@ class PemohonResource extends Resource
         $isValidTipe = in_array(optional($user->unitKerja)->tipe, ['OPD', 'Desa']);
 
         return $isAdmin || ($isUser && $isValidTipe);
+    }
+    // mematikan tombol tambah data (untuk mengaktifkan return false jadikan true)
+    public static function canCreate(): bool
+    {
+        return false;
     }
 
     public static function form(Form $form): Form
