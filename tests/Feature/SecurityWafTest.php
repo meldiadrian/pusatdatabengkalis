@@ -135,9 +135,14 @@ class SecurityWafTest extends TestCase
 
         $response->assertHeader('X-Frame-Options', 'SAMEORIGIN');
         $this->assertStringContainsString("frame-ancestors 'self'", $response->headers->get('Content-Security-Policy'));
+        $this->assertStringContainsString("base-uri 'self'", $response->headers->get('Content-Security-Policy'));
+        $this->assertStringContainsString("object-src 'none'", $response->headers->get('Content-Security-Policy'));
         $response->assertHeader('X-Content-Type-Options', 'nosniff');
         $response->assertHeader('X-XSS-Protection', '1; mode=block');
+        $response->assertHeader('X-Permitted-Cross-Domain-Policies', 'none');
+        $response->assertHeader('X-Download-Options', 'noopen');
         $response->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+        $this->assertFalse($response->headers->has('X-Powered-By'));
     }
 }
 
