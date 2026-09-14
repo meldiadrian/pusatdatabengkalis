@@ -126,4 +126,18 @@ class SecurityWafTest extends TestCase
         // /bulubabi is the Filament login/dashboard route
         $this->assertNotEquals(403, $response->getStatusCode());
     }
+
+    public function test_sets_security_headers_including_clickjacking_protection(): void
+    {
+        $response = $this->withHeaders([
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        ])->get('/bulubabi');
+
+        $response->assertHeader('X-Frame-Options', 'SAMEORIGIN');
+        $this->assertStringContainsString("frame-ancestors 'self'", $response->headers->get('Content-Security-Policy'));
+        $response->assertHeader('X-Content-Type-Options', 'nosniff');
+        $response->assertHeader('X-XSS-Protection', '1; mode=block');
+        $response->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    }
 }
+
