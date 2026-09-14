@@ -54,6 +54,14 @@ class SecurityWafMiddleware
         'scalp',
         'nuclei',
 
+        // Security Reconnaissance, Extension Scanners & Client Manipulation
+        'dotgit',
+        'findsomething',
+        'foxyproxy',
+        'retri.js',
+        'tampermonkey',
+        'wappalyzer',
+
         // Malicious Scrapers & Exploit Frameworks
         'binlar',
         'casper',
