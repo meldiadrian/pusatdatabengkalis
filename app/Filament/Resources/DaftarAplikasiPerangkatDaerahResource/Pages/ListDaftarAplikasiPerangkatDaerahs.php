@@ -59,7 +59,14 @@ class ListDaftarAplikasiPerangkatDaerahs extends ListRecords
                                 ($record && $record->user_id === auth()->id())
                             )
                         )
-                )
+                ),
+
+            Actions\Action::make('download_pdf')
+                ->label('Download PDF')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('success')
+                ->url(fn() => route('pdf.daftar-aplikasi-opd'))
+                ->openUrlInNewTab(),
         ];
     }
 

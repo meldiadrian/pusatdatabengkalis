@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\PdfExportController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -30,4 +31,13 @@ Route::middleware([\App\Http\Middleware\BlockDangerousFileUpload::class, 'thrott
     // Fallback download-file route
     Route::get('/download-file', [DownloadController::class, 'downloadFileQuery'])->name('download.storage.file');
 
+});
+
+// PDF Export routes — hanya untuk user yang sudah login
+Route::middleware(['auth'])->group(function () {
+    Route::get('/pdf/daftar-aplikasi-opd', [PdfExportController::class, 'daftarAplikasiOpd'])
+        ->name('pdf.daftar-aplikasi-opd');
+
+    Route::get('/pdf/daftar-website-opd', [PdfExportController::class, 'daftarWebsiteOpd'])
+        ->name('pdf.daftar-website-opd');
 });

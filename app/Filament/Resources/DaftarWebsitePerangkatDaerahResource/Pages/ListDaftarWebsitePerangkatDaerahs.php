@@ -17,6 +17,13 @@ class ListDaftarWebsitePerangkatDaerahs extends ListRecords
         return [
             //Actions\CreateAction::make()
             // ->label('Tambah Data'),
+
+            Actions\Action::make('download_pdf')
+                ->label('Download PDF')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('success')
+                ->url(fn() => route('pdf.daftar-website-opd'))
+                ->openUrlInNewTab(),
         ];
     }
 

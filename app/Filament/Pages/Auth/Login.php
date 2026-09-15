@@ -37,7 +37,7 @@ class Login extends BaseLogin
                 $this->getPasswordFormComponent(),
                 $this->getRememberFormComponent(),
 
-                // Google reCAPTCHA v2 — widget & validasi server-side
+                // ---------Google reCAPTCHA v2 — widget & validasi server-side---------
                 ViewField::make('recaptcha_token')
                     ->view('filament.forms.components.recaptcha')
                     ->label('')
