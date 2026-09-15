@@ -18,6 +18,8 @@ use App\Models\DaftarAplikasiPerangkatDaerah;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\DaftarWebsitePerangkatDaerahResource\Pages;
 use App\Filament\Resources\DaftarWebsitePerangkatDaerahResource\RelationManagers;
+use App\Models\UnitKerja;
+use Filament\Forms\Components\Select as FormSelect;
 
 class DaftarWebsitePerangkatDaerahResource extends Resource
 {
@@ -166,8 +168,28 @@ class DaftarWebsitePerangkatDaerahResource extends Resource
                     ->label('Download PDF')
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('success')
-                    ->url(fn() => route('pdf.daftar-website-opd'))
-                    ->openUrlInNewTab(),
+                    ->form([
+                        FormSelect::make('unit_kerja_id')
+                            ->label('Filter Berdasarkan OPD')
+                            ->placeholder('-- Semua OPD --')
+                            ->options(
+                                UnitKerja::where('tipe', 'OPD')
+                                    ->orderBy('nama_opd')
+                                    ->pluck('nama_opd', 'id')
+                            )
+                            ->searchable()
+                            ->nullable(),
+                    ])
+                    ->action(function (array $data, $livewire) {
+                        $url = route('pdf.daftar-website-opd');
+                        if (!empty($data['unit_kerja_id'])) {
+                            $url .= '?unit_kerja_id=' . $data['unit_kerja_id'];
+                        }
+                        $livewire->redirect($url);
+                    })
+                    ->modalHeading('Download PDF Daftar Website OPD')
+                    ->modalSubmitActionLabel('Download PDF')
+                    ->modalWidth('md'),
             ])
 
             ->actions([

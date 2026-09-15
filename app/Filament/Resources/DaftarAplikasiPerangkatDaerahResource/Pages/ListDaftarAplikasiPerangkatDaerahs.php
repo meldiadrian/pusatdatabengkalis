@@ -6,6 +6,8 @@ use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\DaftarAplikasiPerangkatDaerahResource;
 use App\Filament\Resources\DaftarAplikasiPerangkatDaerahResource\Widgets\StatistikAplikasiOpd;
+use App\Models\UnitKerja;
+use Filament\Forms\Components\Select;
 
 class ListDaftarAplikasiPerangkatDaerahs extends ListRecords
 {
@@ -65,8 +67,28 @@ class ListDaftarAplikasiPerangkatDaerahs extends ListRecords
                 ->label('Download PDF')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('success')
-                ->url(fn() => route('pdf.daftar-aplikasi-opd'))
-                ->openUrlInNewTab(),
+                ->form([
+                    Select::make('unit_kerja_id')
+                        ->label('Filter Berdasarkan OPD')
+                        ->placeholder('-- Semua OPD --')
+                        ->options(
+                            UnitKerja::where('tipe', 'OPD')
+                                ->orderBy('nama_opd')
+                                ->pluck('nama_opd', 'id')
+                        )
+                        ->searchable()
+                        ->nullable(),
+                ])
+                ->action(function (array $data) {
+                    $url = route('pdf.daftar-aplikasi-opd');
+                    if (!empty($data['unit_kerja_id'])) {
+                        $url .= '?unit_kerja_id=' . $data['unit_kerja_id'];
+                    }
+                    $this->redirect($url, navigate: false);
+                })
+                ->modalHeading('Download PDF Daftar Aplikasi OPD')
+                ->modalSubmitActionLabel('Download PDF')
+                ->modalWidth('md'),
         ];
     }
 

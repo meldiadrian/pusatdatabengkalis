@@ -16,21 +16,41 @@ class StatistikWebsiteOpd extends BaseWidget
 
     protected function getStats(): array
     {
+        $user        = auth()->user();
+        $isAdmin     = $user?->role === 'admin';
+        $unitKerjaId = $user?->unit_kerja_id;
 
-        $total = WebsitePerangkatDaerah::query()
-            ->whereHas('unitKerja', fn($q) => $q->where('tipe', 'OPD'))
-            ->count();
+        // Base query — filter tipe OPD
+        $baseQuery = fn() => WebsitePerangkatDaerah::query()
+            ->whereHas('unitKerja', fn($q) => $q->where('tipe', 'OPD'));
+
+        // Selalu count semua OPD terdaftar (tidak difilter per role)
+        $total = $baseQuery()->distinct('unit_kerja_id')->count('unit_kerja_id');
+
+        if ($isAdmin) {
+            // Admin: jumlah website unik dari semua OPD
+            $totalWebOpd = $baseQuery()
+                ->select('websiteopd')
+                ->distinct('websiteopd')
+                ->count('websiteopd');
+
+            // Admin: jumlah website aktif dari semua OPD
+            $totalAktif = $baseQuery()->where('status', 'aktif')->count();
+        } else {
+            // User / Sekre: hanya data milik unit kerja sendiri
+            $totalWebOpd = $baseQuery()
+                ->where('unit_kerja_id', $unitKerjaId)
+                ->select('websiteopd')
+                ->distinct('websiteopd')
+                ->count('websiteopd');
+
+            $totalAktif = $baseQuery()
+                ->where('unit_kerja_id', $unitKerjaId)
+                ->where('status', 'aktif')
+                ->count();
+        }
 
 
-        $totalWebOpd = WebsitePerangkatDaerah::query()
-            ->select('websiteopd')
-            ->get()
-            ->pluck('websiteopd')
-            ->flatten() // karena array/json
-            ->unique()
-            ->count();
-
-        $totalAktif = WebsitePerangkatDaerah::where('status', 'aktif')->count();
         return [
             Stat::make('Organisasi Perangkat Daerah', $total)
                 ->icon('heroicon-m-building-office')

@@ -108,14 +108,24 @@
         <div class="instansi">Pemerintah Kabupaten Bengkalis</div>
         <div class="instansi">Dinas Komunikasi, Informatika dan Statistik</div>
         <div class="judul">Daftar Aplikasi Perangkat Daerah</div>
-        <div class="sub-judul">Kabupaten Bengkalis - Provinsi Riau</div>
+        <div class="sub-judul">
+            @if(!empty($unitKerja))
+                {{ $unitKerja->nama_opd }} &mdash;
+            @endif
+            Kabupaten Bengkalis - Provinsi Riau
+        </div>
     </div>
 
     <div class="meta">
         Dicetak pada: {{ now()->translatedFormat('d F Y, H:i') }} WIB
     </div>
 
-    <div class="total-info">Total Data: {{ $data->count() }} Aplikasi</div>
+    <div class="total-info">
+        @if(!empty($unitKerja))
+            Perangkat Daerah: {{ $unitKerja->nama_opd }} &nbsp;|&nbsp;
+        @endif
+        Total Data: {{ $data->count() }} Aplikasi
+    </div>
 
     <table>
         <thead>

@@ -11,30 +11,34 @@ class StatistikAplikasiOpd extends BaseWidget
 
     protected function getStats(): array
     {
-        // $total = DaftarAplikasiPerangkatDaerah::count();
-        $total = DaftarAplikasiPerangkatDaerah::whereHas('unitKerja', function ($q) {
-            $q->where('tipe', 'OPD');
-        })
-            ->count();
+        $user       = auth()->user();
+        $isAdmin    = $user?->role === 'admin';
+        $unitKerjaId = $user?->unit_kerja_id;
 
-        $total = DaftarAplikasiPerangkatDaerah::whereHas('unitKerja', function ($q) {
-            $q->where('tipe', 'OPD');
-        })
-            ->distinct('unit_kerja_id')
-            ->count('unit_kerja_id');
+        // Base query — filter tipe OPD
+        $baseQuery = fn() => DaftarAplikasiPerangkatDaerah::whereHas('unitKerja', fn($q) => $q->where('tipe', 'OPD'));
 
-        $totalAplikasi = DaftarAplikasiPerangkatDaerah::query()
-            ->select('nama_aplikasi', 'unit_kerja_id')
-            ->whereHas('unitKerja', function ($q) {
-                $q->where('tipe', 'OPD');
-            })
-            ->get()
-            ->pluck('unit_kerja_id')
-            ->flatten()
-            ->unique()
-            ->count();
+        // Selalu count semua OPD terdaftar (tidak difilter per role)
+        $total = $baseQuery()->distinct('unit_kerja_id')->count('unit_kerja_id');
 
-        $totalAktif = DaftarAplikasiPerangkatDaerah::where('status', 'aktif')->count();
+        if ($isAdmin) {
+            // Admin: jumlah aplikasi dari semua OPD
+            $totalAplikasi = $baseQuery()
+                ->select('unit_kerja_id')
+                ->distinct('unit_kerja_id')
+                ->count('unit_kerja_id');
+
+            // Admin: jumlah aplikasi aktif (semua OPD)
+            $totalAktif = $baseQuery()->where('status', 'aktif')->count();
+        } else {
+            // User / Sekre: hanya data milik unit kerja sendiri
+            $totalAplikasi = $baseQuery()->where('unit_kerja_id', $unitKerjaId)->count();
+
+            $totalAktif = $baseQuery()
+                ->where('unit_kerja_id', $unitKerjaId)
+                ->where('status', 'aktif')
+                ->count();
+        }
 
         return [
             Stat::make('Organisasi Perangkat Daerah ', $total)

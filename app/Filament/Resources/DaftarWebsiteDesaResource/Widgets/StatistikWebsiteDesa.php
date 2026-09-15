@@ -30,49 +30,54 @@ class StatistikWebsiteDesa extends BaseWidget
     // }
     protected function getStats(): array
     {
-        // $total = id::count(); // <-- ambil data dari DB
-        //$total = DaftarWebsiteDesa::count();
-        // $total = DaftarWebsiteDesa::query()
-        //     ->select('websitedesa')
-        //     ->get()
-        //     ->pluck('websitedesa')
-        //     ->flatten() // karena array/json
-        //     ->unique()
-        //     ->count();
+        $user        = auth()->user();
+        $isAdmin     = $user?->role === 'admin';
+        $unitKerjaId = $user?->unit_kerja_id;
 
+        // Selalu count semua kecamatan terdaftar (tidak difilter per role)
         $total = DaftarWebsiteDesa::query()
             ->select('kecamatan_id')
             ->get()
             ->pluck('kecamatan_id')
-            ->flatten() // karena array/json
-            ->unique()
-            ->count();
-        // $totalDesa = DaftarWebsiteDesa::query()
-        //     ->select('desa_ids')
-        //     ->get()
-        //     ->pluck('desa_ids')
-        //     ->flatten() // karena array/json
-        //     ->unique()
-        //     ->count();
-
-        // $totalDesa = DaftarWebsiteDesa::whereHas('unitKerja', function ($q) {
-        //     $q->whereRaw('LOWER(tipe) = ?', ['Desa']);
-        // })->count();
-
-        $totalDesa = DaftarWebsiteDesa::query()
-            ->select('tipe')
-            ->get()
-            ->pluck('tipe')
+            ->flatten()
             ->unique()
             ->count();
 
+        if ($isAdmin) {
+            // Admin: jumlah tipe desa unik dari semua data
+            $totalDesa = DaftarWebsiteDesa::query()
+                ->select('tipe')
+                ->get()
+                ->pluck('tipe')
+                ->unique()
+                ->count();
 
-        $totalAktif = DaftarWebsiteDesa::query()
-            ->select('websitedesa')
-            ->get() 
-            ->pluck('websitedesa')
-            ->unique()
-            ->count();
+            // Admin: jumlah website aktif dari semua data
+            $totalAktif = DaftarWebsiteDesa::query()
+                ->select('websitedesa')
+                ->get()
+                ->pluck('websitedesa')
+                ->unique()
+                ->count();
+        } else {
+            // User / Sekre: hanya data milik unit kerja sendiri
+            $totalDesa = DaftarWebsiteDesa::query()
+                ->where('unit_kerja_id', $unitKerjaId)
+                ->select('tipe')
+                ->get()
+                ->pluck('tipe')
+                ->unique()
+                ->count();
+
+            $totalAktif = DaftarWebsiteDesa::query()
+                ->where('unit_kerja_id', $unitKerjaId)
+                ->select('websitedesa')
+                ->get()
+                ->pluck('websitedesa')
+                ->unique()
+                ->count();
+        }
+
 
         return [
             Stat::make('Kecamatan', $total)
