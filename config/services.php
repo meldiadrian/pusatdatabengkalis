@@ -37,12 +37,17 @@ return [
 
     'whatsapp' => [
         'token' => env('WA_TOKEN'),
-        'url'   => env('WA_URL', 'https://api.fonnte.com/send'),
+        'url' => env('WA_URL', 'https://api.fonnte.com/send'),
     ],
 
+    // 'recaptcha' => [
+    //     'sitekey' => env('NOCAPTCHA_SITEKEY'),
+    //     'secret'  => env('NOCAPTCHA_SECRET'),
+    // ],
+
     'recaptcha' => [
-        'sitekey' => env('NOCAPTCHA_SITEKEY'),
-        'secret'  => env('NOCAPTCHA_SECRET'),
+        'site_key' => env('RECAPTCHA_SITE_KEY'),
+        'secret_key' => env('RECAPTCHA_SECRET_KEY'),
     ],
 
 ];
