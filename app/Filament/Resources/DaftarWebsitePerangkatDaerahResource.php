@@ -161,6 +161,15 @@ class DaftarWebsitePerangkatDaerahResource extends Resource
                 //
             ])
 
+            ->headerActions([
+                Tables\Actions\Action::make('download_pdf')
+                    ->label('Download PDF')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('success')
+                    ->url(fn() => route('pdf.daftar-website-opd'))
+                    ->openUrlInNewTab(),
+            ])
+
             ->actions([
                 // Tables\Actions\EditAction::make()
                 //     ->button()
