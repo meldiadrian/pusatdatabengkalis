@@ -3,7 +3,7 @@
         <div
             id="recaptcha-container"
             class="g-recaptcha"
-            data-sitekey="{{ config('captcha.sitekey') }}"
+            data-sitekey="{{ config('services.recaptcha.site_key') }}"
             data-callback="onRecaptchaSuccess"
             data-expired-callback="onRecaptchaExpired"
             data-error-callback="onRecaptchaError"

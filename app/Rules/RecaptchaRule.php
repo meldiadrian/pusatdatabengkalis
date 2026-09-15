@@ -26,11 +26,11 @@ class RecaptchaRule implements ValidationRule
             return;
         }
 
-        $secret = config('captcha.secret');
+        $secret = config('services.recaptcha.secret_key');
 
         // Pastikan secret key sudah dikonfigurasi
         if (empty($secret)) {
-            Log::critical('reCAPTCHA secret key belum dikonfigurasi di config/captcha.php');
+            Log::critical('reCAPTCHA secret key belum dikonfigurasi di config/services.php (services.recaptcha.secret_key)');
             $fail('Konfigurasi captcha belum lengkap. Hubungi administrator.');
             return;
         }
