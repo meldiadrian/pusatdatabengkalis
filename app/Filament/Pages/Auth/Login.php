@@ -27,7 +27,7 @@ class Login extends BaseLogin
         return $form
             ->schema([
                 TextInput::make('username')
-                    ->label('Username')
+                    ->label('Masukkan username Anda')
                     ->placeholder('Masukkan username Anda')
                     ->required()
                     ->autocomplete('username')

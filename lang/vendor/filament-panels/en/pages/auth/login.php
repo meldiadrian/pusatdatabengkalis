@@ -25,8 +25,12 @@ return [
             'label' => 'Silahkan masukkan email Anda',
         ],
 
+        'username' => [
+            'label' => 'Silahkan masukkan username Anda',
+        ],
+
         'password' => [
-            'label' => 'Silahkan masukkan password Anda',
+            'label' => 'Masukkan password Anda',
         ],
 
         'remember' => [
