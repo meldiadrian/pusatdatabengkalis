@@ -101,7 +101,9 @@ class AdminPanelProvider extends PanelProvider
 
             ->renderHook(
                 PanelsRenderHook::FOOTER,
-                fn(): string => '<div style="text-align:center;padding:12px 0;font-size:0.78rem;color:#6b7280;border-top:1px solid #e5e7eb;margin-top:8px;">Dinas Komunikasi, Informatika, Statistik dan Persandian Kab. Bengkalis. All rights reserved. Developed by Tim Aplikasi.<p>downlad manual book</p></div>'
+                fn(): string => auth()->check()
+                    ? '<div style="text-align:center;padding:12px 0;font-size:0.78rem;color:#6b7280;border-top:1px solid #e5e7eb;margin-top:8px;">Dinas Komunikasi, Informatika, Statistik dan Persandian Kab. Bengkalis. All rights reserved. Developed by Tim Aplikasi.<p>downlad manual book</p></div>'
+                    : ''
             )
             //->brandName('Hoaxs')
             // ->loginHeading('Masuk Aplikasi')

@@ -18,6 +18,11 @@ class Login extends BaseLogin
         return 'e-Data Kabupaten Bengkalis';
     }
 
+    public function hasFooter(): bool
+    {
+        return false;
+    }
+
     /**
      * Override form login: ganti field email menjadi username,
      * tambahkan Google reCAPTCHA v2 di bawah field password.
