@@ -102,7 +102,7 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(
                 PanelsRenderHook::FOOTER,
                 fn(): string => auth()->check()
-                    ? '<div style="text-align:center;padding:12px 0;font-size:0.78rem;color:#6b7280;border-top:1px solid #e5e7eb;margin-top:8px;">Dinas Komunikasi, Informatika, Statistik dan Persandian Kab. Bengkalis. All rights reserved. Developed by Tim Aplikasi.<p>downlad manual book</p></div>'
+                    ? '<div style="text-align:center;padding:12px 0;font-size:0.78rem;color:#6b7280;border-top:1px solid #e5e7eb;margin-top:8px;"><div>Dinas Komunikasi, Informatika, Statistik dan Persandian Kab. Bengkalis. All rights reserved. Developed by Tim Aplikasi.</div><div style="margin-top:6px;"><a href="' . asset('manualbook_e-data.pdf') . '" download="manualbook_e-data.pdf" target="_blank" data-no-spa style="color:#2563eb;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:5px;"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:15px;height:15px;display:inline-block;"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>Download Manual Book</a></div></div>'
                     : ''
             )
             //->brandName('Hoaxs')
